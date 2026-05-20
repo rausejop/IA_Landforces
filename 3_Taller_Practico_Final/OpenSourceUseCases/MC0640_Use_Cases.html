@@ -34,7 +34,7 @@
   --font-mono:'JetBrains Mono','Cascadia Mono','SF Mono',Consolas,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:78px}
 body{
   background:var(--bg); color:var(--fg);
   font-family:var(--font-sans); font-size:15px; line-height:1.55;
@@ -141,14 +141,62 @@ body{
 .refs{color:var(--fg-dim);font-size:0.88rem}
 .refs li{margin-bottom:6px}
 .refs code{font-family:var(--font-mono);font-size:0.82rem;background:var(--bg-3);padding:1px 6px;border-radius:4px;border:1px solid var(--line)}
+.refs a{color:var(--accent);text-decoration:none;border-bottom:1px dashed transparent;transition:border-color 0.15s}
+.refs a:hover{border-bottom-color:var(--accent)}
+.refs a code{cursor:pointer}
+.refs a:hover code{background:var(--bg-4);border-color:var(--accent)}
+.refs li strong:first-child{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.05em;color:var(--gold);font-weight:700;display:inline-block;min-width:110px}
+
+.vlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted rgba(74,158,255,0.45);transition:all 0.15s}
+.vlink:hover{border-bottom-color:var(--accent);background:rgba(74,158,255,0.08)}
 
 footer{margin-top:40px;padding:30px 0 50px;border-top:1px solid var(--line);color:var(--fg-mute);font-size:0.78rem}
 footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 .echelon-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
-.echelon-filter button{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;background:var(--bg-2);color:var(--fg-dim);border:1px solid var(--line-hot);padding:6px 12px;border-radius:6px;cursor:pointer}
+.echelon-filter button{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;background:var(--bg-2);color:var(--fg-dim);border:1px solid var(--line-hot);padding:6px 12px;border-radius:6px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
 .echelon-filter button.active{background:var(--accent-2);color:white;border-color:var(--accent)}
 .echelon-filter button:hover{color:var(--fg)}
+.echelon-filter button .cnt{font-size:0.66rem;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:99px;color:inherit;opacity:0.85}
+.echelon-filter button.active .cnt{background:rgba(255,255,255,0.18)}
+
+.stats-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.stat-chip{display:inline-flex;flex-direction:column;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:8px 14px;min-width:110px}
+.stat-chip .n{font-family:var(--font-mono);font-size:1.3rem;font-weight:700;color:var(--accent);line-height:1}
+.stat-chip .l{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-mute);margin-top:4px}
+.stat-chip.gold .n{color:var(--gold)}
+
+#totop{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--accent-2);color:white;border:1px solid var(--accent);cursor:pointer;display:none;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:1rem;box-shadow:0 4px 14px rgba(0,0,0,0.35);z-index:60}
+#totop.visible{display:flex}
+#totop:hover{background:var(--accent)}
+
+.uc-quickjump{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px;padding:14px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px}
+.uc-quickjump a{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.05em;color:var(--fg-dim);background:var(--bg-3);border:1px solid var(--line-hot);padding:3px 8px;border-radius:5px;text-decoration:none;transition:all 0.15s}
+.uc-quickjump a:hover{background:var(--accent-2);color:white;border-color:var(--accent)}
+.uc-quickjump a.band-Company{border-left:2px solid #fb923c}
+.uc-quickjump a.band-Battle{border-left:2px solid #facc15}
+.uc-quickjump a.band-Brigade{border-left:2px solid #4ade80}
+.uc-quickjump-legend{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-mute);margin-bottom:10px;display:flex;gap:12px;align-items:center}
+.uc-quickjump-legend .dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle}
+
+/* SVG row-key icons in UC cards */
+.uc-rows .k svg{width:12px;height:12px;color:var(--fg-mute);vertical-align:-2px;margin-right:7px}
+
+/* APP-15 Specification Header (above the 14-row body) */
+.app15{border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(212,160,23,0.04),transparent);padding:14px 22px}
+.app15-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.app15-stamp{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);background:rgba(212,160,23,0.1);padding:2px 8px;border-radius:4px}
+.app15-id{font-family:var(--font-mono);font-size:0.86rem;color:var(--fg);letter-spacing:0.02em}
+.app15-meta{font-family:var(--font-mono);font-size:0.7rem;color:var(--fg-dim)}
+.app15-status{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.08em;text-transform:uppercase;padding:1px 7px;border-radius:4px;border:1px solid var(--line-hot);color:var(--fg-dim)}
+.app15-status.draft{color:#facc15;border-color:#a16207;background:rgba(212,160,23,0.1)}
+.app15-status.approved{color:#4ade80;border-color:#16a34a;background:rgba(34,197,94,0.1)}
+.app15-grid{display:grid;grid-template-columns:140px 1fr 140px 1fr;gap:0;font-size:0.84rem;border:1px dashed var(--line-hot);border-radius:6px;overflow:hidden}
+.app15-grid > div{padding:7px 12px;border-bottom:1px dashed var(--line)}
+.app15-grid > div:nth-last-child(-n+4){border-bottom:none}
+.app15-grid .lbl{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-mute);background:rgba(255,255,255,0.015)}
+.app15-grid .val{color:var(--fg)}
+@media(max-width:880px){.app15-grid{grid-template-columns:140px 1fr}}
 </style>
 </head>
 <body>
@@ -160,6 +208,17 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
     <symbol id="i-network" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></symbol>
     <symbol id="i-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-filetext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="i-barchart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-mappin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
   </defs>
 </svg>
 
@@ -199,6 +258,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
       <span class="badge">STANAG 4774 Labels</span>
       <span class="badge">STANAG 5527 NFFI</span>
     </div>
+    <div class="stats-row" id="stats-row"><!-- populated by JS --></div>
   </div>
 </section>
 
@@ -216,6 +276,19 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
         <p class="lede" style="margin-top:0;">Each UC card renders <strong>14 fields</strong> in fixed order — six IER dimensions, then equipment, time window, environment, zones/CoI, availability, classification, an LPI/LPD risk meter with a one-sentence narrative, and an attack-surface note. Mission classification overrides the IER's notional default.</p>
       </div>
     </div>
+
+    <h2 class="h2" style="margin-top:34px;">Use Case generation standard — NAF v4 + ADatP-47</h2>
+    <p class="lede" style="margin-top:0;">In NATO, Use Cases are not authored ad-hoc. They are generated under the <strong>NATO Architecture Framework (NAF) v4</strong> and detailed procedurally by <strong>ADatP-47</strong> (Allied Data Publication 47). AJPs supply the <em>doctrinal context</em> (AJP-5 for operational planning, AJP-6 for CIS), not the UC template. Every card in §05 carries a <code style="font-family:var(--font-mono);background:var(--bg-3);padding:1px 6px;border-radius:4px;border:1px solid var(--line);">NAF v4 · ADatP-47</code> spec header above the 14-row operational body.</p>
+    <table class="uc-index" style="margin-top:14px;">
+      <thead><tr><th>Layer</th><th>Standard</th><th>Role for UC generation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mother framework</strong></td><td><a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>NAF v4</code></a></td><td>Defines NOV (Operational View) + NSOV (Service-Oriented View). UCs are the bridge from operational need to technical solution.</td></tr>
+        <tr><td><strong>Procedural data std.</strong></td><td><a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>ADatP-47</code></a></td><td>Working-group rules for interoperability design. Operational UCs drafted in SysML / UML-adapted military methodology.</td></tr>
+        <tr><td><strong>Op. planning doctrine</strong></td><td><a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>AJP-5</code></a></td><td>Commander's intent + lines of operation. Engineers convert these into technical UCs.</td></tr>
+        <tr><td><strong>CIS doctrine</strong></td><td><a href="https://www.coemed.org/files/stanags/01_AJP/AJP-6_EDB_V1_E_2525.pdf" target="_blank" rel="noopener"><code>AJP-6</code></a></td><td>Mandates service-oriented, UC-validated systems. Prohibits unrooted system development.</td></tr>
+      </tbody>
+    </table>
+    <p class="lede" style="font-size:0.86rem;margin-top:10px;color:var(--fg-mute);"><em>Anti-pattern:</em> citing an AJP as the UC origin. The UC origin is the NAF view + ADatP-47 model; AJPs justify it.</p>
 
     <h2 class="h2" style="margin-top:34px;">MC 0593 vs MC 0640 — why this site only shows the green band</h2>
     <p class="lede" style="margin-top:0;">Both are NATO Military Committee directives, but the scopes do not overlap. This deliverable visualises <strong>only MC 0640</strong> (Brigade and below). LANDCOM, Corps and Division are shown only as upstream reach-back nodes — their primary UC content belongs to MC 0593.</p>
@@ -289,39 +362,39 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
       <div class="card">
         <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">1. SDR + NATO waveforms (tactical radio)</h3>
         <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
-          <li><strong style="color:var(--fg);">Thales</strong> (FR/EU) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">Synaps · SquadNet · PR4G</span>. ESSOR consortium founding member.</li>
-          <li><strong style="color:var(--fg);">L3Harris</strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">Falcon III / IV · AN/PRC-158 · AN/PRC-163</span>. CNR-IP, SATURN, PFL-00446 IP injection.</li>
-          <li><strong style="color:var(--fg);">Leonardo</strong> (IT) — vehicular tactical SDR; ESSOR + militarised IP routing.</li>
-          <li><strong style="color:var(--fg);">Rohde &amp; Schwarz</strong> (DE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">SOVERON</span>. Sovereignty focus; NBWF resilience under EW.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.thalesgroup.com/" target="_blank" rel="noopener" class="vlink">Thales</a></strong> (FR/EU) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://www.thalesgroup.com/en/markets/defence-and-security/communications-and-products/radio-products-and-services/synaps-software-defined-radios" target="_blank" rel="noopener" class="vlink">Synaps</a> · <a href="https://www.thalesgroup.com/en/markets/defence-and-security/communications-and-products/radio-products-and-services" target="_blank" rel="noopener" class="vlink">SquadNet</a> · <a href="https://www.thalesgroup.com/en/markets/defence-and-security/communications-and-products/radio-products-and-services" target="_blank" rel="noopener" class="vlink">PR4G</a></span>. ESSOR consortium founding member.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.l3harris.com/" target="_blank" rel="noopener" class="vlink">L3Harris</a></strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://www.l3harris.com/" target="_blank" rel="noopener" class="vlink">Falcon III / IV</a> · <a href="https://www.l3harris.com/all-capabilities/an-prc-158-multi-channel-manpack-radio" target="_blank" rel="noopener" class="vlink">AN/PRC-158</a> · <a href="https://www.l3harris.com/all-capabilities/an-prc-163-handheld-multi-channel-radio" target="_blank" rel="noopener" class="vlink">AN/PRC-163</a></span>. CNR-IP, SATURN, PFL-00446 IP injection.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.leonardo.com/en/sectors/defence-electronics-security" target="_blank" rel="noopener" class="vlink">Leonardo</a></strong> (IT) — vehicular tactical SDR; ESSOR + militarised IP routing.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.rohde-schwarz.com/" target="_blank" rel="noopener" class="vlink">Rohde &amp; Schwarz</a></strong> (DE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://www.rohde-schwarz.com/solutions/aerospace-defense-security/secure-communications/soveron/soveron-overview_254537.html" target="_blank" rel="noopener" class="vlink">SOVERON</a></span>. Sovereignty focus; NBWF resilience under EW.</li>
         </ul>
       </div>
       <div class="card">
         <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">2. NFV / SWaP-C / DCIS hardware</h3>
         <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
-          <li><strong style="color:var(--fg);">Klas Telecom</strong> (IE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">KlasTRX · Voyager</span>. SFF backpack modules; de-facto NATO deployable HQ standard.</li>
-          <li><strong style="color:var(--fg);">Cisco Defense</strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">ESR6300</span>. Runs BGP-4 + IPsec STANAG 4711 PCN tunnels for ~90% of NATO PCN nets.</li>
-          <li><strong style="color:var(--fg);">PacStar / Curtiss-Wright</strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">PacStar 400-Series</span>. BG/Bde CP rapid deployment.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.klasgroup.com/" target="_blank" rel="noopener" class="vlink">Klas Telecom</a></strong> (IE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://www.klasgroup.com/" target="_blank" rel="noopener" class="vlink">KlasTRX</a> · <a href="https://www.klasgroup.com/products/voyager/" target="_blank" rel="noopener" class="vlink">Voyager</a></span>. SFF backpack modules; de-facto NATO deployable HQ standard.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.cisco.com/c/en/us/solutions/industries/government/defense.html" target="_blank" rel="noopener" class="vlink">Cisco Defense</a></strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://www.cisco.com/c/en/us/products/routers/embedded-services-router-esr-6300-series/index.html" target="_blank" rel="noopener" class="vlink">ESR6300</a></span>. Runs BGP-4 + IPsec STANAG 4711 PCN tunnels for ~90% of NATO PCN nets.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.curtisswrightds.com/" target="_blank" rel="noopener" class="vlink">PacStar / Curtiss-Wright</a></strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://www.curtisswrightds.com/products/cots-modules/pacstar/400-series.html" target="_blank" rel="noopener" class="vlink">PacStar 400-Series</a></span>. BG/Bde CP rapid deployment.</li>
         </ul>
       </div>
       <div class="card">
         <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">3. C2 software (mission data)</h3>
         <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
-          <li><strong style="color:var(--fg);">Systematic</strong> (DK) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">SitaWare Headquarters · Frontline · Edge</span>. De-facto NATO land C2 standard. XMPP tactical chat, NFFI mapping, FMN-native.</li>
-          <li><strong style="color:var(--fg);">Saab</strong> (SE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">9LAND C2</span>. Land + fires interop, NISP B16 profile compliance.</li>
+          <li><strong style="color:var(--fg);"><a href="https://systematic.com/" target="_blank" rel="noopener" class="vlink">Systematic</a></strong> (DK) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://systematic.com/en/industries/defence/products/sitaware-headquarters/" target="_blank" rel="noopener" class="vlink">SitaWare Headquarters</a> · <a href="https://systematic.com/en/industries/defence/products/sitaware-frontline/" target="_blank" rel="noopener" class="vlink">Frontline</a> · <a href="https://systematic.com/en/industries/defence/products/sitaware-edge/" target="_blank" rel="noopener" class="vlink">Edge</a></span>. De-facto NATO land C2 standard. XMPP tactical chat, NFFI mapping, FMN-native.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.saab.com/" target="_blank" rel="noopener" class="vlink">Saab</a></strong> (SE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);"><a href="https://www.saab.com/products/9land" target="_blank" rel="noopener" class="vlink">9LAND C2</a></span>. Land + fires interop, NISP B16 profile compliance.</li>
         </ul>
       </div>
       <div class="card">
         <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">4. Cross-Domain Solutions (NNI / classification boundary)</h3>
         <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
-          <li><strong style="color:var(--fg);">Advenica</strong> (SE) — hardware/software CDS gateways; STANAG 4774 label validation at NNI.</li>
-          <li><strong style="color:var(--fg);">Fox-IT</strong> (NL) — high-grade CDS appliances; classification boundary enforcement.</li>
+          <li><strong style="color:var(--fg);"><a href="https://advenica.com/" target="_blank" rel="noopener" class="vlink">Advenica</a></strong> (SE) — hardware/software CDS gateways; STANAG 4774 label validation at NNI.</li>
+          <li><strong style="color:var(--fg);"><a href="https://www.fox-it.com/" target="_blank" rel="noopener" class="vlink">Fox-IT</a></strong> (NL) — high-grade CDS appliances; classification boundary enforcement.</li>
         </ul>
       </div>
     </div>
     <div class="card" style="margin-top:20px;border-left:3px solid var(--gold);background:linear-gradient(180deg,rgba(212,160,23,0.06),var(--bg-2));">
       <h3 class="h3" style="color:var(--gold);margin-bottom:6px;">Reference integration pattern</h3>
       <p style="color:var(--fg);font-size:0.95rem;line-height:1.7;">
-        <strong>Systematic SitaWare</strong> (C2 software) → on <strong>Klas Voyager</strong> hardware (virtualised NFV) → routed by <strong>Cisco ESR6300</strong> (encrypted IPsec / BGP-4) → injected into <strong>Thales Synaps</strong> or <strong>L3Harris AN/PRC-163</strong> SDR → over a common NATO waveform (ESSOR HDR or NBWF) → label-validated through <strong>Advenica / Fox-IT CDS</strong> at every NNI.
+        <strong><a href="https://systematic.com/en/industries/defence/products/sitaware/" target="_blank" rel="noopener" class="vlink">Systematic SitaWare</a></strong> (C2 software) → on <strong><a href="https://www.klasgroup.com/products/voyager/" target="_blank" rel="noopener" class="vlink">Klas Voyager</a></strong> hardware (virtualised NFV) → routed by <strong><a href="https://www.cisco.com/c/en/us/products/routers/embedded-services-router-esr-6300-series/index.html" target="_blank" rel="noopener" class="vlink">Cisco ESR6300</a></strong> (encrypted IPsec / BGP-4) → injected into <strong><a href="https://www.thalesgroup.com/en/markets/defence-and-security/communications-and-products/radio-products-and-services/synaps-software-defined-radios" target="_blank" rel="noopener" class="vlink">Thales Synaps</a></strong> or <strong><a href="https://www.l3harris.com/all-capabilities/an-prc-163-handheld-multi-channel-radio" target="_blank" rel="noopener" class="vlink">L3Harris AN/PRC-163</a></strong> SDR → over a common NATO waveform (ESSOR HDR or NBWF) → label-validated through <strong><a href="https://advenica.com/" target="_blank" rel="noopener" class="vlink">Advenica</a></strong> / <strong><a href="https://www.fox-it.com/" target="_blank" rel="noopener" class="vlink">Fox-IT</a></strong> CDS at every NNI.
       </p>
     </div>
   </div>
@@ -341,6 +414,14 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
     <div class="eyebrow">§ 05 · Use Cases</div>
     <h2 class="h2">32 representative Use Cases — Brigade, Battle Group, Company</h2>
     <p class="lede" style="margin-bottom:22px;">First-cut presentation. All 32 UCs sit within the MC 0640 scope (Brigade and below). They are fused with STEADFAST COBALT constraints, PFL-00403 technology choices, and real vendor products (Thales, L3Harris, Klas, Cisco, Systematic, Advenica). The full Annex C inventory (~700–800 Serials) lives in <code style="font-family:var(--font-mono);background:var(--bg-3);padding:1px 6px;border-radius:4px;border:1px solid var(--line);">serials/annexC_extracted.json</code>.</p>
+
+    <div class="uc-quickjump-legend">
+      <span><span class="dot" style="background:#fb923c"></span>Company</span>
+      <span><span class="dot" style="background:#facc15"></span>Battle Group</span>
+      <span><span class="dot" style="background:#4ade80"></span>Brigade</span>
+      <span style="margin-left:auto;color:var(--fg-mute)">Click any UC to jump to its card</span>
+    </div>
+    <div class="uc-quickjump" id="uc-quickjump"></div>
 
     <div class="echelon-filter" id="echelon-filter"></div>
 
@@ -372,21 +453,25 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
     <div class="eyebrow">§ 07 · References</div>
     <h2 class="h2">Doctrine, profiles, and STANAGs cited</h2>
     <ul class="refs">
-      <li><code>Draft MC 0640</code> — Minimum Level of CIS Capabilities at Land Tactical Level (replaces former STANAG 5048). Annex C carries the IER Specifications used here.</li>
-      <li><code>AJP-6 Ed B v1 (Apr 2024)</code> — Allied Joint Doctrine for CIS; defines the IER framework, resilience, interoperability, availability requirements.</li>
-      <li><code>AJP-3.2 Ed B</code> — Allied Joint Doctrine for Land Operations.</li>
-      <li><code>NISP Baseline 16 / AC/322-D(2024)0053</code> — establishes <strong>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</strong>.</li>
-      <li><code>AP-06 / AP-15</code> — NATO Glossaries.</li>
-      <li><code>APP-7(D)</code> Joint Brevity Words; <code>APP-11</code> NATO Message Text Formats.</li>
-      <li><code>STANAG 4711</code> — Protected Core Networking (PCN).</li>
-      <li><code>STANAG 4774</code> — Confidentiality Metadata Label Syntax.</li>
-      <li><code>STANAG 4691</code> — Multi-channel ad-hoc relay (MarLOS).</li>
-      <li><code>STANAG 5527 / NFFI</code> — NATO Friendly Force Information.</li>
-      <li><code>STANAG 5630</code> — NATO Narrowband Waveform (NBWF) physical layer.</li>
-      <li><code>STANAG 5634 / AComP-5634</code> — NBWF Profile B / MELPe 2.4 kbps over RTP/UDP.</li>
-      <li><code>STANAG 5651</code> — ESSOR High Data Rate Waveform.</li>
-      <li><code>SATURN Ed.4 / PRF-151</code> — Anti-jam Tactical UHF Radio for NATO.</li>
-      <li><code>RFC 6120 / 6121</code> — Extensible Messaging and Presence Protocol (XMPP).</li>
+      <li><strong>Reference A —</strong> <a href="https://www.mindev.gov.gr/wp-content/uploads/2023/04/08-NCIA-ACQ-2023-06756.pdf" target="_blank" rel="noopener"><code>Draft MC 0640</code></a> — Minimum Level of CIS Capabilities at Land Tactical Level (replaces former STANAG 5048). Annex C carries the IER Specifications used here.</li>
+      <li><strong>Reference B —</strong> <a href="https://www.coemed.org/files/stanags/01_AJP/AJP-6_EDB_V1_E_2525.pdf" target="_blank" rel="noopener"><code>AJP-6 Ed B v1 (Apr 2024)</code></a> — Allied Joint Doctrine for CIS; defines the IER framework, resilience, interoperability, availability requirements.</li>
+      <li><strong>Reference C —</strong> <a href="https://www.coemed.org/files/stanags/01_AJP/AJP-3.2_EDB_V1_E_2288.pdf" target="_blank" rel="noopener"><code>AJP-3.2 Ed B</code></a> — Allied Joint Doctrine for Land Operations.</li>
+      <li><strong>Reference D —</strong> <a href="https://nhqc3s.hq.nato.int/apps/nisp/NISP_Baseline_16_Catalogue_5SEP2024_enclosure_only.pdf" target="_blank" rel="noopener"><code>NISP Baseline 16 / AC/322-D(2024)0053</code></a> — establishes <strong>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</strong>.</li>
+      <li><strong>Reference E —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>AP-06 / AP-15</code></a> — NATO Glossaries (via NATO Standardization Office).</li>
+      <li><strong>Reference F —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>APP-7(D)</code></a> Joint Brevity Words; <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>APP-11</code></a> NATO Message Text Formats.</li>
+      <li><strong>Reference G —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>STANAG 4711</code></a> — Protected Core Networking (PCN).</li>
+      <li><strong>Reference H —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>STANAG 4774</code></a> — Confidentiality Metadata Label Syntax.</li>
+      <li><strong>Reference I —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>STANAG 4691</code></a> — Multi-channel ad-hoc relay (MarLOS).</li>
+      <li><strong>Reference J —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>STANAG 5527 / NFFI</code></a> — NATO Friendly Force Information.</li>
+      <li><strong>Reference K —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>STANAG 5630</code></a> — NATO Narrowband Waveform (NBWF) physical layer.</li>
+      <li><strong>Reference L —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>STANAG 5634 / AComP-5634</code></a> — NBWF Profile B / MELPe 2.4 kbps over RTP/UDP.</li>
+      <li><strong>Reference M —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>STANAG 5651</code></a> — ESSOR High Data Rate Waveform.</li>
+      <li><strong>Reference N —</strong> <a href="https://nso.nato.int/" target="_blank" rel="noopener"><code>SATURN Ed.4 / PRF-151</code></a> — Anti-jam Tactical UHF Radio for NATO.</li>
+      <li><strong>Reference O —</strong> <a href="https://datatracker.ietf.org/doc/html/rfc6120" target="_blank" rel="noopener"><code>RFC 6120</code></a> / <a href="https://datatracker.ietf.org/doc/html/rfc6121" target="_blank" rel="noopener"><code>RFC 6121</code></a> — Extensible Messaging and Presence Protocol (XMPP).</li>
+      <li><strong>Reference P —</strong> <a href="https://www.sto.nato.int/document/military-communications-and-networks/" target="_blank" rel="noopener"><code>STO MP-IST-092</code></a> — Military Communications and Networks (proceedings, 2010-vintage background).</li>
+      <li><strong>Reference Q —</strong> <a href="https://publications.sto.nato.int/publications/STO%20Meeting%20Proceedings/STO-MP-IST-203/MP-IST-203-05bP.pdf" target="_blank" rel="noopener"><code>STO MP-IST-203</code></a> — modernised tactical comms paper (2023).</li>
+      <li><strong>Reference R —</strong> <a href="https://www.sto.nato.int/document/tr-ist-175-es-executive-summary-and-synthese/" target="_blank" rel="noopener"><code>STO TR-IST-175</code></a> — Executive Summary and Synthèse (2023-era reference).</li>
+      <li style="margin-top:14px;color:var(--fg-mute);font-size:0.78rem;list-style:none;"><em>Note:</em> STANAGs and APPs (References E–N) link to the public NATO Standardization Office portal. Many STANAGs are NATO-Restricted and not publicly published; the NSO site is the authoritative index.</li>
     </ul>
   </div>
 </section>
@@ -398,8 +483,195 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
   </div>
 </footer>
 
+<button id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top">↑</button>
+
 <script>
 "use strict";
+
+/* Vendor / product URL map. Most specific keys first so the alternation regex
+   below prefers longer matches before falling back to the homepage match. */
+const VENDOR_URLS = {
+  "L3Harris AN/PRC-163":             "https://www.l3harris.com/all-capabilities/an-prc-163-handheld-multi-channel-radio",
+  "L3Harris AN/PRC-158":             "https://www.l3harris.com/all-capabilities/an-prc-158-multi-channel-manpack-radio",
+  "L3Harris Falcon IV":              "https://www.l3harris.com/",
+  "L3Harris Falcon III":             "https://www.l3harris.com/",
+  "L3Harris":                        "https://www.l3harris.com/",
+  "Thales Synaps":                   "https://www.thalesgroup.com/en/markets/defence-and-security/communications-and-products/radio-products-and-services/synaps-software-defined-radios",
+  "Thales SquadNet":                 "https://www.thalesgroup.com/en/markets/defence-and-security/communications-and-products/radio-products-and-services",
+  "Thales PR4G":                     "https://www.thalesgroup.com/en/markets/defence-and-security/communications-and-products/radio-products-and-services",
+  "Thales":                          "https://www.thalesgroup.com/",
+  "Leonardo":                        "https://www.leonardo.com/en/sectors/defence-electronics-security",
+  "Rohde & Schwarz SOVERON":         "https://www.rohde-schwarz.com/solutions/aerospace-defense-security/secure-communications/soveron/soveron-overview_254537.html",
+  "Rohde & Schwarz":                 "https://www.rohde-schwarz.com/",
+  "Klas Voyager":                    "https://www.klasgroup.com/products/voyager/",
+  "Klas Telecom":                    "https://www.klasgroup.com/",
+  "KlasTRX":                         "https://www.klasgroup.com/",
+  "Cisco ESR6300":                   "https://www.cisco.com/c/en/us/products/routers/embedded-services-router-esr-6300-series/index.html",
+  "Cisco Defense":                   "https://www.cisco.com/c/en/us/solutions/industries/government/defense.html",
+  "Cisco":                           "https://www.cisco.com/",
+  "PacStar 400-Series":              "https://www.curtisswrightds.com/products/cots-modules/pacstar/400-series.html",
+  "PacStar":                         "https://www.curtisswrightds.com/",
+  "Curtiss-Wright":                  "https://www.curtisswrightds.com/",
+  "Systematic SitaWare Headquarters":"https://systematic.com/en/industries/defence/products/sitaware-headquarters/",
+  "Systematic SitaWare Frontline":   "https://systematic.com/en/industries/defence/products/sitaware-frontline/",
+  "Systematic SitaWare Edge":        "https://systematic.com/en/industries/defence/products/sitaware-edge/",
+  "Systematic SitaWare HQ":          "https://systematic.com/en/industries/defence/products/sitaware-headquarters/",
+  "Systematic SitaWare":             "https://systematic.com/en/industries/defence/products/sitaware/",
+  "SitaWare Headquarters":           "https://systematic.com/en/industries/defence/products/sitaware-headquarters/",
+  "SitaWare Frontline":              "https://systematic.com/en/industries/defence/products/sitaware-frontline/",
+  "SitaWare Edge":                   "https://systematic.com/en/industries/defence/products/sitaware-edge/",
+  "SitaWare HQ":                     "https://systematic.com/en/industries/defence/products/sitaware-headquarters/",
+  "SitaWare":                        "https://systematic.com/en/industries/defence/products/sitaware/",
+  "Systematic":                      "https://systematic.com/",
+  "Saab 9LAND C2":                   "https://www.saab.com/products/9land",
+  "Saab 9LAND":                      "https://www.saab.com/products/9land",
+  "Saab":                            "https://www.saab.com/",
+  "Advenica":                        "https://advenica.com/",
+  "Fox-IT":                          "https://www.fox-it.com/"
+};
+
+/* Build alternation regex from VENDOR_URLS keys, sorted longest-first so
+   "Thales Synaps" matches before "Thales", etc. */
+const VENDOR_PATTERN = new RegExp(
+  "(" + Object.keys(VENDOR_URLS)
+    .sort((a,b) => b.length - a.length)
+    .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|") + ")",
+  "g"
+);
+
+function linkifyVendors(text) {
+  if (!text) return text;
+  return text.replace(VENDOR_PATTERN, (m) => {
+    const href = VENDOR_URLS[m];
+    if (!href) return m;
+    return `<a href="${href}" target="_blank" rel="noopener" class="vlink">${m}</a>`;
+  });
+}
+
+/* ===========================================================
+   NAF v4 · ADatP-47 Specification Header
+   -----------------------------------------------------------
+   Per the NATO Architecture Framework, every UC must surface
+   operational + service-view metadata (NOV / NSOV alignment),
+   primary actor, goal, trigger, pre/postconditions, the FMN
+   service that realises it, and a doctrinal anchor (AJP-5 /
+   AJP-6 / MC 0640). ADatP-47 codifies the SysML/UML artefact.
+   =========================================================== */
+
+const FMN_SERVICE_BY_KEYWORD = [
+  [/Voice \(Secure\)|Voice/i,        "FMN Voice (Tactical / Secure)"],
+  [/Instant Message/i,               "FMN Tactical Messaging (XMPP)"],
+  [/Informal Message/i,              "FMN Informal Messaging"],
+  [/Formal Message|APP-11 MTF/i,     "FMN Military Messaging"],
+  [/NFFI|BFT/i,                      "FMN Situational Awareness (BFT)"],
+  [/Battlefield Control|Maneuver/i,  "FMN Maneuver Planning"],
+  [/Call For Fire|CFF/i,             "FMN Targeting / Call For Fire"],
+  [/Target Folder|TST|Target/i,      "FMN Targeting"],
+  [/METEOC|Meteorology/i,            "FMN Environmental"],
+  [/RFI|Requests & Responses/i,      "FMN Requests & Responses"],
+  [/INTREP|HUMINT/i,                 "FMN Joint Reporting"],
+  [/LOGREP|LOGSITREP|Logistics/i,    "FMN Logistics"],
+  [/Document Collaboration|Storage/i,"FMN Information Management"],
+  [/VTC/i,                           "FMN VTC"],
+  [/Office Collaboration|Collab/i,   "FMN Office Collaboration"],
+  [/Tasking|Tasking & Orders/i,      "FMN Tasking & Orders"],
+  [/ASSESSREP|Reports/i,             "FMN Joint Reporting"],
+  [/Airspace|ACM/i,                  "FMN Airspace Management"],
+  [/BGP-4|PCR|federation/i,          "FMN Core Networking (PCN)"],
+  [/VNF|NFV|blade/i,                 "FMN Core Enterprise Services"]
+];
+function detectFmnService(t) {
+  if (!t) return "FMN Tactical Service";
+  for (const [re, name] of FMN_SERVICE_BY_KEYWORD) if (re.test(t)) return name;
+  return "FMN Tactical Service";
+}
+
+const NAF_VIEW_BY_BAND = {
+  "Company":      "NOV-5 (Operational Activity) · NSOV-4 (Service Interaction)",
+  "Battle Group": "NOV-2 (Operational Resource Flow) · NSOV-3 (Service Composition)",
+  "Brigade":      "NOV-5 (Operational Activity) · NSOV-1 (Service Taxonomy)"
+};
+
+const NAF_OVERRIDES = {
+  "UC-001": {
+    goal:"Enable immediate indirect fires on a dismounted contact under EW",
+    trigger:"Forward observer identifies hostile target inside Coy AOR",
+    preconditions:"Coy NBWF mesh active · mortar section laid · CNR-IP gateway nominal",
+    postconditions:"Fire mission accepted by mortar section · target serviced · CFST resumes observation"
+  },
+  "UC-002": {
+    goal:"Federate a manoeuvring BG into the coalition core within the 20-minute STEADFAST COBALT target",
+    trigger:"BG retrograde manoeuvre completes; vehicle halts",
+    preconditions:"Spare NFV blade powered · golden image signed · SATCOM line-of-sight to FMN core",
+    postconditions:"PCR up · BGP-4 announce accepted · BG visible to all 32 nations · BFT flowing"
+  },
+  "UC-003": {
+    goal:"Ingest CDS-degraded intel from Division reach-back without violating Bde-level classification",
+    trigger:"Division intel package arrives at the Bde NNI",
+    preconditions:"Advenica/Fox-IT CDS policy current · STANAG 4774 label registry synced",
+    postconditions:"Intel package distributed inside Bde enclave · degraded view available to BGs · audit trail signed"
+  },
+  "UC-007": {
+    goal:"Sensor-to-shooter sub-5-minute conversion from CFST observation",
+    trigger:"CFST observer identifies engageable target",
+    preconditions:"Fires net silent · CFST cleared to call",
+    postconditions:"Fire mission acknowledged · target effects assessed"
+  },
+  "UC-016": {
+    goal:"Maintain shared BFT across two nations inside the same BG",
+    trigger:"BG continuous operations",
+    preconditions:"Both nations' BFT terminals registered · CDS label policy synced · BGP-4 NNI converged",
+    postconditions:"Each nation's vehicles see the other's positions in real time"
+  },
+  "UC-019": {
+    goal:"Service Bde deep targets with high-tempo digital fires",
+    trigger:"BJFC identifies validated deep target",
+    preconditions:"DBAWS firing units online · MIP4 fires bus nominal",
+    postconditions:"Deep target serviced · BDA collected · target folder updated"
+  },
+  "UC-024": {
+    goal:"Push fused theatre intel to the Bde ASAC for action",
+    trigger:"CIFC publishes a new INTREP relevant to the Bde AOR",
+    preconditions:"CIFC↔Bde ASAC PCN tunnel up · STANAG 4774 label policy current",
+    postconditions:"INTREP delivered, acknowledged, and acted upon at Bde level"
+  },
+  "UC-032": {
+    goal:"Restore Coy C2 services after physical CP loss within 30 minutes",
+    trigger:"Coy CP NFV blade declared lost (kinetic or capture)",
+    preconditions:"BG reserve blade available · signed golden image present · per-blade key issuable",
+    postconditions:"Coy back on the C2 net · keys rotated · audit log of restore archived"
+  }
+};
+
+function naf(uc) {
+  const o = NAF_OVERRIDES[uc.id] || {};
+  const actors = uc.ier.who.split(/[➜↔]/).map(s => s.trim()).filter(Boolean);
+  const primary = actors[0] || "—";
+  const secondary = actors.slice(1).join(" · ") || "—";
+  const ierIdBand = uc.band === "Battle Group" ? "BG" : uc.band.slice(0,3).toUpperCase();
+  const rel = uc.cls === "MS"
+    ? "Releasable to FMN Mission Network participants"
+    : (uc.cls === "NS"
+        ? "Releasable to NATO"
+        : "Releasable to NATO + Mission Partners");
+  return {
+    ierId: `IER-LAND-${ierIdBand}-${uc.id.replace('UC-','')}`,
+    version: "1.0",
+    status: "DRAFT",
+    issueDate: "2026-05-20",
+    authority: "LANDCOM CCIS Branch · project staff (proxy)",
+    primary, secondary, releasability: rel,
+    goal:           o.goal           || uc.sub.split('.')[0],
+    trigger:        o.trigger        || "Operational event in the mission profile",
+    preconditions:  o.preconditions  || "Bearer up · C2 registry reachable · classification policy current",
+    postconditions: o.postconditions || "Information exchanged · consumer entity acts on the product",
+    nafView:        NAF_VIEW_BY_BAND[uc.band] || "NOV-5 / NSOV-1",
+    adatp47:        "ADatP-47 Operational Use Case + Service Interaction Pattern (SysML)",
+    fmnService:     detectFmnService(uc.ier.what + " " + uc.ier.protection),
+    doctrinalBasis: "AJP-5 (Operational Planning) · AJP-6 (CIS) · MC 0640 (Land Tactical CIS)"
+  };
+}
 
 const ROW_LABELS = {
   who:"IER · Who", what:"IER · What", when:"IER · When",
@@ -408,6 +680,15 @@ const ROW_LABELS = {
   zones:"Zones, CoI", availability:"Availability", classification:"Classification",
   risk:"Risk (LPI/LPD)", attackSurface:"Attack Surface"
 };
+const ROW_ICONS = {
+  who:"i-users", what:"i-filetext", when:"i-clock", protection:"i-shield",
+  precedence:"i-zap", volume:"i-barchart", equipment:"i-radio", timeWindow:"i-clock",
+  environment:"i-globe", zones:"i-mappin", availability:"i-activity",
+  classification:"i-shield", risk:"i-target", attackSurface:"i-alert"
+};
+function rowKey(name) {
+  return `<svg><use href="#${ROW_ICONS[name]}"/></svg>${ROW_LABELS[name]}`;
+}
 const RISK_LABEL = ["None","None","LPI","LPI","LPI+LPD","LPI+LPD"];
 const RISK_NARR = [
   "No tactical concealment required; routine garrison-style RF posture.",
@@ -772,10 +1053,10 @@ const USE_CASES = [
       volume:"Medium · steady multicast stream"
     },
     equipment:[
-      "Vehicle BFT terminals on both nations",
-      "PCR translates national subnets via BGP-4 NNI",
-      "ESSOR HDR backbone, multicast across NNI",
-      "STANAG 4774 label validated on every multicast packet"
+      "Systematic SitaWare Frontline (Nation C) ↔ Saab 9LAND C2 (Nation D) BFT terminals",
+      "Cisco ESR6300 PCR translates national subnets via BGP-4 NNI",
+      "Thales Synaps ESSOR HDR backbone, multicast across NNI",
+      "Advenica / Fox-IT CDS validates STANAG 4774 label on every multicast packet"
     ],
     attackSurface:"Inter-national multicast is the textbook target for stream injection. Mitigation: per-packet origin auth, CDS replay on every NNI."
   },
@@ -793,10 +1074,10 @@ const USE_CASES = [
       volume:"Ultra-low under degradation"
     },
     equipment:[
-      "Adaptive bearer policy on vehicle SDR",
-      "NBWF Profile A fallback path",
-      "Coalition COP aggregator interpolates between bursts",
-      "DSCP CS3 reserved for degraded BFT"
+      "Adaptive bearer policy on Thales Synaps vehicle SDR",
+      "Rohde & Schwarz SOVERON NBWF Profile A fallback path",
+      "Systematic SitaWare HQ coalition COP aggregator interpolates between bursts",
+      "DSCP CS3 reserved for degraded BFT (Cisco ESR6300)"
     ],
     attackSurface:"Adversary detects degradation and pushes harder. Mitigation: pre-planned scheduled bursts, antenna nulling, opportunistic frequency change."
   },
@@ -814,10 +1095,10 @@ const USE_CASES = [
       volume:"Low to medium · text + occasional imagery"
     },
     equipment:[
-      "Long-range handheld SDR with directional antenna",
-      "NBWF on the recon leg, ESSOR on the BG leg",
-      "Local image compressor on Coy NFV blade",
-      "DSCP CS3"
+      "L3Harris AN/PRC-163 / Rohde & Schwarz SOVERON long-range handheld with directional antenna",
+      "NBWF on the recon leg, Thales Synaps ESSOR HDR on the BG leg",
+      "Klas Voyager NFV blade hosts the image compressor (Coy)",
+      "DSCP CS3 (Cisco ESR6300)"
     ],
     attackSurface:"Recon team RF emissions are the highest-value EW target. Counter: scheduled brief contacts, antenna directionality, full radio silence between contacts."
   },
@@ -837,10 +1118,10 @@ const USE_CASES = [
       volume:"Medium · structured target packets"
     },
     equipment:[
-      "MIP4 fires data model on Bde DCIS",
-      "ESSOR HDR backbone Bde-to-firing unit",
-      "Digital fire control via tasking service",
-      "DSCP EF reserved for fires"
+      "Saab 9LAND C2 / Systematic SitaWare HQ MIP4 fires data model on Klas Voyager NFV stack",
+      "Thales Synaps ESSOR HDR backbone Bde-to-firing unit",
+      "Digital fire control via Tasking & Order Services VNF (Klas Voyager)",
+      "DSCP EF reserved for fires (Cisco ESR6300)"
     ],
     attackSurface:"Fires net is the prime EW + cyber target. Counter: dual signed path (voice brevity + digital), pre-coordinated brevity codes."
   },
@@ -858,10 +1139,10 @@ const USE_CASES = [
       volume:"Low to medium"
     },
     equipment:[
-      "Vehicular SDR with ESSOR HDR + NBWF",
-      "XMPP on Bde DCIS for chat",
-      "MELPe voice on the fires net",
-      "PFL-00446 DSCP shaping"
+      "Thales Synaps vehicular SDR with ESSOR HDR + NBWF",
+      "Systematic SitaWare HQ XMPP on Klas Voyager NFV blade for chat",
+      "L3Harris AN/PRC-163 MELPe voice on the fires net",
+      "PFL-00446 DSCP shaping (Cisco ESR6300)"
     ],
     attackSurface:"Same as UC-019 fires net considerations; CBAG positions are also vulnerable to BFT-derived counter-battery."
   },
@@ -879,9 +1160,9 @@ const USE_CASES = [
       volume:"Medium"
     },
     equipment:[
-      "BASO terminal on Bde DCIS",
-      "MIP4 airspace deconfliction service",
-      "AOCC(L) reach-back via PCN tunnel",
+      "Systematic SitaWare HQ BASO terminal with air overlay (Klas Voyager NFV)",
+      "Saab 9LAND C2 MIP4 airspace deconfliction service",
+      "Cisco ESR6300 AOCC(L) reach-back via STANAG 4711 PCN tunnel",
       "DSCP AF31 for ACMs, AF41 for fires voice"
     ],
     attackSurface:"ACM tampering can clear airspace for adversary or block friendly fires. Mitigation: signed ACMs, BASO/BJFC dual ack."
@@ -900,10 +1181,10 @@ const USE_CASES = [
       volume:"Medium"
     },
     equipment:[
-      "MIP4 target folder replication",
-      "ESSOR HDR backbone",
-      "XMPP coordination chat",
-      "Dual-control sign-off"
+      "Systematic SitaWare HQ MIP4 target folder replication (Klas Voyager)",
+      "Thales Synaps ESSOR HDR backbone",
+      "Saab 9LAND XMPP coordination chat",
+      "Dual-control sign-off (per-cell signed)"
     ],
     attackSurface:"Handover misalignment can cause fires gap or duplicate. Mitigation: explicit dual-ack handover, fires-active flag in MIP4."
   },
@@ -921,10 +1202,10 @@ const USE_CASES = [
       volume:"Low · structured short-form"
     },
     equipment:[
-      "EWCC tasking service on Bde DCIS",
-      "ESSOR HDR + dedicated EW back-haul",
-      "Encrypted multicast to EW asset cluster",
-      "DSCP CS4 reserved for EW tasking"
+      "Systematic SitaWare HQ EWCC tasking service on Klas Voyager NFV blade (Bde DCIS)",
+      "Thales Synaps ESSOR HDR + dedicated EW back-haul",
+      "Cisco ESR6300 encrypted multicast to EW asset cluster",
+      "DSCP CS4 reserved for EW tasking · Rohde & Schwarz SOVERON on the EW assets"
     ],
     attackSurface:"EW tasking compromise reveals friendly EW intent. Mitigation: short-validity tasking tokens, asset-side replay protection."
   },
@@ -942,10 +1223,10 @@ const USE_CASES = [
       volume:"Medium · text + sometimes imagery"
     },
     equipment:[
-      "MIP4 intel data model",
-      "PCN tunnel from theatre intel core to Bde",
-      "CDS gateway for any cross-classification recipients",
-      "DSCP CS3"
+      "Systematic SitaWare HQ MIP4 intel data model on Klas Voyager NFV blade",
+      "Cisco ESR6300 establishes PCN tunnel from theatre intel core to Bde",
+      "Advenica / Fox-IT CDS gateway for any cross-classification recipients",
+      "DSCP CS3 (Cisco ESR6300 policy)"
     ],
     attackSurface:"Intel leak risk is structural. Mitigation: minimum-necessary disclosure, per-report label review."
   },
@@ -1197,7 +1478,8 @@ function renderUcIndex(list) {
 
 function renderUcCards(list) {
   document.getElementById("uc-cards").innerHTML = list.map(uc => {
-    const eq = uc.equipment.map((l,i) => `<span class="mono-sub${i===0?' first':''}">${l}</span>`).join("");
+    const eq = uc.equipment.map((l,i) => `<span class="mono-sub${i===0?' first':''}">${linkifyVendors(l)}</span>`).join("");
+    const n = naf(uc);
     return `
     <article class="uc-card" id="${uc.id}">
       <header class="uc-head">
@@ -1208,22 +1490,45 @@ function renderUcCards(list) {
           <span class="cls-tag cls-${uc.cls}" style="margin-left:auto;">${clsName(uc.cls)}</span>
         </div>
         <div class="uc-title">${uc.title}</div>
-        <div class="uc-sub">${uc.sub}</div>
+        <div class="uc-sub">${linkifyVendors(uc.sub)}</div>
       </header>
+      <div class="app15">
+        <div class="app15-bar">
+          <span class="app15-stamp">NAF v4 · ADatP-47</span>
+          <span class="app15-id">${n.ierId}</span>
+          <span class="app15-meta">v${n.version}</span>
+          <span class="app15-meta">${n.issueDate}</span>
+          <span class="app15-status draft">${n.status}</span>
+          <span class="app15-meta" style="margin-left:auto;">${n.authority}</span>
+        </div>
+        <div class="app15-grid">
+          <div class="lbl">Primary actor</div>          <div class="val">${linkifyVendors(n.primary)}</div>
+          <div class="lbl">Secondary actors</div>       <div class="val">${linkifyVendors(n.secondary)}</div>
+          <div class="lbl">Goal (AJP-5)</div>           <div class="val">${linkifyVendors(n.goal)}</div>
+          <div class="lbl">Trigger event</div>          <div class="val">${linkifyVendors(n.trigger)}</div>
+          <div class="lbl">Preconditions</div>          <div class="val">${linkifyVendors(n.preconditions)}</div>
+          <div class="lbl">Postconditions</div>         <div class="val">${linkifyVendors(n.postconditions)}</div>
+          <div class="lbl">NAF view</div>               <div class="val">${n.nafView}</div>
+          <div class="lbl">ADatP-47 artifact</div>      <div class="val">${n.adatp47}</div>
+          <div class="lbl">FMN service</div>            <div class="val">${n.fmnService}</div>
+          <div class="lbl">Releasability</div>          <div class="val">${n.releasability}</div>
+          <div class="lbl">Doctrinal basis</div>        <div class="val" style="grid-column:span 3">${n.doctrinalBasis}</div>
+        </div>
+      </div>
       <div class="uc-rows">
-        <div class="k">${ROW_LABELS.who}</div>          <div class="v">${uc.ier.who}</div>
-        <div class="k">${ROW_LABELS.what}</div>         <div class="v">${uc.ier.what}</div>
-        <div class="k">${ROW_LABELS.when}</div>         <div class="v">${uc.ier.when}</div>
-        <div class="k">${ROW_LABELS.protection}</div>   <div class="v">${uc.ier.protection}</div>
-        <div class="k">${ROW_LABELS.precedence}</div>   <div class="v"><span class="prec-tag">${uc.prec}</span></div>
-        <div class="k">${ROW_LABELS.volume}</div>       <div class="v">${uc.ier.volume}</div>
-        <div class="k">${ROW_LABELS.equipment}</div>    <div class="v">${eq}</div>
-        <div class="k">${ROW_LABELS.timeWindow}</div>   <div class="v">${uc.timeWindow}</div>
-        <div class="k">${ROW_LABELS.environment}</div>  <div class="v"><span class="env-dot env-${uc.env}"></span>${envLabel(uc.env)}</div>
-        <div class="k">${ROW_LABELS.zones}</div>        <div class="v">${uc.zones}</div>
-        <div class="k">${ROW_LABELS.availability}</div> <div class="v">${uc.avail}</div>
-        <div class="k">${ROW_LABELS.classification}</div><div class="v"><span class="cls-tag cls-${uc.cls}">${uc.cls} — ${clsName(uc.cls)}</span></div>
-        <div class="k">${ROW_LABELS.risk}</div>
+        <div class="k">${rowKey('who')}</div>           <div class="v">${linkifyVendors(uc.ier.who)}</div>
+        <div class="k">${rowKey('what')}</div>          <div class="v">${linkifyVendors(uc.ier.what)}</div>
+        <div class="k">${rowKey('when')}</div>          <div class="v">${linkifyVendors(uc.ier.when)}</div>
+        <div class="k">${rowKey('protection')}</div>    <div class="v">${linkifyVendors(uc.ier.protection)}</div>
+        <div class="k">${rowKey('precedence')}</div>    <div class="v"><span class="prec-tag">${uc.prec}</span></div>
+        <div class="k">${rowKey('volume')}</div>        <div class="v">${linkifyVendors(uc.ier.volume)}</div>
+        <div class="k">${rowKey('equipment')}</div>     <div class="v">${eq}</div>
+        <div class="k">${rowKey('timeWindow')}</div>    <div class="v">${uc.timeWindow}</div>
+        <div class="k">${rowKey('environment')}</div>   <div class="v"><span class="env-dot env-${uc.env}"></span>${envLabel(uc.env)}</div>
+        <div class="k">${rowKey('zones')}</div>         <div class="v">${uc.zones}</div>
+        <div class="k">${rowKey('availability')}</div>  <div class="v">${uc.avail}</div>
+        <div class="k">${rowKey('classification')}</div><div class="v"><span class="cls-tag cls-${uc.cls}">${uc.cls} — ${clsName(uc.cls)}</span></div>
+        <div class="k">${rowKey('risk')}</div>
         <div class="v">
           <div class="risk">
             <div class="risk-meter">
@@ -1234,7 +1539,7 @@ function renderUcCards(list) {
             <div class="risk-narr">${RISK_NARR[uc.lpi]}</div>
           </div>
         </div>
-        <div class="k">${ROW_LABELS.attackSurface}</div><div class="v">${uc.attackSurface}</div>
+        <div class="k">${rowKey('attackSurface')}</div><div class="v">${linkifyVendors(uc.attackSurface)}</div>
       </div>
     </article>`;
   }).join("");
@@ -1242,9 +1547,42 @@ function renderUcCards(list) {
 
 function renderFilter() {
   const bands = ["All", ...new Set(USE_CASES.map(u => u.band))];
-  document.getElementById("echelon-filter").innerHTML = bands.map(b =>
-    `<button class="${b === activeBand ? 'active' : ''}" onclick="setBand('${b}')">${b}</button>`
+  document.getElementById("echelon-filter").innerHTML = bands.map(b => {
+    const cnt = (b === "All") ? USE_CASES.length : USE_CASES.filter(u => u.band === b).length;
+    return `<button class="${b === activeBand ? 'active' : ''}" onclick="setBand('${b}')">${b}<span class="cnt">${cnt}</span></button>`;
+  }).join("");
+}
+
+function renderStats() {
+  const total   = USE_CASES.length;
+  const byBand  = USE_CASES.reduce((m,u) => (m[u.band] = (m[u.band]||0) + 1, m), {});
+  const flashN  = USE_CASES.filter(u => u.prec === "Flash").length;
+  const hiRisk  = USE_CASES.filter(u => u.lpi >= 4).length;
+  const chips = [
+    { n: total,         l: "Use Cases" },
+    { n: byBand.Company || 0,      l: "Company" },
+    { n: byBand["Battle Group"] || 0, l: "Battle Group" },
+    { n: byBand.Brigade || 0,      l: "Brigade" },
+    { n: flashN,        l: "Flash precedence", gold: true },
+    { n: hiRisk,        l: "LPI ≥ 4/5",        gold: true }
+  ];
+  document.getElementById("stats-row").innerHTML = chips.map(c =>
+    `<div class="stat-chip${c.gold ? ' gold' : ''}"><span class="n">${c.n}</span><span class="l">${c.l}</span></div>`
   ).join("");
+}
+
+function renderQuickJump() {
+  const bandClass = b => b === "Battle Group" ? "Battle" : b;
+  document.getElementById("uc-quickjump").innerHTML = USE_CASES.map(u =>
+    `<a href="#${u.id}" class="band-${bandClass(u.band)}" title="${u.title.replace(/"/g,'&quot;')}">${u.id}</a>`
+  ).join("");
+}
+
+function setupTopButton() {
+  const btn = document.getElementById("totop");
+  window.addEventListener("scroll", () => {
+    btn.classList.toggle("visible", window.scrollY > 600);
+  }, { passive: true });
 }
 function setBand(b) {
   activeBand = b;
@@ -1264,8 +1602,11 @@ function renderSerials() {
 }
 
 renderLadder();
+renderStats();
+renderQuickJump();
 applyFilter();
 renderSerials();
+setupTopButton();
 </script>
 
 </body>
