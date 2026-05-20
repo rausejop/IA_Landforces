@@ -15,11 +15,23 @@
 
 <style>
 :root {
-  --bg:#0a0e14; --bg-2:#11161e; --bg-3:#1a2230; --bg-4:#232c3d;
+  /* NATO Allied Command Operations (ACO) — official heraldic palette.
+     NATO Blue is PMS 286 (~ #003F87), used across SHAPE / ACO branding.
+     NATO Gold is the metal of the NATO compass star (~ #cba135).
+     White is the compass-star body itself. */
+  --nato-blue:       #003F87;
+  --nato-blue-dark:  #002967;
+  --nato-blue-deep:  #001b4d;
+  --nato-blue-light: #5a8acf;
+  --nato-gold:       #cba135;
+  --nato-gold-light: #e6c569;
+  --nato-white:      #ffffff;
+
+  --bg:#0a0e14; --bg-2:#0f1623; --bg-3:#182338; --bg-4:#233152;
   --fg:#e6edf3; --fg-dim:#8b96a8; --fg-mute:#5a6678;
-  --line:#283142; --line-hot:#3a4658;
-  --accent:#4a9eff; --accent-2:#2d6cc0;
-  --gold:#d4a017; --gold-soft:rgba(212,160,23,0.18);
+  --line:#1f2c44; --line-hot:#2e3f5e;
+  --accent:#5a8acf; --accent-2:#003F87;
+  --gold:#cba135; --gold-soft:rgba(203,161,53,0.18);
 
   /* Classification palette — AstroUXDS/Pantone Standard-Form (NU/NR/NS).
      MS has no canonical NATO colour; magenta is the FMN/AMN convention. */
@@ -40,13 +52,15 @@ body{
   font-family:var(--font-sans); font-size:15px; line-height:1.55;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
   background-image:
-    radial-gradient(800px 400px at 80% -10%,rgba(74,158,255,0.06),transparent 60%),
-    radial-gradient(600px 300px at 5% 5%,rgba(212,160,23,0.04),transparent 60%);
+    radial-gradient(900px 450px at 80% -10%,rgba(0,63,135,0.20),transparent 60%),
+    radial-gradient(700px 350px at 5% 5%,rgba(203,161,53,0.06),transparent 60%),
+    linear-gradient(180deg,#091226 0%,var(--bg) 360px);
 }
 .wrap{max-width:1280px;margin:0 auto;padding:0 28px}
 .section{padding:56px 0 24px}
 .section + .section{border-top:1px dashed var(--line)}
-.eyebrow{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-mute);margin-bottom:10px}
+.eyebrow{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--nato-gold);margin-bottom:10px;display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";display:inline-block;width:24px;height:1px;background:var(--nato-gold)}
 .h1{font-size:2.4rem;font-weight:700;line-height:1.1;letter-spacing:-0.01em}
 .h2{font-size:1.5rem;font-weight:700;line-height:1.2;margin-bottom:18px}
 .h3{font-size:1.05rem;font-weight:600;letter-spacing:0.01em}
@@ -58,20 +72,25 @@ body{
 @media(max-width:980px){.grid-3,.grid-4{grid-template-columns:1fr 1fr}}
 @media(max-width:680px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
 
-.topbar{position:sticky;top:0;z-index:50;background:rgba(10,14,20,0.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.topbar-inner{display:flex;align-items:center;gap:18px;padding:14px 28px;max-width:1280px;margin:0 auto}
-.brand{display:flex;align-items:center;gap:12px;font-weight:700}
-.brand .star{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#1a2230,#0a0e14);border:1px solid var(--line-hot);border-radius:8px;color:var(--accent)}
-.brand .titleblock{display:flex;flex-direction:column;line-height:1.1}
-.brand .titleblock .t1{font-size:0.95rem}
-.brand .titleblock .t2{font-size:0.68rem;letter-spacing:0.12em;color:var(--fg-mute);text-transform:uppercase}
-.topnav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-.topnav a{color:var(--fg-dim);text-decoration:none;font-size:0.85rem;padding:8px 10px;border-radius:6px}
-.topnav a:hover{background:var(--bg-3);color:var(--fg)}
+.topbar{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(0,27,77,0.92),rgba(10,14,20,0.88));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--nato-blue);box-shadow:0 1px 0 var(--nato-gold) inset, 0 4px 14px rgba(0,0,0,0.45)}
+.topbar-inner{display:flex;align-items:center;gap:18px;padding:12px 28px;max-width:1280px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:14px;font-weight:700}
+.brand .star{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px var(--nato-gold), 0 2px 8px rgba(0,63,135,0.5)}
+.brand .titleblock{display:flex;flex-direction:column;line-height:1.15}
+.brand .titleblock .t1{font-size:0.95rem;color:var(--nato-white)}
+.brand .titleblock .t2{font-size:0.66rem;letter-spacing:0.14em;color:var(--nato-blue-light);text-transform:uppercase;margin-top:1px}
+.topnav{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
+.topnav a{color:var(--nato-blue-light);text-decoration:none;font-size:0.82rem;padding:6px 10px;border-radius:5px;border:1px solid transparent;transition:all 0.15s}
+.topnav a:hover{background:rgba(0,63,135,0.35);color:var(--nato-gold);border-color:var(--nato-blue)}
 
-.hero{padding:56px 0 36px}
+.hero{padding:56px 0 36px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1fr 200px;gap:32px;align-items:start}
+@media(max-width:880px){.hero-grid{grid-template-columns:1fr}.hero-emblem{order:-1;margin:0 auto 14px}}
+.hero-emblem{width:180px;height:180px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 6px 14px rgba(0,27,77,0.55))}
 .hero .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.badge{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.08em;padding:4px 9px;border-radius:5px;border:1px solid var(--line-hot);color:var(--fg-dim);background:var(--bg-2)}
+.hero-corner-text{position:absolute;top:18px;right:0;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.16em;color:var(--nato-gold);text-transform:uppercase}
+.badge{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.08em;padding:4px 9px;border-radius:5px;border:1px solid var(--nato-blue);color:var(--nato-blue-light);background:rgba(0,63,135,0.18)}
+.badge:hover{border-color:var(--nato-gold);color:var(--nato-gold)}
 
 /* Classification tag — mandatory styling per spec */
 .cls-tag{display:inline-block;font-family:var(--font-mono);font-weight:700;font-size:0.62rem;letter-spacing:0.06em;padding:1px 7px;border-radius:5px;border-width:1px;border-style:solid;text-transform:uppercase}
@@ -209,12 +228,53 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 #toast.ok{border-color:#16a34a}
 #toast.err{border-color:#dc2626}
 
-/* Technical Report cover strip */
-.doc-control{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;padding:14px 18px;background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:8px;font-family:var(--font-mono);font-size:0.78rem}
-.doc-control .field{display:flex;flex-direction:column;gap:2px;min-width:120px}
-.doc-control .field .l{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--fg-mute)}
+/* Technical Report cover strip — NATO/ACO formal info box */
+.doc-control{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px;padding:16px 20px;background:linear-gradient(180deg,rgba(0,63,135,0.16),rgba(0,27,77,0.10));border:1px solid var(--nato-blue);border-top:3px solid var(--nato-gold);border-radius:8px;font-family:var(--font-mono);font-size:0.78rem;position:relative}
+.doc-control::before{content:"DOCUMENT CONTROL";position:absolute;top:-9px;left:14px;background:var(--bg);padding:0 8px;color:var(--nato-gold);font-size:0.6rem;letter-spacing:0.18em;font-weight:700}
+.doc-control .field{display:flex;flex-direction:column;gap:3px;min-width:120px}
+.doc-control .field .l{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--nato-gold)}
 .doc-control .field .v{color:var(--fg)}
 .doc-control .field.cls{justify-content:center}
+
+/* Source tag for each acronym in §2 */
+.src-tag{display:inline-block;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.04em;color:var(--gold);background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.35);padding:0 5px;border-radius:3px;margin-left:6px;white-space:nowrap;vertical-align:1px}
+.src-tag a{color:inherit;text-decoration:none}
+.src-tag a:hover{text-decoration:underline}
+
+/* Annex A — Formal Definitions */
+.defs{margin-top:18px}
+.defs dt{font-family:var(--font-mono);color:var(--fg);font-size:0.92rem;margin-top:18px;padding-bottom:5px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.defs dt .term{color:var(--accent);font-weight:700;letter-spacing:0.03em}
+.defs dt .expansion{color:var(--fg);font-family:var(--font-sans);font-weight:400}
+.defs dd{margin-left:0;margin-top:7px;color:var(--fg-dim);font-size:0.9rem;line-height:1.65}
+.defs dd em{color:var(--fg)}
+.defs-group{margin-top:24px}
+.defs-group > h3{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);border-top:1px dashed var(--line-hot);padding-top:18px;margin-top:10px}
+
+/* Annex B — Formal Definitions, 3-column table */
+.defs-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg-2);font-size:0.86rem;margin-top:14px}
+.defs-table th,.defs-table td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+.defs-table th{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-mute);background:var(--bg-3);border-bottom:1px solid var(--line-hot)}
+.defs-table tbody tr:last-child td{border-bottom:0}
+.defs-table tbody tr:hover{background:var(--bg-3)}
+.defs-table .term-cell{width:18%}
+.defs-table .term-cell .acro{font-family:var(--font-mono);font-weight:700;color:var(--accent);letter-spacing:0.03em}
+.defs-table .term-cell .expansion{display:block;color:var(--fg);font-size:0.82rem;margin-top:3px}
+.defs-table .std-cell{width:22%;font-family:var(--font-mono);font-size:0.78rem;color:var(--gold);line-height:1.5}
+.defs-table .def-cell{color:var(--fg-dim);line-height:1.6}
+.defs-table .def-cell em{color:var(--fg)}
+
+/* Annex A — UC × Vendor × NAF Architecture table */
+.naf-vendor{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg-2);font-size:0.82rem}
+.naf-vendor th,.naf-vendor td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.naf-vendor th{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg-mute);background:var(--bg-3);border-bottom:1px solid var(--line-hot)}
+.naf-vendor tbody tr:last-child td{border-bottom:0}
+.naf-vendor tbody tr:hover{background:var(--bg-3)}
+.naf-vendor .uc-cell{font-family:var(--font-mono);white-space:nowrap}
+.naf-vendor .uc-cell a{color:var(--accent);text-decoration:none}
+.naf-vendor .uc-cell .ttl{display:block;font-family:var(--font-sans);font-size:0.78rem;color:var(--fg-dim);white-space:normal;margin-top:2px;max-width:240px}
+.naf-vendor .naf-cell{color:var(--fg-dim);font-size:0.8rem;line-height:1.5}
+.naf-vendor .none{color:var(--fg-mute);font-style:italic}
 </style>
 </head>
 <body>
@@ -239,37 +299,93 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
     <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+
+    <!-- ACO emblem (stylised) — NATO compass star + crossed swords on blue/gold shield.
+         Approximation of the Allied Command Operations heraldic mark. The mark is
+         used here as a brand reference only; not a substitute for the official emblem. -->
+    <symbol id="i-aco-emblem" viewBox="0 0 200 200">
+      <defs>
+        <radialGradient id="aco-bg" cx="50%" cy="40%" r="65%">
+          <stop offset="0%" stop-color="#0a559a"/>
+          <stop offset="60%" stop-color="#003F87"/>
+          <stop offset="100%" stop-color="#001b4d"/>
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="96" fill="url(#aco-bg)" stroke="#cba135" stroke-width="2.5"/>
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#e6c569" stroke-width="0.5" stroke-dasharray="2 2"/>
+      <circle cx="100" cy="100" r="72" fill="#001b4d" stroke="#cba135" stroke-width="1"/>
+      <g stroke="#cba135" stroke-width="2.5" stroke-linecap="round" opacity="0.85">
+        <line x1="58" y1="58" x2="142" y2="142"/>
+        <line x1="142" y1="58" x2="58" y2="142"/>
+      </g>
+      <circle cx="58" cy="58" r="4" fill="#cba135"/>
+      <circle cx="142" cy="58" r="4" fill="#cba135"/>
+      <circle cx="58" cy="142" r="4" fill="#cba135"/>
+      <circle cx="142" cy="142" r="4" fill="#cba135"/>
+      <g transform="translate(100 100)" fill="#ffffff" stroke="#cba135" stroke-width="0.6" stroke-linejoin="miter">
+        <polygon points="0,-58 13,-13 58,0 13,13 0,58 -13,13 -58,0 -13,-13"/>
+      </g>
+      <circle cx="100" cy="100" r="5" fill="#cba135" stroke="#ffffff" stroke-width="0.6"/>
+      <defs>
+        <path id="aco-arc-top" d="M 18,100 A 82,82 0 0,1 182,100" fill="none"/>
+        <path id="aco-arc-bot" d="M 25,115 A 75,75 0 0,0 175,115" fill="none"/>
+      </defs>
+      <text fill="#e6c569" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="13" letter-spacing="2.2">
+        <textPath href="#aco-arc-top" startOffset="50%" text-anchor="middle">ALLIED COMMAND OPERATIONS</textPath>
+      </text>
+      <text fill="#e6c569" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="11" letter-spacing="3.5">
+        <textPath href="#aco-arc-bot" startOffset="50%" text-anchor="middle">★ NATO · SHAPE ★</textPath>
+      </text>
+    </symbol>
+
+    <!-- Compact 4-point NATO compass star, for small branding spots -->
+    <symbol id="i-nato-star" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="11.5" fill="#003F87" stroke="#cba135" stroke-width="0.6"/>
+      <g transform="translate(12 12)" fill="#ffffff">
+        <polygon points="0,-9 2,-2 9,0 2,2 0,9 -2,2 -9,0 -2,-2"/>
+      </g>
+      <circle cx="12" cy="12" r="1.2" fill="#cba135"/>
+    </symbol>
   </defs>
 </svg>
 
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <span class="star"><svg width="22" height="22"><use href="#i-star"/></svg></span>
+      <span class="star"><svg width="40" height="40" aria-label="NATO"><use href="#i-nato-star"/></svg></span>
       <span class="titleblock">
-        <span class="t1">MC&nbsp;0640 Use Cases</span>
-        <span class="t2">PFL-00403 · FMN Spiral 5 · DRAFT</span>
+        <span class="t1">MC&nbsp;0640 Use Cases · <span style="color:var(--nato-gold)">ACO</span></span>
+        <span class="t2">Allied Command Operations · PFL-00403 · FMN Spiral 5 · DRAFT</span>
       </span>
     </div>
     <nav class="topnav">
       <a href="#exec">§1 Summary</a>
-      <a href="#acronyms">§2 Acronyms</a>
-      <a href="#about">§3 Intro</a>
-      <a href="#constraints">§4 Constraints</a>
-      <a href="#vendors">§5 Vendors</a>
-      <a href="#echelons">§6 Echelons</a>
-      <a href="#use-cases">§7 Use Cases</a>
-      <a href="#serials">§8 Serials</a>
-      <a href="#references">§9 References</a>
+      <a href="#methodology">§2 Method</a>
+      <a href="#acronyms">§3 Acronyms</a>
+      <a href="#about">§4 Intro</a>
+      <a href="#constraints">§5 Constraints</a>
+      <a href="#vendors">§6 Vendors</a>
+      <a href="#echelons">§7 Echelons</a>
+      <a href="#uc-framework">§8 UC Framework</a>
+      <a href="#use-cases">§9 Use Cases</a>
+      <a href="#serials">§10 Serials</a>
+      <a href="#references">§11 References</a>
+      <a href="#annex-b">Annex A</a>
+      <a href="#annex-a">Annex B</a>
     </nav>
   </div>
 </header>
 
 <section class="hero">
   <div class="wrap">
-    <div class="eyebrow">TECHNICAL REPORT · ALLIED COMMAND OPERATIONS · NATO LAND FORCES</div>
-    <h1 class="h1">Technical Report — CIS Communications Use Cases at Land Tactical Level</h1>
-    <p class="lede"><strong>Subject:</strong> Use Cases for the <em>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</em>, generated under <strong>NAF v4 + ADatP-47</strong> and applied to the Information Exchange Requirement tables of <strong>Annex C to Draft MC 0640</strong> (which supersedes STANAG 5048). <strong>Scope: Brigade and below.</strong> Division / Corps / LANDCOM appear only as upstream reach-back nodes — their primary UC content belongs to MC 0593. Technical realisation is constrained by the STEADFAST COBALT lessons learned and by NISP Baseline 16.</p>
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow" style="color:var(--nato-gold)">Technical Report · Allied Command Operations · NATO Land Forces</div>
+        <h1 class="h1">Technical Report — CIS Communications Use Cases at Land Tactical Level</h1>
+        <p class="lede"><strong>Subject:</strong> Use Cases for the <em>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</em>, generated under <strong>NAF v4 + ADatP-47</strong> and applied to the Information Exchange Requirement tables of <strong>Annex C to Draft MC 0640</strong> (which supersedes STANAG 5048). <strong>Scope: Brigade and below.</strong> Division / Corps / LANDCOM appear only as upstream reach-back nodes — their primary UC content belongs to MC 0593. Technical realisation is constrained by the STEADFAST COBALT lessons learned and by NISP Baseline 16.</p>
+      </div>
+      <div class="hero-emblem"><svg width="180" height="180" aria-label="Allied Command Operations emblem"><use href="#i-aco-emblem"/></svg></div>
+    </div>
     <div class="badge-row">
       <span class="badge">DRAFT MC 0640</span>
       <span class="badge">NAF v4 · ADatP-47</span>
@@ -309,71 +425,130 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
   </div>
 </section>
 
+<section class="section" id="methodology">
+  <div class="wrap">
+    <div class="eyebrow">§ 2 · Methodology</div>
+    <h2 class="h2">Scientific method applied to deterministic Technical Report generation</h2>
+    <p class="lede" style="margin-top:0;">This Technical Report is generated by applying the <strong>scientific method</strong> to NATO authoritative sources in a <strong>deterministic</strong> pipeline: the same inputs (MC 0640 Annex C tables, NAF v4 / ADatP-47 framework, AJP-5 / AJP-6 doctrine, NISP B16 / PFL-00403, STEADFAST COBALT lessons learned, AAP-06 / AAP-15 terminology) always produce the same outputs (the 32 Use Cases, their NAF specification headers, their 14-row operational bodies, the vendor &amp; NAF architecture mapping in Annex A, and the formal-definition tables in Annex B). No prose-driven invention; every claim is traceable to a reference identifier (Reference&nbsp;A … Reference&nbsp;R in §11).</p>
+
+    <h2 class="h2" style="margin-top:32px;font-size:1.15rem;">2.1 — Scientific-method phases applied to NATO CIS Use Case generation</h2>
+    <table class="uc-index" style="margin-top:8px;">
+      <thead><tr><th style="width:18%">Phase</th><th style="width:42%">Activity in this Technical Report</th><th>Deterministic output</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Observation</strong></td><td>Read the IER tables in MC 0640 Annex C and the STEADFAST COBALT lessons learned; catalogue every entity-to-entity flow with its IE Product and C3 Taxonomy mapping.</td><td>Raw IER inventory of ~700–800 Serial rows (file: <code>serials/annexC_extracted.json</code>).</td></tr>
+        <tr><td><strong>2. Hypothesis</strong></td><td>State the project convention: "Each Serial pairs <em>1:1</em> with a Use Case under FMN Spiral 5 / PFL-00403, with MC 0640 scope = Brigade and below."</td><td>Mapping rule <code>S-NNN ↔ UC-NNN</code> with band restriction <code>band ∈ { Company · Battle Group · Brigade }</code>.</td></tr>
+        <tr><td><strong>3. Experimentation</strong></td><td>Apply the NAF v4 + ADatP-47 framework to each Serial. Populate the formal IER specification header (primary actor, goal, trigger, preconditions, postconditions, NAF view, ADatP-47 artifact, FMN service, releasability, doctrinal basis).</td><td>Per-UC NAF spec header — 16 fields, deterministically derived from Serial entity-pair + STEADFAST COBALT echelon tier + AAP-06 terminology.</td></tr>
+        <tr><td><strong>4. Analysis</strong></td><td>For each UC, fill the 14-row operational body (six IER dimensions + Equipment + TimeWindow + Environment + Zones/CoI + Availability + Classification + Risk LPI/LPD + Attack Surface). Cross-check classification palette (NU/NR/NS/MS) and risk meter (0–5 LPI/LPD).</td><td>14-row body for every UC, with frequency band and channel width substituted for vendor identity (vendor mapping deferred to Annex A).</td></tr>
+        <tr><td><strong>5. Conclusion</strong></td><td>Cross-reference the vendor ecosystem (Thales / L3Harris / Leonardo / R&amp;S · Klas / Cisco / PacStar · Systematic / Saab · Advenica / Fox-IT) and produce a deterministic Single Page Application that publishes the UC inventory.</td><td>Annex A vendor &amp; NAF architecture mapping + 32 UC cards + Serial inventory (§10).</td></tr>
+        <tr><td><strong>6. Reproducibility</strong></td><td>Every transform between input and output is explicit and deterministic. A qualified reader applying the same NATO sources reproduces the same Technical Report.</td><td>Audit-replayable Technical Report (single self-contained <code>.html</code> file, no runtime fetches).</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="h2" style="margin-top:32px;font-size:1.15rem;">2.2 — Deterministic input/output contract</h2>
+    <div class="grid grid-2" style="gap:14px;">
+      <div class="card" style="border-left:3px solid var(--nato-blue);">
+        <h3 class="h3" style="color:var(--nato-blue-light);margin-bottom:8px;">Canonical inputs</h3>
+        <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.9rem;line-height:1.75;">
+          <li>· <strong style="color:var(--fg);">MC 0640 Annex C</strong> — IER tables (entity-pair, IE product, C3 Taxonomy L1/L2)</li>
+          <li>· <strong style="color:var(--fg);">NAF v4</strong> NOV + NSOV views + <strong style="color:var(--fg);">ADatP-47</strong> SysML/UML schema</li>
+          <li>· <strong style="color:var(--fg);">AJP-5</strong> (operational planning) + <strong style="color:var(--fg);">AJP-6</strong> (CIS) doctrine</li>
+          <li>· <strong style="color:var(--fg);">NISP Baseline 16</strong> → <strong style="color:var(--fg);">PFL-00403</strong> (Land Tactical C2 IE Profile, FMN Spiral 5)</li>
+          <li>· <strong style="color:var(--fg);">STEADFAST COBALT</strong> lessons learned (PCN, echelon tiering, STANAG 4774 NNI, NFV/DCIS)</li>
+          <li>· <strong style="color:var(--fg);">AAP-06 / AAP-15</strong> NATO terminology</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:3px solid var(--nato-gold);">
+        <h3 class="h3" style="color:var(--nato-gold);margin-bottom:8px;">Deterministic outputs</h3>
+        <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.9rem;line-height:1.75;">
+          <li>· <strong style="color:var(--fg);">32 Use Cases</strong> in §9, each with NAF spec header + 14-row operational body</li>
+          <li>· <strong style="color:var(--fg);">Annex A</strong> — UC × Vendor × NAF Architecture Mapping (3 sub-tables, one per echelon)</li>
+          <li>· <strong style="color:var(--fg);">Annex B</strong> — Formal Definitions (3-column tables, Term · Standard · Definition)</li>
+          <li>· <strong style="color:var(--fg);">§10 Serial Inventory</strong> sample drawn from <code>annexC_extracted.json</code></li>
+          <li>· <strong style="color:var(--fg);">§11 References</strong> A through R, every citation hyperlinked</li>
+          <li>· <strong style="color:var(--fg);">Word-ready Copy buttons</strong> on every UC card (HTML + plain-text MIME)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="h2" style="margin-top:32px;font-size:1.15rem;">2.3 — Why "deterministic"</h2>
+    <p class="lede" style="margin-top:0;">Determinism here means three things:</p>
+    <ul style="margin:10px 0 0 22px;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
+      <li><strong style="color:var(--fg);">Schema-fixed.</strong> Every UC has the exact same 16-field NAF header + 14-row body (see §8 Use Case Framework). No structural variation between UCs.</li>
+      <li><strong style="color:var(--fg);">Rule-derived.</strong> Field values are produced by explicit derivation rules from the canonical inputs. The IER ID, FMN service, NAF view, releasability, and C3 Taxonomy L1/L2 are computed; only operational specifics (goal, trigger, pre/postconditions, attack-surface narrative) are hand-curated and per-UC traceable.</li>
+      <li><strong style="color:var(--fg);">Reference-traceable.</strong> Every technical assertion either cites a Reference (A–R in §11) or names a STANAG / AJP / RFC inline. The Annex B formal-definitions table is the dictionary against which every term in this report can be checked.</li>
+    </ul>
+  </div>
+</section>
+
 <section class="section" id="acronyms">
   <div class="wrap">
-    <div class="eyebrow">§ 2 · Acronyms &amp; Abbreviations</div>
+    <div class="eyebrow">§ 3 · Acronyms &amp; Abbreviations</div>
     <h2 class="h2">Terminology used in this report</h2>
     <p class="lede" style="margin-top:0;margin-bottom:14px;">Per AP-06 (NATO Glossary of Terms) and AP-15 (Glossary of Allied Joint Publications). When in doubt, the AP-06/AP-15 definition prevails.</p>
     <div class="grid grid-2" style="gap:10px;">
       <div class="card" style="padding:14px 18px;">
         <h3 class="h3" style="color:var(--accent);margin-bottom:8px;font-size:0.9rem;">Operational &amp; doctrine</h3>
-        <ul style="list-style:none;padding:0;font-size:0.86rem;line-height:1.7;color:var(--fg-dim);">
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ACO</strong> — Allied Command Operations</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">AJP</strong> — Allied Joint Publication</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">AOR</strong> — Area of Responsibility</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BFT</strong> — Blue Force Tracking</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BG</strong> — Battle Group</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BJFC / BGIFC / BFDC</strong> — Brigade / Battlegroup Joint Fires Cell / Brigade Fire Direction Centre</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CCIR</strong> — Commander's Critical Information Requirements</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CFST</strong> — Company-Level Fire Support Team</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CIFC / LIFC</strong> — Combined / Land Intelligence Fusion Cell</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">COIST</strong> — Company Intelligence Support Team</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CoI</strong> — Community of Interest</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">COP</strong> — Common Operational Picture</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">EW / EWCC</strong> — Electronic Warfare / EW Coordination Cell</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">HUMINT</strong> — Human Intelligence</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">IER</strong> — Information Exchange Requirement</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ISTAR</strong> — Intelligence, Surveillance, Target Acquisition, Reconnaissance</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">LANDCOM</strong> — Allied Land Command</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MTF</strong> — Message Text Format (APP-11)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">QRF</strong> — Quick Reaction Force</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">RFI</strong> — Request For Information</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SITREP / LOGSITREP</strong> — Situation Report / Logistics Situation Report</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">TET</strong> — Target Engagement Team</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">VJTF(L)</strong> — Very High Readiness Joint Task Force (Land)</li>
+        <ul style="list-style:none;padding:0;font-size:0.86rem;line-height:1.9;color:var(--fg-dim);">
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ACO</strong> — Allied Command Operations <span class="src-tag">AAP-06</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">AJP</strong> — Allied Joint Publication <span class="src-tag">AAP-06</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">AOR</strong> — Area of Responsibility <span class="src-tag">AAP-06</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BFT</strong> — Blue Force Tracking <span class="src-tag">AAP-06 · STANAG 5527</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BG</strong> — Battle Group <span class="src-tag">AJP-3.2</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BJFC / BGIFC / BFDC</strong> — Brigade / Battlegroup Joint Fires Cell / Brigade Fire Direction Centre <span class="src-tag">AJP-3.9 · MC 0640 Annex C</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CCIR</strong> — Commander's Critical Information Requirements <span class="src-tag">AJP-2 · AJP-5</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CFST</strong> — Company-Level Fire Support Team <span class="src-tag">AJP-3.9</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CIFC / LIFC</strong> — Combined / Land Intelligence Fusion Cell <span class="src-tag">AJP-2</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">COIST</strong> — Company Intelligence Support Team <span class="src-tag">AJP-2 · national tac. doctrine</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CoI</strong> — Community of Interest <span class="src-tag">NISP B16 · FMN Framework</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">COP</strong> — Common Operational Picture <span class="src-tag">AJP-6 · AAP-06</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">EW / EWCC</strong> — Electronic Warfare / EW Coordination Cell <span class="src-tag">AJP-3.6 · AAP-06</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">HUMINT</strong> — Human Intelligence <span class="src-tag">AJP-2.1</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">IER</strong> — Information Exchange Requirement <span class="src-tag">AJP-6 (Ref K)</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ISTAR</strong> — Intelligence, Surveillance, Target Acquisition, Reconnaissance <span class="src-tag">AJP-2 · AAP-06</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">LANDCOM</strong> — Allied Land Command <span class="src-tag">NATO Command Structure</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MTF</strong> — Message Text Format <span class="src-tag">APP-11</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">QRF</strong> — Quick Reaction Force <span class="src-tag">AAP-06 · AJP-3.2</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">RFI</strong> — Request For Information <span class="src-tag">AJP-2 · AAP-06</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SITREP</strong> — Situation Report <span class="src-tag">APP-11</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">LOGSITREP</strong> — Logistics Situation Report <span class="src-tag">APP-11 · AJP-4</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">TET</strong> — Target Engagement Team <span class="src-tag">AJP-3.9 · national doctrine</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">VJTF(L)</strong> — Very High Readiness Joint Task Force (Land) <span class="src-tag">NATO RAP · Wales Summit 2014</span></li>
         </ul>
       </div>
       <div class="card" style="padding:14px 18px;">
         <h3 class="h3" style="color:var(--accent);margin-bottom:8px;font-size:0.9rem;">CIS / networking / waveforms</h3>
-        <ul style="list-style:none;padding:0;font-size:0.86rem;line-height:1.7;color:var(--fg-dim);">
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BGP-4</strong> — Border Gateway Protocol v4</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">C3</strong> — Consultation, Command &amp; Control</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CDS</strong> — Cross-Domain Solution</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">DCIS</strong> — Deployable CIS</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">DSCP</strong> — Differentiated Services Code Point</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ESSOR HDR</strong> — European Secure Software-defined Radio High Data Rate Waveform (STANAG 5651)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">FFH / EPM</strong> — Fast Frequency Hopping / Electronic Protection Measures</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">FMN</strong> — Federated Mission Networking</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">IGMPv3</strong> — Internet Group Management Protocol v3</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">LPI / LPD</strong> — Low Probability of Intercept / Detection</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MarLOS</strong> — Multi-channel Ad-hoc Relay LOS (STANAG 4691)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MELPe</strong> — Mixed Excitation Linear Prediction enhanced (STANAG 5634)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MIP4</strong> — Multilateral Interoperability Programme baseline 4</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MNE</strong> — Mission Network Element</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NAF</strong> — NATO Architecture Framework</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NBWF</strong> — NATO Narrowband Waveform (STANAG 5630)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NFFI</strong> — NATO Friendly Force Information (STANAG 5527)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NFV</strong> — Network Functions Virtualization</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NISP</strong> — NATO Interoperability Standards and Profiles</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NNI</strong> — Network-to-Network Interface</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PCN / PCR</strong> — Protected Core Networking / Protected Core Router (STANAG 4711)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PFL</strong> — Profile (NISP Baseline)</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PTT</strong> — Push-To-Talk</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">RTP / UDP</strong> — Real-time Transport Protocol / User Datagram Protocol</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SATURN</strong> — Second-generation Anti-jam Tactical UHF Radio for NATO</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SDR</strong> — Software Defined Radio</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SFF / SWaP-C</strong> — Small Form Factor / Size, Weight, Power, Cost</li>
-          <li><strong style="color:var(--fg);font-family:var(--font-mono);">XMPP</strong> — Extensible Messaging and Presence Protocol (RFC 6120/6121)</li>
+        <ul style="list-style:none;padding:0;font-size:0.86rem;line-height:1.9;color:var(--fg-dim);">
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BGP-4</strong> — Border Gateway Protocol v4 <span class="src-tag">IETF RFC 4271</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">C3</strong> — Consultation, Command &amp; Control <span class="src-tag">AJP-6 · AAP-06 · NC3B</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CDS</strong> — Cross-Domain Solution <span class="src-tag">NCIA · NISP · STANAG 4774</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">DCIS</strong> — Deployable CIS <span class="src-tag">NCIA doctrine</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">DSCP</strong> — Differentiated Services Code Point <span class="src-tag">IETF RFC 2474 / 2475</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ESSOR HDR</strong> — European Secure SDR High Data Rate Waveform <span class="src-tag">STANAG 5651 · OCCAR ESSOR</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">FFH</strong> — Fast Frequency Hopping <span class="src-tag">STANAG 4372 · AJP-3.6</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">EPM</strong> — Electronic Protection Measures <span class="src-tag">AJP-3.6</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">FMN</strong> — Federated Mission Networking <span class="src-tag">NISP B16 · AC/322 FMN Framework</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">IGMPv3</strong> — Internet Group Management Protocol v3 <span class="src-tag">IETF RFC 3376</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">LPI / LPD</strong> — Low Probability of Intercept / Detection <span class="src-tag">AAP-06 · AJP-3.6</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MarLOS</strong> — Multi-channel Ad-hoc Relay LOS <span class="src-tag">STANAG 4691</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MELPe</strong> — Mixed Excitation Linear Prediction enhanced <span class="src-tag">STANAG 4591 · STANAG 5634 / AComP-5634</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MIP4</strong> — Multilateral Interoperability Programme baseline 4 <span class="src-tag">MIP Programme docs</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MNE</strong> — Mission Network Element <span class="src-tag">FMN Framework</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NAF</strong> — NATO Architecture Framework <span class="src-tag">NAF v4 (NC3B)</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NBWF</strong> — NATO Narrowband Waveform <span class="src-tag">STANAG 5630 · STANAG 5634</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NFFI</strong> — NATO Friendly Force Information <span class="src-tag">STANAG 5527</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NFV</strong> — Network Functions Virtualization <span class="src-tag">ETSI NFV ISG · NATO DCIS adaptation</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NISP</strong> — NATO Interoperability Standards and Profiles <span class="src-tag">AC/322-D(2024)0053</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NNI</strong> — Network-to-Network Interface <span class="src-tag">ITU-T · NISP profile usage</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PCN / PCR</strong> — Protected Core Networking / Router <span class="src-tag">STANAG 4711</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PFL</strong> — Profile <span class="src-tag">NISP Baseline 16</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PTT</strong> — Push-To-Talk <span class="src-tag">STANAG 5634 / AComP-5634</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">RTP</strong> — Real-time Transport Protocol <span class="src-tag">IETF RFC 3550</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">UDP</strong> — User Datagram Protocol <span class="src-tag">IETF RFC 768</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SATURN</strong> — Second-generation Anti-jam Tactical UHF Radio for NATO <span class="src-tag">STANAG 4372</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SDR</strong> — Software Defined Radio <span class="src-tag">NATO SDR Initiative · industry term</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SFF</strong> — Small Form Factor <span class="src-tag">industry · NATO DCIS guidance</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SWaP-C</strong> — Size, Weight, Power, Cost <span class="src-tag">industry · STEADFAST COBALT LL</span></li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">XMPP</strong> — Extensible Messaging and Presence Protocol <span class="src-tag">IETF RFC 6120 / 6121</span></li>
         </ul>
       </div>
     </div>
@@ -382,7 +557,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="about">
   <div class="wrap">
-    <div class="eyebrow">§ 3 · Introduction &amp; Doctrinal Basis</div>
+    <div class="eyebrow">§ 4 · Introduction &amp; Doctrinal Basis</div>
     <h2 class="h2">What an IER is, and why every Use Case picks one</h2>
     <div class="grid grid-2">
       <div class="card">
@@ -444,7 +619,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="constraints">
   <div class="wrap">
-    <div class="eyebrow">§ 4 · Technical Constraints — STEADFAST COBALT lessons learned</div>
+    <div class="eyebrow">§ 5 · Technical Constraints — STEADFAST COBALT lessons learned</div>
     <h2 class="h2">Four constraint blocks that shape every Use Case</h2>
     <div class="grid grid-2">
       <div class="pillar">
@@ -473,7 +648,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="vendors">
   <div class="wrap">
-    <div class="eyebrow">§ 5 · Vendor Ecosystem</div>
+    <div class="eyebrow">§ 6 · Vendor Ecosystem</div>
     <h2 class="h2">Who actually builds the boxes — four blocks of NATO suppliers</h2>
     <p class="lede" style="margin-bottom:20px;">No single vendor covers the full MC 0640 + FMN Spiral 5 + legacy/SDR matrix. The 32 allied nations procure across four blocks, with interoperability proven annually at <strong>CWIX</strong> and <strong>STEADFAST COBALT</strong>. UC cards below name representative products in the <em>Frequencies / Equipment</em> row.</p>
     <div class="grid grid-2">
@@ -520,16 +695,70 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="echelons">
   <div class="wrap">
-    <div class="eyebrow">§ 6 · Echelon Profile</div>
+    <div class="eyebrow">§ 7 · Echelon Profile</div>
     <h2 class="h2">MC 0640 scope — Brigade and below (LANDCOM/Corps shown as upstream context only)</h2>
     <div class="ladder" id="ladder"></div>
     <p class="lede" style="font-size:0.88rem;margin-top:14px;"><em>Note:</em> Platoon is intentionally not covered by MC 0640. LANDCOM/Corps/Division rungs are shown for context (reach-back targets) but their primary UC content belongs to MC 0593, not this deliverable.</p>
   </div>
 </section>
 
+<section class="section" id="uc-framework">
+  <div class="wrap">
+    <div class="eyebrow">§ 8 · Use Case Framework</div>
+    <h2 class="h2">Every UC has the same structure — here is the field-by-field rationale</h2>
+    <p class="lede" style="margin-top:0;">All 32 Use Cases in §9 share two fixed blocks: a <strong>NAF v4 / ADatP-47 Specification Header</strong> (16 fields, formal metadata per ADatP-47) and a <strong>14-row Operational Body</strong> (the six IER dimensions per AJP-6 Reference K, plus eight operational context fields). This chapter documents the rationale, range of values, and meaning of each field so any UC card in §9 can be read against a single framework definition.</p>
+
+    <h2 class="h2" style="margin-top:32px;font-size:1.15rem;">8.1 — NAF v4 / ADatP-47 Specification Header (16 fields)</h2>
+    <table class="uc-index" style="margin-top:8px;">
+      <thead><tr><th style="width:14%">Field</th><th style="width:24%">Rationale (why it exists)</th><th style="width:24%">Range of values</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><strong>IER ID</strong></td><td>Formal NATO identifier for the IER, decoupled from the UI shorthand <code>UC-NNN</code>.</td><td>Pattern <code>IER-LAND-{BAND}-{NNN}</code> where <code>BAND ∈ {Com, BG, Bri}</code>, <code>NNN</code> = UC sequence number.</td><td>Used by NATO release authorities to track this IER independently of any visualisation.</td></tr>
+        <tr><td><strong>Version</strong></td><td>Document-control version per ADatP-47 lifecycle.</td><td>Semantic version. <code>v0.x</code> = draft; <code>v1.x</code> = approved/released.</td><td>Allows substitution of revised UC content without breaking external references.</td></tr>
+        <tr><td><strong>Status</strong></td><td>Lifecycle state of the UC.</td><td><code>DRAFT</code> · <code>APPROVED</code> · <code>DEPRECATED</code>.</td><td><em>DRAFT:</em> under working-group review. <em>APPROVED:</em> ratified for FMN use. <em>DEPRECATED:</em> superseded by a newer UC.</td></tr>
+        <tr><td><strong>Issue date</strong></td><td>When this UC version was issued.</td><td>ISO 8601 (<code>YYYY-MM-DD</code>).</td><td>Determines which version of the UC applies on a given operational date.</td></tr>
+        <tr><td><strong>Authority</strong></td><td>The organisation that owns and maintains this UC.</td><td>NATO command or branch — free text (e.g. "LANDCOM CCIS Branch").</td><td>Single point of contact for changes, clarifications, or escalation.</td></tr>
+        <tr><td><strong>Primary actor</strong></td><td>The originator of the IER, per AJP-6.</td><td>Any C2 entity from the MC 0640 Annex C taxonomy (LCC, VJTF(L), BG TOC, Coy HQ, CFST, EWCC, ...).</td><td>The entity that <em>produces</em> the information product.</td></tr>
+        <tr><td><strong>Secondary actors</strong></td><td>Recipients and other participants in the flow.</td><td>Zero or more C2 entities from the MC 0640 Annex C taxonomy.</td><td>The entities that <em>consume</em> the IER product or contribute to the flow (e.g. relay nodes, lateral cells).</td></tr>
+        <tr><td><strong>Goal (AJP-5)</strong></td><td>Commander's intent that justifies the UC's existence.</td><td>Free text per AJP-5 wording.</td><td>Connects the UC to the operational mission objective; the "why" at the operational level.</td></tr>
+        <tr><td><strong>Trigger event</strong></td><td>The operational event that fires the IER.</td><td>Free text describing an in-mission stimulus.</td><td>When and why this UC is activated in real operations (e.g. "Forward observer identifies hostile target").</td></tr>
+        <tr><td><strong>Preconditions</strong></td><td>State that must hold before the UC can execute.</td><td>Free text. Typically: bearer up, C2 registry reachable, classification policy current.</td><td>What must be true for the UC to be possible (bearer state, key material, label policy).</td></tr>
+        <tr><td><strong>Postconditions</strong></td><td>State after a successful execution.</td><td>Free text. Typically: information exchanged, consumer acts on the product.</td><td>What is achieved when the UC completes; the verifiable success criterion.</td></tr>
+        <tr><td><strong>NAF view</strong></td><td>Architecture-view alignment in NAF v4.</td><td>Combinations of <code>NOV-x</code> (Operational View) + <code>NSOV-y</code> (Service-Oriented View).</td><td>Tells the architect which NAF models apply (e.g. NOV-5 Operational Activity + NSOV-1 Service Taxonomy).</td></tr>
+        <tr><td><strong>ADatP-47 artifact</strong></td><td>The SysML/UML artefact set codifying this UC.</td><td>ADatP-47 artefact name (Operational Use Case package, Service Interaction Pattern, Activity diagram).</td><td>Defines how the UC is modelled and where the formal definition lives in the ADatP-47 repository.</td></tr>
+        <tr><td><strong>FMN service</strong></td><td>The FMN Spiral 5 service that <em>realises</em> this UC.</td><td>FMN service-catalog name (FMN Voice, FMN Tactical Messaging, FMN Targeting, ...).</td><td>The runtime service in NISP B16 / PFL-00403 that fulfils this UC's IER on the network.</td></tr>
+        <tr><td><strong>Releasability</strong></td><td>Sharing scope, enforced at the NNI by STANAG 4774 CDS.</td><td><code>Releasable to NATO</code> · <code>NATO + Mission Partners</code> · <code>FMN Mission Network participants</code>.</td><td>Who can receive the information; mapped to a STANAG 4774 confidentiality label.</td></tr>
+        <tr><td><strong>Doctrinal basis</strong></td><td>Cited NATO doctrine that justifies the UC.</td><td>AJP-5 + AJP-6 + MC 0640 + other applicable AJPs/STANAGs.</td><td>Doctrinal references that authorise the existence and content of this UC; the upstream chain of authority.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="h2" style="margin-top:32px;font-size:1.15rem;">8.2 — 14-row Operational Body (the IER block + 8 context fields)</h2>
+    <table class="uc-index" style="margin-top:8px;">
+      <thead><tr><th style="width:5%">#</th><th style="width:14%">Field</th><th style="width:22%">Rationale (why it exists)</th><th style="width:22%">Range of values</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>IER · Who</strong></td><td>Origin → destination per AJP-6 (Reference&nbsp;K).</td><td>Pairs from the MC 0640 Annex C C2-entity taxonomy (e.g. <code>Coy FO → Mortar Section</code>).</td><td>Identifies the two ends of the information exchange.</td></tr>
+        <tr><td>2</td><td><strong>IER · What</strong></td><td>Content + format of the information product.</td><td>IE Product per Annex C + format (APP-11 MTF · NFFI XML · MIP4 packet · MELPe stream · XMPP message).</td><td>Specifies <em>what</em> is being exchanged and in what schema.</td></tr>
+        <tr><td>3</td><td><strong>IER · When</strong></td><td>Latency &amp; cadence required.</td><td>Max latency (<code>≤ X ms / s</code>) plus cadence (continuous · periodic · event-driven · PTT-burst).</td><td>Defines temporal requirements; drives bearer choice and QoS class.</td></tr>
+        <tr><td>4</td><td><strong>IER · Protection</strong></td><td>Classification + crypto/integrity posture.</td><td><code>&lt;UC.classification&gt; — &lt;STANAG 4774 label + crypto&gt;</code>.</td><td>Defines confidentiality + integrity + authenticity rules. <em>Mission classification overrides</em> any IER notional default.</td></tr>
+        <tr><td>5</td><td><strong>IER · Precedence</strong></td><td>Message precedence per APP-11.</td><td><code>Flash</code> · <code>Immediate</code> · <code>Priority</code> · <code>Routine</code> (+ edge labels <code>Distress</code>, <code>Mixed</code>).</td><td>Determines queuing order during bearer contention; rendered as a gold <code>.prec-tag</code>.</td></tr>
+        <tr><td>6</td><td><strong>IER · Volume</strong></td><td>Qualitative bandwidth/cadence class.</td><td><code>Ultra-low</code> · <code>Low</code> · <code>Medium</code> · <code>High</code>.</td><td>Establishes bandwidth class to size the bearer (NBWF burst vs ESSOR HDR streaming vs SATCOM bulk).</td></tr>
+        <tr><td>7</td><td><strong>Frequencies / Equipment</strong></td><td>Bearer + frequency band + waveform profile + STANAG.</td><td>NBWF VHF Low 30–88 MHz · NBWF UHF 225–400 MHz · ESSOR HDR UHF/L-band 225 MHz – 2.5 GHz · SATURN UHF FFH · MIL Ka SATCOM 20/30 GHz · MIL X-band 7.25–8.4 GHz · etc.</td><td>Specifies the physical layer + STANAG profile + edge-IP profile (e.g. PFL-00446). <em>Vendor identity is deferred to Annex&nbsp;A.</em></td></tr>
+        <tr><td>8</td><td><strong>Time Window</strong></td><td>Operational window when the UC is active.</td><td>Mission window · continuous · scheduled (e.g. daily 1800Z) · per-sortie.</td><td>When during operations this UC's bearer + service stack must be available.</td></tr>
+        <tr><td>9</td><td><strong>Environment</strong></td><td>Operational-environment colour.</td><td><code>Friend</code> (green) · <code>NotFriend</code> (red) · <code>Mixed</code> (gold).</td><td>Indicates EW / threat colour of the environment in which the UC executes.</td></tr>
+        <tr><td>10</td><td><strong>Zones, CoI</strong></td><td>Spatial scope + Community of Interest.</td><td>AOR dimensions (e.g. <code>1.5 × 1.5 km</code> Coy · <code>4 × 5 km</code> BG · <code>15 × 25 km</code> Bde) + named CoI (Coalition, BG fires, Bde intel, ...).</td><td>Spatial extent and sharing scope of the UC.</td></tr>
+        <tr><td>11</td><td><strong>Availability</strong></td><td>Service-availability expectation.</td><td><code>High (24/7)</code> · <code>Mission (best-effort)</code> · <code>Best-effort</code>.</td><td>Uptime expectation; drives redundancy and bearer-diversity design.</td></tr>
+        <tr><td>12</td><td><strong>Classification</strong></td><td>Mission classification overlay (governs row 4).</td><td><code>NU</code> · <code>NR</code> · <code>NS</code> · <code>MS</code>.</td><td>Mission-level classification. NU/NR/NS are standard NATO; MS is the FMN / Afghanistan-Mission-Network convention (no canonical NATO colour, magenta by community agreement).</td></tr>
+        <tr><td>13</td><td><strong>Risk (LPI/LPD)</strong></td><td>Electronic-warfare exposure meter.</td><td>Integer 0–5 (<code>0/5</code> none … <code>5/5</code> LPI+LPD mission-critical) + one-sentence narrative from <code>RISK_NARR</code>.</td><td>Five-dot gold meter. Drives bearer choice (NBWF vs ESSOR FFH) and emission-management policy.</td></tr>
+        <tr><td>14</td><td><strong>Attack Surface</strong></td><td>Explicit threat surface + mitigation strategy.</td><td>Free text — typically names the highest-value compromise point and its counter-measure.</td><td>Surfaces the residual risk after the protection in row 4 is applied; tells the operator what still needs guarding.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="lede" style="font-size:0.86rem;color:var(--fg-mute);margin-top:14px;"><em>Reading a UC:</em> the spec header (8.1) tells you <em>who owns it, why it exists, and how it maps to NAF</em>; the operational body (8.2) tells you <em>how it is actually exchanged</em>. The vendor stack that realises it is in <a href="#annex-b" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted">Annex&nbsp;A</a>; the term-by-term formal definitions are in <a href="#annex-a" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted">Annex&nbsp;B</a>.</p>
+  </div>
+</section>
+
 <section class="section" id="use-cases">
   <div class="wrap">
-    <div class="eyebrow">§ 7 · Use Cases</div>
+    <div class="eyebrow">§ 9 · Use Cases</div>
     <h2 class="h2">32 representative Use Cases — Brigade, Battle Group, Company</h2>
     <p class="lede" style="margin-bottom:22px;">First-cut presentation. All 32 UCs sit within the MC 0640 scope (Brigade and below). They are fused with STEADFAST COBALT constraints, PFL-00403 technology choices, and real vendor products (Thales, L3Harris, Klas, Cisco, Systematic, Advenica). The full Annex C inventory (~700–800 Serials) lives in <code style="font-family:var(--font-mono);background:var(--bg-3);padding:1px 6px;border-radius:4px;border:1px solid var(--line);">serials/annexC_extracted.json</code>.</p>
 
@@ -556,7 +785,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="serials">
   <div class="wrap">
-    <div class="eyebrow">§ 8 · Serial Inventory</div>
+    <div class="eyebrow">§ 10 · Serial Inventory</div>
     <h2 class="h2">Annex C Serials (sample) — 1:1 with Use Cases</h2>
     <p class="lede" style="margin-bottom:18px;">MC 0640 (Land) does not publish formal Serial identifiers the way MC 0195 (Maritime) does. We therefore treat each row of Annex C as one Serial S-NNN paired 1:1 with one Use Case UC-NNN. The full live mapping lives in <code>serials/annexC_extracted.json</code>.</p>
     <table class="uc-index">
@@ -568,7 +797,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="references">
   <div class="wrap">
-    <div class="eyebrow">§ 9 · References</div>
+    <div class="eyebrow">§ 11 · References</div>
     <h2 class="h2">Doctrine, profiles, and STANAGs cited</h2>
     <ul class="refs">
       <li><strong>Reference A —</strong> <a href="https://www.mindev.gov.gr/wp-content/uploads/2023/04/08-NCIA-ACQ-2023-06756.pdf" target="_blank" rel="noopener"><code>Draft MC 0640</code></a> — Minimum Level of CIS Capabilities at Land Tactical Level (replaces former STANAG 5048). Annex C carries the IER Specifications used here.</li>
@@ -591,6 +820,109 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
       <li><strong>Reference R —</strong> <a href="https://www.sto.nato.int/document/tr-ist-175-es-executive-summary-and-synthese/" target="_blank" rel="noopener"><code>STO TR-IST-175</code></a> — Executive Summary and Synthèse (2023-era reference).</li>
       <li style="margin-top:14px;color:var(--fg-mute);font-size:0.78rem;list-style:none;"><em>Note:</em> STANAGs and APPs (References E–N) link to the public NATO Standardization Office portal. Many STANAGs are NATO-Restricted and not publicly published; the NSO site is the authoritative index.</li>
     </ul>
+  </div>
+</section>
+
+<section class="section" id="annex-b">
+  <div class="wrap">
+    <div class="eyebrow">Annex A · Vendor &amp; NAF Architecture Mapping</div>
+    <h2 class="h2">For each Use Case: who builds it, and how it maps onto NAF v4</h2>
+    <p class="lede" style="margin-top:0;">For every UC in §7, this annex maps the operational design onto (a) the specific manufacturer, brand-model and version that realises each NAF service block (Radio · NFV · C2 · CDS) with a public datasheet URL, and (b) the NAF v4 architecture sketch — NOV / NSOV view alignment, FMN service composition, bearer waveform with frequency band, and key STANAG anchors. Vendor names below are clickable; the UC ID jumps to the corresponding card in §7.</p>
+    <p class="lede" style="font-size:0.86rem;color:var(--fg-mute);margin-top:6px;"><em>Note:</em> the per-UC equipment rows in §7 deliberately do <strong>not</strong> name vendors — they list only frequency bands, channel widths and waveform profiles. Vendor selection lives here, in the architecture annex, where it can be substituted without touching the operational UC content.</p>
+
+    <div class="defs-group">
+      <h3>A.1 — Company-level UCs</h3>
+      <table class="naf-vendor" id="naf-table-coy"></table>
+    </div>
+    <div class="defs-group">
+      <h3>A.2 — Battle Group UCs</h3>
+      <table class="naf-vendor" id="naf-table-bg"></table>
+    </div>
+    <div class="defs-group">
+      <h3>A.3 — Brigade UCs</h3>
+      <table class="naf-vendor" id="naf-table-bde"></table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="annex-a">
+  <div class="wrap">
+    <div class="eyebrow">Annex B · Formal Definitions</div>
+    <h2 class="h2">Authoritative wording for every term used in this Technical Report</h2>
+    <p class="lede" style="margin-top:0;">Per AAP-06 (NATO Glossary of Terms and Definitions), AAP-15 (Glossary of Abbreviations), the relevant AJPs, STANAGs and IETF RFCs. Where this Annex paraphrases rather than quotes verbatim, the cited source is the authoritative text; the wording below is the working definition adopted for this report. Each entry tags the standard where the term is formally defined.</p>
+
+    <div class="defs-group">
+      <h3>B.1 — Operational &amp; doctrinal terms</h3>
+      <table class="defs-table">
+        <thead><tr><th>Term</th><th>Standard where defined</th><th>Formal definition</th></tr></thead>
+        <tbody>
+          <tr><td class="term-cell"><span class="acro">ACO</span><span class="expansion">Allied Command Operations</span></td><td class="std-cell">AAP-06 · NATO Command Structure</td><td class="def-cell">One of NATO's two Strategic Commands, responsible for the planning, preparation, and execution of all Alliance military operations. Headquartered at SHAPE (Supreme Headquarters Allied Powers Europe), Mons, Belgium. Its sister command is Allied Command Transformation (ACT).</td></tr>
+          <tr><td class="term-cell"><span class="acro">AJP</span><span class="expansion">Allied Joint Publication</span></td><td class="std-cell">AAP-06</td><td class="def-cell">The principal NATO joint-doctrine publications, organised in series (AJP-1 to AJP-6+, with dependent sub-publications). Each AJP defines authoritative doctrine for a specific operational domain or function and is formally ratified by NATO nations.</td></tr>
+          <tr><td class="term-cell"><span class="acro">AOR</span><span class="expansion">Area of Responsibility</span></td><td class="std-cell">AAP-06</td><td class="def-cell">The geographical area associated with a specific commander within which that commander has the authority and the responsibility for the conduct of military operations.</td></tr>
+          <tr><td class="term-cell"><span class="acro">BFT</span><span class="expansion">Blue Force Tracking</span></td><td class="std-cell">AAP-06 · STANAG 5527 (NFFI)</td><td class="def-cell">A capability that displays the location of friendly (blue) forces in near real time on a Common Operational Picture. Technical realisation in NATO uses the <em>NATO Friendly Force Information</em> (NFFI) protocol per STANAG 5527.</td></tr>
+          <tr><td class="term-cell"><span class="acro">BG</span><span class="expansion">Battle Group</span></td><td class="std-cell">AJP-3.2</td><td class="def-cell">A combined-arms tactical formation built around a reinforced battalion-sized manoeuvre unit, employed as the principal manoeuvre element for tactical land operations. Typical AOR is of the order of 4 × 5 km.</td></tr>
+          <tr><td class="term-cell"><span class="acro">BJFC / BGIFC / BFDC</span><span class="expansion">Brigade / Battlegroup Joint Fires Cell · Brigade Fire Direction Centre</span></td><td class="std-cell">AJP-3.9 · MC 0640 Annex C</td><td class="def-cell">The brigade-level cell that plans, coordinates and executes joint fires (<em>BJFC</em>); the battlegroup-level equivalent (<em>BGIFC</em>); and the brigade computational cell that converts a call-for-fire into firing data for the gun batteries (<em>BFDC</em>). Doctrine: AJP-3.9 (Allied Joint Doctrine for Joint Targeting); the specific entity-to-entity flows are tabulated in MC 0640 Annex C.</td></tr>
+          <tr><td class="term-cell"><span class="acro">CCIR</span><span class="expansion">Commander's Critical Information Requirements</span></td><td class="std-cell">AJP-2 · AJP-5</td><td class="def-cell">The comprehensive list of information needs identified by the commander as critical to facilitating timely decision-making. Comprises Priority Intelligence Requirements (PIR), Friendly Force Information Requirements (FFIR), and Essential Elements of Friendly Information (EEFI).</td></tr>
+          <tr><td class="term-cell"><span class="acro">CFST</span><span class="expansion">Company-Level Fire Support Team</span></td><td class="std-cell">AJP-3.9 · national fire-support doctrine</td><td class="def-cell">A small fire-support element attached at company level, responsible for processing calls-for-fire from forward elements and coordinating with the battlegroup joint fires cell.</td></tr>
+          <tr><td class="term-cell"><span class="acro">CIFC / LIFC</span><span class="expansion">Combined / Land Intelligence Fusion Cell</span></td><td class="std-cell">AJP-2</td><td class="def-cell">Multinational (Combined) or land-specific (Land) intelligence fusion cells that aggregate, analyse and fuse intelligence from multiple sources, producing unified intelligence products for distribution to subordinate commanders.</td></tr>
+          <tr><td class="term-cell"><span class="acro">COIST</span><span class="expansion">Company Intelligence Support Team</span></td><td class="std-cell">AJP-2 · national tactical-intelligence doctrine</td><td class="def-cell">A small intelligence cell organic to a manoeuvre company, responsible for processing tactical-level intelligence (patrols, sensors, HUMINT contacts) and feeding the battlegroup intelligence section.</td></tr>
+          <tr><td class="term-cell"><span class="acro">CoI</span><span class="expansion">Community of Interest</span></td><td class="std-cell">NISP Baseline 16 · FMN Framework</td><td class="def-cell">A collaborative group of users sharing a common interest in, or operational need for, an exchange of information. In FMN, a CoI defines the releasability scope of a body of information and the set of services that produce and consume it.</td></tr>
+          <tr><td class="term-cell"><span class="acro">COP</span><span class="expansion">Common Operational Picture</span></td><td class="std-cell">AJP-6 · AAP-06</td><td class="def-cell">A single identical display of relevant information shared by more than one command, facilitating collaborative planning and assisting all echelons to achieve situational awareness.</td></tr>
+          <tr><td class="term-cell"><span class="acro">EW / EWCC</span><span class="expansion">Electronic Warfare / EW Coordination Cell</span></td><td class="std-cell">AJP-3.6 · AAP-06</td><td class="def-cell"><em>EW:</em> military action employing electromagnetic and directed-energy actions to control the electromagnetic spectrum or to attack the adversary. <em>EWCC:</em> the staff cell that plans and coordinates EW activities at a given command level.</td></tr>
+          <tr><td class="term-cell"><span class="acro">HUMINT</span><span class="expansion">Human Intelligence</span></td><td class="std-cell">AJP-2.1</td><td class="def-cell">A category of intelligence derived from information collected and provided by human sources, including overt collection, interrogation, and source operations.</td></tr>
+          <tr><td class="term-cell"><span class="acro">IER</span><span class="expansion">Information Exchange Requirement</span></td><td class="std-cell">AJP-6 (Reference K)</td><td class="def-cell">Per AJP-6: "those categories of information that must be exchanged between operational facilities to provide commanders with essential information for decision-making." MC 0640 requires each IER to answer six dimensions: <em>Who, What, When, Protection, Precedence, Volume</em>.</td></tr>
+          <tr><td class="term-cell"><span class="acro">ISTAR</span><span class="expansion">Intelligence, Surveillance, Target Acquisition, Reconnaissance</span></td><td class="std-cell">AJP-2 · AAP-06</td><td class="def-cell">An integrated intelligence and operations function that fuses information collected by surveillance, target-acquisition and reconnaissance sensors and processes it into intelligence products for the commander.</td></tr>
+          <tr><td class="term-cell"><span class="acro">LANDCOM</span><span class="expansion">Allied Land Command</span></td><td class="std-cell">NATO Command Structure</td><td class="def-cell">NATO's command for all Allied land forces, headquartered in Izmir, Turkey. In MC 0640, LANDCOM is the upper boundary of tactical CIS scope; this Technical Report treats LANDCOM as upstream reach-back context only — its primary content belongs to MC 0593.</td></tr>
+          <tr><td class="term-cell"><span class="acro">LOGSITREP</span><span class="expansion">Logistics Situation Report</span></td><td class="std-cell">APP-11 · AJP-4</td><td class="def-cell">A standard NATO MTF report on the logistics state of a unit: personnel, POL (petroleum, oil, lubricants), ammunition, equipment, casualties, maintenance.</td></tr>
+          <tr><td class="term-cell"><span class="acro">MTF</span><span class="expansion">Message Text Format</span></td><td class="std-cell">APP-11</td><td class="def-cell">A formal, machine-readable structured-text format used for NATO operational messages (e.g., SITREP, ASSESSREP, 9-Line CASEVAC). Each MTF has a published schema and a defined field set; APP-11 is the NATO Message Text Formatting System publication.</td></tr>
+          <tr><td class="term-cell"><span class="acro">QRF</span><span class="expansion">Quick Reaction Force</span></td><td class="std-cell">AAP-06 · AJP-3.2</td><td class="def-cell">A pre-designated force held at high readiness to respond rapidly to unforeseen tactical situations within a unit's AOR.</td></tr>
+          <tr><td class="term-cell"><span class="acro">RFI</span><span class="expansion">Request For Information</span></td><td class="std-cell">AAP-06 · AJP-2</td><td class="def-cell">A formal mechanism by which a unit requests additional information or intelligence from a higher, lateral, or supporting headquarters or agency.</td></tr>
+          <tr><td class="term-cell"><span class="acro">SITREP</span><span class="expansion">Situation Report</span></td><td class="std-cell">APP-11</td><td class="def-cell">A standard NATO MTF report providing a periodic update on the tactical situation of a reporting unit.</td></tr>
+          <tr><td class="term-cell"><span class="acro">TET</span><span class="expansion">Target Engagement Team</span></td><td class="std-cell">AJP-3.9 · national targeting doctrine</td><td class="def-cell">A small cell that converts an approved target into a specific engagement using available fires assets; often co-located with the brigade fires cell.</td></tr>
+          <tr><td class="term-cell"><span class="acro">VJTF(L)</span><span class="expansion">Very High Readiness Joint Task Force (Land)</span></td><td class="std-cell">NATO Readiness Action Plan · Wales Summit 2014</td><td class="def-cell">The land component of NATO's Very High Readiness Joint Task Force — a brigade-sized formation able to deploy within days. Established under the NATO Readiness Action Plan agreed at the Wales Summit (2014); held on a rotational basis by NATO nations.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="defs-group">
+      <h3>B.2 — CIS, networking &amp; waveform terms</h3>
+      <table class="defs-table">
+        <thead><tr><th>Term</th><th>Standard where defined</th><th>Formal definition</th></tr></thead>
+        <tbody>
+          <tr><td class="term-cell"><span class="acro">BGP-4</span><span class="expansion">Border Gateway Protocol v4</span></td><td class="std-cell">IETF RFC 4271</td><td class="def-cell">The standard inter-domain routing protocol of the Internet, used in NATO Protected Core Networking to announce subnet reachability between national Mission Network Elements. NATO FMN profiles add TCP Authentication Option (TCP-AO, RFC 5925) and RPKI-style origin validation.</td></tr>
+          <tr><td class="term-cell"><span class="acro">C3</span><span class="expansion">Consultation, Command &amp; Control</span></td><td class="std-cell">AJP-6 · AAP-06 · NATO C3 Board</td><td class="def-cell">The activities and supporting systems that enable Alliance political consultation and military command and control. The NATO C3 Taxonomy (managed by the NC3B) organises NATO services into hierarchical Level 1 / Level 2 categories used throughout MC 0640 Annex C.</td></tr>
+          <tr><td class="term-cell"><span class="acro">CDS</span><span class="expansion">Cross-Domain Solution</span></td><td class="std-cell">NCIA · NISP B16 · STANAG 4774</td><td class="def-cell">A controlled interface that enforces release policy between security domains of different classifications, typically using a label-aware filter and an audit chain. In NATO FMN, the CDS reads STANAG 4774 Confidentiality Metadata Labels at the NNI to authorise or downgrade information transfer.</td></tr>
+          <tr><td class="term-cell"><span class="acro">DCIS</span><span class="expansion">Deployable CIS</span></td><td class="std-cell">NCIA doctrine</td><td class="def-cell">NATO term for a deployable CIS package — a transportable command-post-grade CIS stack including networking, services, and security functions, often virtualised. Underpins the STEADFAST COBALT push to virtualised tactical clouds.</td></tr>
+          <tr><td class="term-cell"><span class="acro">DSCP</span><span class="expansion">Differentiated Services Code Point</span></td><td class="std-cell">IETF RFC 2474 / 2475</td><td class="def-cell">A 6-bit field in the IPv4 Type-of-Service / IPv6 Traffic-Class header that marks per-packet QoS treatment. Standard codes include EF (Expedited Forwarding) for voice and the AF (Assured Forwarding) classes for differentiated data.</td></tr>
+          <tr><td class="term-cell"><span class="acro">EPM</span><span class="expansion">Electronic Protection Measures</span></td><td class="std-cell">AJP-3.6</td><td class="def-cell">The division of EW concerned with measures taken to protect friendly use of the electromagnetic spectrum from the effects of friendly or hostile EW actions.</td></tr>
+          <tr><td class="term-cell"><span class="acro">ESSOR HDR</span><span class="expansion">European Secure Software-defined Radio · High Data Rate Waveform</span></td><td class="std-cell">STANAG 5651 · OCCAR ESSOR Programme</td><td class="def-cell">Broadband mobile ad-hoc network waveform developed under the European ESSOR consortium (managed via OCCAR), supporting IP-native operation on SDR platforms primarily at brigade and battalion vehicular level.</td></tr>
+          <tr><td class="term-cell"><span class="acro">FFH</span><span class="expansion">Fast Frequency Hopping</span></td><td class="std-cell">STANAG 4372 (SATURN) · AJP-3.6</td><td class="def-cell">Electronic-protection technique in which the transmitter and receiver pseudo-randomly change carrier frequency many times per second following a shared hop pattern. Baseline for SATURN and integral to NBWF / ESSOR HDR EPM modes.</td></tr>
+          <tr><td class="term-cell"><span class="acro">FMN</span><span class="expansion">Federated Mission Networking</span></td><td class="std-cell">NISP B16 · AC/322 FMN Framework</td><td class="def-cell">An initiative that enables rapidly formed mission networks among NATO nations and partners using a common set of standards, processes, and services. Currently at Spiral 5, codified by NISP Baseline 16 / AC/322-D(2024)0053.</td></tr>
+          <tr><td class="term-cell"><span class="acro">IGMPv3</span><span class="expansion">Internet Group Management Protocol v3</span></td><td class="std-cell">IETF RFC 3376</td><td class="def-cell">The IPv4 host-router protocol for managing multicast group membership. Used in tactical IP networks to distribute COP overlays, RAP feeds and NFFI BFT streams.</td></tr>
+          <tr><td class="term-cell"><span class="acro">LPI / LPD</span><span class="expansion">Low Probability of Intercept / Low Probability of Detection</span></td><td class="std-cell">AAP-06 · AJP-3.6</td><td class="def-cell"><em>LPI:</em> transmission characteristics designed so that an adversary signal-intelligence receiver has a low probability of intercepting the emission. <em>LPD:</em> low probability that the receiver detects an emission is present at all. Typically achieved through spread-spectrum, frequency hopping, and low-duty-cycle techniques.</td></tr>
+          <tr><td class="term-cell"><span class="acro">MarLOS</span><span class="expansion">Multi-channel Ad-hoc Relay · Line-Of-Sight</span></td><td class="std-cell">STANAG 4691</td><td class="def-cell">NATO standard for a multi-channel tactical line-of-sight relay capable of operating in an ad-hoc mesh topology, for medium-bandwidth packetised IP at brigade and battalion level.</td></tr>
+          <tr><td class="term-cell"><span class="acro">MELPe</span><span class="expansion">Mixed Excitation Linear Prediction enhanced</span></td><td class="std-cell">STANAG 4591 (codec) · STANAG 5634 / AComP-5634 (NBWF profile)</td><td class="def-cell">A low-rate (typically 600, 1200, or 2400 bit/s) speech codec adopted by NATO for narrowband secure-voice channels. MELPe-2400 is the default for NBWF voice. Codec definition: STANAG 4591; NBWF integration profile: STANAG 5634 / AComP-5634.</td></tr>
+          <tr><td class="term-cell"><span class="acro">MIP4</span><span class="expansion">Multilateral Interoperability Programme · Baseline 4</span></td><td class="std-cell">MIP Programme docs</td><td class="def-cell">The fourth baseline of the MIP land C2 data model, providing a common information model for land operations that allies' systems can publish and consume.</td></tr>
+          <tr><td class="term-cell"><span class="acro">MNE</span><span class="expansion">Mission Network Element</span></td><td class="std-cell">FMN Framework Documents</td><td class="def-cell">A national or coalition CIS contribution to a Mission Network. Each MNE federates into the Mission Network through standardised NNIs.</td></tr>
+          <tr><td class="term-cell"><span class="acro">NAF</span><span class="expansion">NATO Architecture Framework</span></td><td class="std-cell">NAF v4 · NATO C3 Board · ADatP-47</td><td class="def-cell">NATO's authoritative architecture framework for C3 systems. NAF v4 mandates the use of Operational (NOV) and Service-Oriented (NSOV) views, with Use Cases bridging operational need to technical solution. ADatP-47 codifies the SysML/UML artefact set.</td></tr>
+          <tr><td class="term-cell"><span class="acro">NBWF</span><span class="expansion">NATO Narrowband Waveform</span></td><td class="std-cell">STANAG 5630 · STANAG 5634 / AComP-5634</td><td class="def-cell">NATO's narrowband tactical waveform for VHF/UHF SDR operation in 25 kHz / 50 kHz channels, optimised for contested EW environments with MLPP-prioritised IP transport. Physical layer: STANAG 5630; data + voice profiles: STANAG 5634 / AComP-5634.</td></tr>
+          <tr><td class="term-cell"><span class="acro">NFFI</span><span class="expansion">NATO Friendly Force Information</span></td><td class="std-cell">STANAG 5527</td><td class="def-cell">NATO standard XML/JSON schema for exchanging friendly-force position and status data — the protocol underlying tactical Blue Force Tracking.</td></tr>
+          <tr><td class="term-cell"><span class="acro">NFV</span><span class="expansion">Network Functions Virtualization</span></td><td class="std-cell">ETSI NFV ISG · NATO DCIS adaptation</td><td class="def-cell">Architectural approach in which network functions (router, firewall, XMPP server, etc.) are realised as software workloads on virtualised commodity hardware rather than dedicated appliances. Baseline definitions in ETSI NFV ISG documents; NATO DCIS guidance adapts them for tactical use.</td></tr>
+          <tr><td class="term-cell"><span class="acro">NISP</span><span class="expansion">NATO Interoperability Standards and Profiles</span></td><td class="std-cell">AC/322-D(2024)0053 (Baseline 16)</td><td class="def-cell">The NATO catalogue of standards and service profiles (PFLs) mandatory or recommended for NATO and FMN interoperability. Baseline 16 (current at issue) is AC/322-D(2024)0053.</td></tr>
+          <tr><td class="term-cell"><span class="acro">NNI</span><span class="expansion">Network-to-Network Interface</span></td><td class="std-cell">ITU-T · NISP profile usage</td><td class="def-cell">The boundary point where two distinct networks (typically of two different administrative authorities) interconnect. In NATO it is the place where STANAG 4774 label policy and CDS rules are enforced.</td></tr>
+          <tr><td class="term-cell"><span class="acro">PCN / PCR</span><span class="expansion">Protected Core Networking · Protected Core Router</span></td><td class="std-cell">STANAG 4711</td><td class="def-cell"><em>PCN:</em> NATO architecture for a black-core transport service that carries encrypted user data across an agnostic shared physical layer between coloured-side enclaves, implemented via IPsec tunnels. <em>PCR:</em> the PCN-aware edge router that establishes those tunnels. Each Mission Network Element typically spins up at least one PCR.</td></tr>
+          <tr><td class="term-cell"><span class="acro">PFL</span><span class="expansion">Profile (NISP)</span></td><td class="std-cell">NISP Baseline 16</td><td class="def-cell">Within NISP, a <code style="font-family:var(--font-mono);background:var(--bg-3);padding:0 5px;border-radius:3px;border:1px solid var(--line);">PFL-XXXXX</code> is a published interoperability profile that constrains the choice of standards and parameters for a specific service. <strong>PFL-00403</strong> is the <em>Land Tactical C2 Information Exchange Profile (FMN Spiral 5)</em> — the target profile of this Technical Report.</td></tr>
+          <tr><td class="term-cell"><span class="acro">PTT</span><span class="expansion">Push-To-Talk</span></td><td class="std-cell">STANAG 5634 / AComP-5634</td><td class="def-cell">A half-duplex voice control mode in which the operator must press and hold a button to transmit; the universal control paradigm of tactical radio voice. STANAG 5634 / AComP-5634 defines the VARC half-duplex signalling for MELPe over NBWF.</td></tr>
+          <tr><td class="term-cell"><span class="acro">RTP</span><span class="expansion">Real-time Transport Protocol</span></td><td class="std-cell">IETF RFC 3550</td><td class="def-cell">End-to-end transport protocol for real-time data such as audio and video. Used to carry MELPe voice packets over UDP/IP in NATO tactical IP networks.</td></tr>
+          <tr><td class="term-cell"><span class="acro">SATURN</span><span class="expansion">Second-generation Anti-jam Tactical UHF Radio for NATO</span></td><td class="std-cell">STANAG 4372</td><td class="def-cell">NATO standard for anti-jam UHF tactical voice, the successor to Have Quick II. Edition 4 / PRF-151 is the variant referenced by PFL-00403 for air-ground voice.</td></tr>
+          <tr><td class="term-cell"><span class="acro">SDR</span><span class="expansion">Software Defined Radio</span></td><td class="std-cell">NATO SDR Initiative · industry-standard term</td><td class="def-cell">A radio in which signal-processing functions traditionally implemented in hardware (modulation, filtering, demodulation) are realised in reprogrammable software, allowing a single chassis to run multiple waveforms — typically ESSOR HDR, NBWF, SATURN, and legacy analogue VHF.</td></tr>
+          <tr><td class="term-cell"><span class="acro">SFF</span><span class="expansion">Small Form Factor</span></td><td class="std-cell">industry · NATO DCIS guidance</td><td class="def-cell">Commercial classification for compact ruggedised computer enclosures usable in tactical vehicles or man-portable kits. Pairs with SWaP-C optimisation goals.</td></tr>
+          <tr><td class="term-cell"><span class="acro">SWaP-C</span><span class="expansion">Size, Weight, Power, Cost</span></td><td class="std-cell">industry · STEADFAST COBALT lessons learned</td><td class="def-cell">The four critical optimisation axes for deployable military electronics. Lower SWaP-C means more mobility and a smaller electromagnetic / thermal signature; explicitly surfaced as a STEADFAST COBALT lesson learned.</td></tr>
+          <tr><td class="term-cell"><span class="acro">UDP</span><span class="expansion">User Datagram Protocol</span></td><td class="std-cell">IETF RFC 768</td><td class="def-cell">Connectionless datagram transport on IP; bearer for RTP voice, NFFI BFT, XMPP server-to-server traffic, and many other tactical IP services.</td></tr>
+          <tr><td class="term-cell"><span class="acro">XMPP</span><span class="expansion">Extensible Messaging and Presence Protocol</span></td><td class="std-cell">IETF RFC 6120 (core) · RFC 6121 (IM &amp; presence)</td><td class="def-cell">Open standard for near-real-time messaging, presence, and request-response interactions. Adopted by FMN as the tactical chat protocol of choice due to its low bandwidth footprint and extensibility. RFC 6120 defines the core protocol; RFC 6121 defines instant messaging and presence semantics.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -849,10 +1181,10 @@ const USE_CASES = [
       volume:"Ultra-low · 2.4 kbps voice + bytes-per-burst XMPP"
     },
     equipment:[
-      "L3Harris AN/PRC-163 tri-band SDR (Coy HQ) + Thales PR4G legacy VHF (dismounted)",
-      "NATO NBWF Profile A — AComP-5630 Annex G — 25 kHz channels",
-      "AComP-5634 / STANAG 5634 — MELPe 2.4 kbps RTP/UDP — VARC half-duplex PTT",
-      "Klas Voyager backpack edge router · PFL-00446 (DSCP / IGMPv3 / UDP)"
+      "Tri-band SDR at Coy HQ + legacy analogue VHF radios for dismounted soldiers",
+      "NATO NBWF Profile A (STANAG 5630/5634, AComP-5630 Annex G) · VHF Low 30–88 MHz · 25 kHz channels",
+      "MELPe codec at 2.4 kbit/s over RTP/UDP/IPv4 · VARC half-duplex PTT (AComP-5634 / STANAG 5634)",
+      "Ruggedised backpack edge router enforcing PFL-00446 (DSCP / IGMPv3 / UDP)"
     ],
     attackSurface:"Legacy VHF mesh has no native auth; CNR-IP gateway is the single label-enforcement point. Mitigation: per-link key + DSCP starvation guard + scheduled brevity bursts under EW."
   },
@@ -872,10 +1204,11 @@ const USE_CASES = [
       volume:"Medium · constant BFT trickle + bursty formal traffic + opportunistic chat"
     },
     equipment:[
-      "Thales Synaps vehicular tri-band SDR with ESSOR HDR Waveform (STANAG 5651)",
-      "Light SATCOM terminal · MIL-Ka or X-band, theatre-dependent",
-      "Klas Voyager SFF blade · hypervisor hosts the PCR + Systematic SitaWare HQ + XMPP + security gateway",
-      "Cisco ESR6300 runs BGP-4 NNI announce into FMN MNE · STANAG 4691 MarLOS to peer BGs"
+      "Vehicular tri-band SDR with ESSOR HDR Waveform (STANAG 5651)",
+      "ESSOR HDR · UHF / L-band 225 MHz – 2.5 GHz · channel widths 1.25–5 MHz",
+      "Light MIL Ka-band SATCOM uplink (20 GHz downlink / 30 GHz uplink) or MIL X-band 7.25–8.4 GHz, theatre-dependent",
+      "Militarised SFF blade · hypervisor hosts PCR + C2 stack + XMPP server + security gateway",
+      "PCN-aware edge router runs BGP-4 NNI announce into FMN MNE (STANAG 4711) · MarLOS STANAG 4691 to peer BGs"
     ],
     attackSurface:"PCR is single point of trust for the MNE; loss exposes every subnet. BGP-4 hijack risk mitigated by TCP-AO and RPKI-style origin validation. Hypervisor escape would cross every virtualised function — patch cadence and signed-VNF policy are mandatory."
   },
@@ -895,10 +1228,11 @@ const USE_CASES = [
       volume:"High · MB to GB per package · multicast inside Bde enclave (IGMPv3)"
     },
     equipment:[
-      "Advenica / Fox-IT CDS gateway at the Div↔Bde NNI",
-      "Systematic SitaWare Headquarters (Bde ASAC console) with MIP4 ingest",
-      "Klas Voyager NFV blade hosting the CDS-translated multicast distributor",
-      "Cisco ESR6300 PCN gateway · STANAG 4711 IPsec tunnel to Div upstream"
+      "CDS gateway at the Div↔Bde NNI (STANAG 4774 label validation)",
+      "Bde ASAC console with MIP4 ingest service",
+      "NFV blade hosting the CDS-translated multicast distributor (IGMPv3)",
+      "PCN-aware edge router · STANAG 4711 IPsec tunnel to Div upstream",
+      "Transport: MIL X-band SATCOM 7.25–8.4 GHz + military fibre"
     ],
     attackSurface:"CDS gateway is the trust crown — a misconfigured label policy can over-release NS content. Mitigation: dual-control policy review, golden-image CDS replay testing, and per-flow STANAG 4774 origin validation at every NNI hop."
   },
@@ -918,10 +1252,10 @@ const USE_CASES = [
       volume:"2.4 kbps streaming under PTT · idle silent"
     },
     equipment:[
-      "Thales Synaps vehicular SDR (BG side) + L3Harris AN/PRC-163 handheld + Thales PR4G legacy VHF (Coy)",
-      "NATO NBWF Profile A — STANAG 5630 / AComP-5634",
-      "MELPe 2.4 kbps RTP/UDP/IPv4",
-      "PFL-00446 DSCP — Flash marking on PTT-active flow · Klas Voyager edge router enforces"
+      "Vehicular SDR (BG side) + handheld SDR / legacy analogue VHF radios (Coy)",
+      "NATO NBWF Profile A (STANAG 5630/5634) · VHF Low 30–88 MHz + UHF 225–400 MHz · 25 kHz channels",
+      "MELPe 2.4 kbit/s over RTP/UDP/IPv4 (STANAG 5634)",
+      "PFL-00446 DSCP — Flash marking on PTT-active flow · enforced at backpack edge router"
     ],
     attackSurface:"Direction-finding risk on long-duration PTT. Counter: brevity, scheduled keying windows, antenna pattern management."
   },
@@ -939,10 +1273,11 @@ const USE_CASES = [
       volume:"A few bytes per message · cumulative kbps even at high tempo"
     },
     equipment:[
-      "L3Harris AN/PRC-163 handheld SDR running NBWF (Coy) · Thales Synaps vehicular (BG)",
-      "Systematic SitaWare Edge XMPP client (RFC 6120/6121) on the C2 handheld",
-      "Klas Voyager NFV blade on BG TOC hosting the XMPP server",
-      "DSCP shaping enforced by Cisco ESR6300 ensures XMPP priority above bulk traffic"
+      "Handheld SDR (Coy) + vehicular SDR (BG) running NBWF",
+      "NBWF UHF 225–400 MHz · 25 kHz channels",
+      "XMPP RFC 6120 / RFC 6121 client on the C2 handheld",
+      "Local DCIS XMPP server on the BG NFV blade",
+      "DSCP shaping (PFL-00446) gives XMPP priority above bulk traffic"
     ],
     attackSurface:"XMPP roster leaks can map the unit hierarchy. Counter: rosters per-mission, no presence broadcast, JIDs scoped to short-lived mission identifiers."
   },
@@ -960,10 +1295,11 @@ const USE_CASES = [
       volume:"Ultra-low · bit-budget tight · compressed coordinate format"
     },
     equipment:[
-      "Rohde & Schwarz SOVERON / L3Harris AN/PRC-163 soldier handheld SDR (NBWF Profile A)",
-      "Klas Voyager NFV blade on Coy CP aggregates NFFI feed",
-      "PFL-00446 DSCP — Routine marking but never starved (Cisco ESR6300 policy)",
-      "Upstream relay via Thales Synaps vehicular ESSOR HDR to BG"
+      "Soldier handheld SDR running NBWF Profile A (STANAG 5630)",
+      "NBWF VHF Low 30–88 MHz · 25 kHz channels · low-duty-cycle bursts",
+      "NFV blade on Coy CP aggregates the NFFI feed (STANAG 5527)",
+      "PFL-00446 DSCP CS3 — Routine marking but never starved",
+      "Upstream relay via vehicular ESSOR HDR (UHF / L-band 225 MHz – 2.5 GHz) to BG"
     ],
     attackSurface:"BFT stream reveals troop concentration to RF interceptors. Mitigation: jittered update intervals, position obfuscation on suspected EW dominance."
   },
@@ -981,10 +1317,11 @@ const USE_CASES = [
       volume:"Low · voice burst + small digital payload"
     },
     equipment:[
-      "L3Harris AN/PRC-163 tri-band SDR with NBWF to BG, Thales Synaps ESSOR HDR back-haul",
-      "Systematic SitaWare Edge / Saab 9LAND C2 fires registry on Klas Voyager NFV blade",
-      "MELPe 2.4 kbps voice channel reserved for fires",
-      "DSCP EF marking guaranteed across the BG enclave (Cisco ESR6300)"
+      "Tri-band SDR with NBWF to BG, ESSOR HDR back-haul",
+      "NBWF UHF 225–400 MHz · 25 kHz channels (fires net)",
+      "ESSOR HDR UHF / L-band 225 MHz – 2.5 GHz (back-haul)",
+      "MELPe 2.4 kbit/s voice channel reserved for fires",
+      "DSCP EF marking guaranteed across the BG enclave (PFL-00446)"
     ],
     attackSurface:"Fires net is the highest-value EW target; loss = mission abort. Defence-in-depth: dual bearer (voice + digital), pre-planned silence procedures."
   },
@@ -1002,10 +1339,10 @@ const USE_CASES = [
       volume:"Low · structured METEOC packet a few hundred bytes"
     },
     equipment:[
-      "Systematic SitaWare HQ pub/sub topic on Bde DCIS",
-      "Tactical IP transport via Thales Synaps ESSOR HDR",
-      "Klas Voyager NFV blade caches METEOC for offline ballistic calc",
-      "PFL-00446 DSCP CS2 (Cisco ESR6300 policy)"
+      "MIP4 pub/sub topic for METEOC on Bde DCIS",
+      "Tactical IP transport via ESSOR HDR · UHF / L-band 225 MHz – 2.5 GHz",
+      "NFV blade caches METEOC for offline ballistic calc",
+      "PFL-00446 DSCP CS2"
     ],
     attackSurface:"Met data poisoning is low-risk but possible; counter with signed packets and consistency checks against neighbouring Coys."
   },
@@ -1023,10 +1360,11 @@ const USE_CASES = [
       volume:"Low · text + small JPEG attachments"
     },
     equipment:[
-      "L3Harris AN/PRC-163 handheld with NBWF · short-burst tactical messenger",
-      "XMPP attachment relay (Systematic SitaWare Edge) via Klas Voyager NFV blade",
-      "Multicast aggregation to COIST via IGMPv3 (Cisco ESR6300)",
-      "Brevity-only voice on Rohde & Schwarz SOVERON fallback if data path saturated"
+      "Long-range handheld SDR with NBWF · directional antenna · short-burst tactical messenger",
+      "NBWF UHF 225–400 MHz · 25 kHz channels",
+      "XMPP attachment relay via Coy NFV blade",
+      "Multicast aggregation to COIST via IGMPv3 (RFC 3376)",
+      "Brevity-only voice fallback on NBWF if data path saturated"
     ],
     attackSurface:"Patrol radio signature is the highest LPI/LPD challenge on the battlefield. Counter: cold transmit, ESSOR FFH on the back-haul leg, no idle keep-alives."
   },
@@ -1044,10 +1382,11 @@ const USE_CASES = [
       volume:"Low · structured short-form text"
     },
     equipment:[
-      "L3Harris AN/PRC-163 voice over NBWF + digital MTF via Systematic SitaWare XMPP",
-      "MTF templating on Klas Voyager NFV blade (Coy CP)",
-      "Dual-bearer redundancy (voice on Rohde & Schwarz SOVERON + chat in parallel)",
-      "DSCP EF reserved for medical traffic (Cisco ESR6300 policy)"
+      "Handheld SDR with NBWF voice + digital MTF via XMPP",
+      "NBWF VHF Low 30–88 MHz + UHF 225–400 MHz · 25 kHz channels",
+      "APP-11 9-Liner MTF templating on Coy NFV blade",
+      "Dual-bearer redundancy: MELPe voice + XMPP chat in parallel",
+      "DSCP EF reserved for medical traffic"
     ],
     attackSurface:"Aid station radio nets are RoE-protected but still EW-vulnerable. Mitigation: pre-coordinated frequencies, alternate met / aid station rendezvous."
   },
@@ -1067,10 +1406,10 @@ const USE_CASES = [
       volume:"Medium · structured XML payload"
     },
     equipment:[
-      "Thales Synaps ESSOR HDR backbone Bde-to-BG",
-      "Systematic SitaWare HQ MIP4 message bus replicates control measures",
-      "Klas Voyager DCIS gateway translates to BG-native C2 (e.g. Saab 9LAND)",
-      "Multicast distribution within BG enclave (Cisco ESR6300, IGMPv3)"
+      "ESSOR HDR backbone Bde-to-BG · UHF / L-band 225 MHz – 2.5 GHz",
+      "MIP4 message bus replicates control measures",
+      "DCIS gateway translates to BG-native C2 software",
+      "IGMPv3 multicast distribution within the BG enclave"
     ],
     attackSurface:"Tampering with FSCMs can cause fratricide. Mitigation: digital signature verification at every consumer, dual-acknowledge before fires are deconflicted."
   },
@@ -1088,10 +1427,10 @@ const USE_CASES = [
       volume:"Medium · 10s of KB per OPORD"
     },
     equipment:[
-      "Systematic SitaWare HQ formal messaging server on Bde DCIS (Klas Voyager)",
-      "Thales Synaps ESSOR HDR backbone for vehicle-borne BG",
-      "Cisco ESR6300 establishes STANAG 4711 PCN tunnel across NNI to higher",
-      "MIP4 attachment encoding (SitaWare native)"
+      "Military Messaging Service on Bde DCIS NFV blade",
+      "ESSOR HDR backbone for vehicle-borne BG · UHF / L-band 225 MHz – 2.5 GHz",
+      "STANAG 4711 PCN tunnel across NNI to higher (IPsec over black core)",
+      "MIP4 attachment encoding"
     ],
     attackSurface:"Replay or delayed-delivery attacks on OPORDs can disrupt phase changes. Mitigation: timestamps + sequence numbers signed end-to-end."
   },
@@ -1109,10 +1448,10 @@ const USE_CASES = [
       volume:"Medium · AV stream ~512 kbps · chat negligible"
     },
     equipment:[
-      "Systematic SitaWare HQ collaboration suite on Klas Voyager NFV stack (Bde)",
-      "Multicast video distribution via IGMPv3 (Cisco ESR6300)",
-      "Thales Synaps ESSOR HDR backbone for the BG end",
-      "STANAG 4711 PCN tunnel through black core (Cisco ESR6300)"
+      "Collaboration suite on Bde DCIS NFV stack (Audio + AV + Chat)",
+      "Multicast video distribution via IGMPv3 (RFC 3376)",
+      "ESSOR HDR backbone for the BG end · UHF / L-band 225 MHz – 2.5 GHz",
+      "STANAG 4711 PCN tunnel through black core"
     ],
     attackSurface:"Shared whiteboards can leak plan-in-progress. Mitigation: ephemeral session keys, no recording at the BG end, label-on-export."
   },
@@ -1130,10 +1469,10 @@ const USE_CASES = [
       volume:"High · ~1.5 Mbps video + 64 kbps audio"
     },
     equipment:[
-      "PacStar 400-Series vehicle VTC endpoint with hardware codec",
-      "Thales Synaps ESSOR HDR + light SATCOM hybrid back-haul",
-      "MCU on Klas Voyager NFV blade (Bde DCIS)",
-      "DSCP AF41 / EF reserved for the session (Cisco ESR6300)"
+      "Vehicle VTC endpoint with hardware codec",
+      "ESSOR HDR · UHF / L-band 225 MHz – 2.5 GHz + light MIL Ka-band SATCOM (20 GHz down / 30 GHz up) hybrid back-haul",
+      "MCU on Bde DCIS NFV blade",
+      "DSCP AF41 / EF reserved for the session"
     ],
     attackSurface:"VTC streams reveal terminal location via traffic patterns. Mitigation: cover traffic, alternate-route load balancing."
   },
@@ -1151,9 +1490,9 @@ const USE_CASES = [
       volume:"Low · structured short-form"
     },
     equipment:[
-      "Systematic SitaWare LOG schema · MIP4-formatted packet",
-      "Military messaging service relay on Klas Voyager NFV blade",
-      "Thales Synaps ESSOR HDR + Cisco ESR6300 PCN tunnel to Bde G4",
+      "MIP4 LOG schema · structured LOGSITREP packet",
+      "Military Messaging Service relay on BG NFV blade",
+      "ESSOR HDR (UHF / L-band 225 MHz – 2.5 GHz) + STANAG 4711 PCN tunnel to Bde G4",
       "Archival store on Bde DCIS (signed audit log)"
     ],
     attackSurface:"Logistics data exposes operational tempo. Mitigation: NR-level confinement, no MS or above commingling without label upgrade."
@@ -1172,10 +1511,10 @@ const USE_CASES = [
       volume:"Medium · steady multicast stream"
     },
     equipment:[
-      "Systematic SitaWare Frontline (Nation C) ↔ Saab 9LAND C2 (Nation D) BFT terminals",
-      "Cisco ESR6300 PCR translates national subnets via BGP-4 NNI",
-      "Thales Synaps ESSOR HDR backbone, multicast across NNI",
-      "Advenica / Fox-IT CDS validates STANAG 4774 label on every multicast packet"
+      "Vehicle BFT terminals on both nations (national C2 stacks federated via FMN)",
+      "PCR (STANAG 4711) translates national subnets via BGP-4 at the NNI",
+      "ESSOR HDR backbone · UHF / L-band 225 MHz – 2.5 GHz · IGMPv3 multicast across NNI",
+      "CDS gateway validates the STANAG 4774 confidentiality label on every multicast packet"
     ],
     attackSurface:"Inter-national multicast is the textbook target for stream injection. Mitigation: per-packet origin auth, CDS replay on every NNI."
   },
@@ -1193,10 +1532,11 @@ const USE_CASES = [
       volume:"Ultra-low under degradation"
     },
     equipment:[
-      "Adaptive bearer policy on Thales Synaps vehicle SDR",
-      "Rohde & Schwarz SOVERON NBWF Profile A fallback path",
-      "Systematic SitaWare HQ coalition COP aggregator interpolates between bursts",
-      "DSCP CS3 reserved for degraded BFT (Cisco ESR6300)"
+      "Adaptive bearer policy on the vehicular SDR",
+      "Primary: ESSOR HDR UHF / L-band 225 MHz – 2.5 GHz",
+      "Fallback: NBWF Profile A · VHF Low 30–88 MHz · 25 kHz channels · compressed NFFI burst every 60 s instead of every 10 s",
+      "Coalition COP aggregator interpolates between bursts",
+      "DSCP CS3 reserved for degraded BFT"
     ],
     attackSurface:"Adversary detects degradation and pushes harder. Mitigation: pre-planned scheduled bursts, antenna nulling, opportunistic frequency change."
   },
@@ -1214,10 +1554,11 @@ const USE_CASES = [
       volume:"Low to medium · text + occasional imagery"
     },
     equipment:[
-      "L3Harris AN/PRC-163 / Rohde & Schwarz SOVERON long-range handheld with directional antenna",
-      "NBWF on the recon leg, Thales Synaps ESSOR HDR on the BG leg",
-      "Klas Voyager NFV blade hosts the image compressor (Coy)",
-      "DSCP CS3 (Cisco ESR6300)"
+      "Long-range handheld SDR with directional antenna",
+      "Recon leg: NBWF UHF 225–400 MHz · 25 kHz · scheduled brief contacts",
+      "BG leg: ESSOR HDR UHF / L-band 225 MHz – 2.5 GHz",
+      "NFV blade hosts the image compressor (Coy side)",
+      "DSCP CS3"
     ],
     attackSurface:"Recon team RF emissions are the highest-value EW target. Counter: scheduled brief contacts, antenna directionality, full radio silence between contacts."
   },
@@ -1237,10 +1578,10 @@ const USE_CASES = [
       volume:"Medium · structured target packets"
     },
     equipment:[
-      "Saab 9LAND C2 / Systematic SitaWare HQ MIP4 fires data model on Klas Voyager NFV stack",
-      "Thales Synaps ESSOR HDR backbone Bde-to-firing unit",
-      "Digital fire control via Tasking & Order Services VNF (Klas Voyager)",
-      "DSCP EF reserved for fires (Cisco ESR6300)"
+      "MIP4 fires data model on Bde DCIS NFV stack",
+      "ESSOR HDR backbone Bde-to-firing unit · UHF / L-band 225 MHz – 2.5 GHz",
+      "Digital fire control via Tasking & Order Services VNF",
+      "DSCP EF reserved for fires"
     ],
     attackSurface:"Fires net is the prime EW + cyber target. Counter: dual signed path (voice brevity + digital), pre-coordinated brevity codes."
   },
@@ -1258,10 +1599,11 @@ const USE_CASES = [
       volume:"Low to medium"
     },
     equipment:[
-      "Thales Synaps vehicular SDR with ESSOR HDR + NBWF",
-      "Systematic SitaWare HQ XMPP on Klas Voyager NFV blade for chat",
-      "L3Harris AN/PRC-163 MELPe voice on the fires net",
-      "PFL-00446 DSCP shaping (Cisco ESR6300)"
+      "Vehicular SDR with ESSOR HDR + NBWF",
+      "ESSOR HDR UHF / L-band 225 MHz – 2.5 GHz (Bde-to-CBAG)",
+      "NBWF UHF 225–400 MHz · 25 kHz channels (close fires voice)",
+      "XMPP on Bde DCIS for chat · MELPe 2.4 kbit/s voice on the fires net",
+      "PFL-00446 DSCP shaping"
     ],
     attackSurface:"Same as UC-019 fires net considerations; CBAG positions are also vulnerable to BFT-derived counter-battery."
   },
@@ -1279,9 +1621,10 @@ const USE_CASES = [
       volume:"Medium"
     },
     equipment:[
-      "Systematic SitaWare HQ BASO terminal with air overlay (Klas Voyager NFV)",
-      "Saab 9LAND C2 MIP4 airspace deconfliction service",
-      "Cisco ESR6300 AOCC(L) reach-back via STANAG 4711 PCN tunnel",
+      "BASO terminal on Bde DCIS with air overlay (NFV blade)",
+      "ESSOR HDR UHF / L-band 225 MHz – 2.5 GHz (BJFC ↔ BASO)",
+      "SATURN Ed.4 PRF-151 · UHF 225–400 MHz with Fast Frequency Hopping for air-ground (STANAG 4372)",
+      "MIP4 airspace deconfliction service · AOCC(L) reach-back via STANAG 4711 PCN tunnel",
       "DSCP AF31 for ACMs, AF41 for fires voice"
     ],
     attackSurface:"ACM tampering can clear airspace for adversary or block friendly fires. Mitigation: signed ACMs, BASO/BJFC dual ack."
@@ -1300,9 +1643,9 @@ const USE_CASES = [
       volume:"Medium"
     },
     equipment:[
-      "Systematic SitaWare HQ MIP4 target folder replication (Klas Voyager)",
-      "Thales Synaps ESSOR HDR backbone",
-      "Saab 9LAND XMPP coordination chat",
+      "MIP4 target folder replication on Bde DCIS",
+      "ESSOR HDR backbone · UHF / L-band 225 MHz – 2.5 GHz",
+      "XMPP coordination chat between BJFC and BGIFC",
       "Dual-control sign-off (per-cell signed)"
     ],
     attackSurface:"Handover misalignment can cause fires gap or duplicate. Mitigation: explicit dual-ack handover, fires-active flag in MIP4."
@@ -1321,10 +1664,11 @@ const USE_CASES = [
       volume:"Low · structured short-form"
     },
     equipment:[
-      "Systematic SitaWare HQ EWCC tasking service on Klas Voyager NFV blade (Bde DCIS)",
-      "Thales Synaps ESSOR HDR + dedicated EW back-haul",
-      "Cisco ESR6300 encrypted multicast to EW asset cluster",
-      "DSCP CS4 reserved for EW tasking · Rohde & Schwarz SOVERON on the EW assets"
+      "EWCC tasking service on Bde DCIS NFV blade",
+      "ESSOR HDR UHF / L-band 225 MHz – 2.5 GHz + dedicated EW back-haul",
+      "EW assets running sovereign SDR for jamming / ESM",
+      "Encrypted multicast to EW asset cluster",
+      "DSCP CS4 reserved for EW tasking · short-validity tasking tokens"
     ],
     attackSurface:"EW tasking compromise reveals friendly EW intent. Mitigation: short-validity tasking tokens, asset-side replay protection."
   },
@@ -1342,10 +1686,10 @@ const USE_CASES = [
       volume:"Medium · text + sometimes imagery"
     },
     equipment:[
-      "Systematic SitaWare HQ MIP4 intel data model on Klas Voyager NFV blade",
-      "Cisco ESR6300 establishes PCN tunnel from theatre intel core to Bde",
-      "Advenica / Fox-IT CDS gateway for any cross-classification recipients",
-      "DSCP CS3 (Cisco ESR6300 policy)"
+      "MIP4 intel data model on Bde DCIS NFV blade",
+      "STANAG 4711 PCN tunnel from theatre intel core to Bde",
+      "CDS gateway for any cross-classification recipients (STANAG 4774 labels)",
+      "DSCP CS3"
     ],
     attackSurface:"Intel leak risk is structural. Mitigation: minimum-necessary disclosure, per-report label review."
   },
@@ -1365,10 +1709,10 @@ const USE_CASES = [
       volume:"Low · structured short-form a few KB"
     },
     equipment:[
-      "Systematic SitaWare Headquarters (Bde G4 console)",
-      "Systematic SitaWare Frontline (BG S4 vehicle)",
-      "Klas Voyager NFV blade on the BG TOC · Cisco ESR6300 PCN gateway",
-      "Formal Messaging Service over STANAG 4711 PCN tunnel"
+      "MIP4 LOG schema on Bde G4 console + BG S4 vehicle terminal",
+      "ESSOR HDR (UHF / L-band 225 MHz – 2.5 GHz) + STANAG 4711 PCN gateway",
+      "Military Messaging Service (APP-11 MTF) over PCN tunnel · daily 1800Z",
+      "Archived to Bde DCIS (signed audit trail)"
     ],
     attackSurface:"Logistics traffic discloses operational tempo. Mitigation: NR confinement, no MS commingling without label upgrade, signed audit trail on Bde G4 side."
   },
@@ -1386,10 +1730,10 @@ const USE_CASES = [
       volume:"Medium · MIP4 BCM packet with attachments"
     },
     equipment:[
-      "Systematic SitaWare Edge with engineer overlay plug-in",
-      "MIP4 BCM bus on Bde DCIS (Klas Voyager)",
-      "Thales Synaps vehicular SDR · ESSOR HDR backbone to BGs",
-      "Multicast distribution inside Bde enclave (IGMPv3)"
+      "Engineer overlay on Bde DCIS C2 software stack",
+      "MIP4 Battlefield Control Measures bus on Bde DCIS NFV stack",
+      "Vehicular SDR · ESSOR HDR backbone to BGs · UHF / L-band 225 MHz – 2.5 GHz",
+      "Multicast distribution inside Bde enclave (IGMPv3, RFC 3376)"
     ],
     attackSurface:"Tampered route status can cause mobility-kill on a friendly column. Mitigation: signed per-segment status, dual-source verification (engineer + UAS imagery)."
   },
@@ -1407,10 +1751,10 @@ const USE_CASES = [
       volume:"Low · text-dominant"
     },
     equipment:[
-      "L3Harris AN/PRC-163 handheld (HUMINT field team)",
-      "NBWF Profile A · short-burst tactical messenger",
-      "Systematic SitaWare Frontline on BGISS terminal",
-      "XMPP attachment relay via Klas Voyager NFV blade"
+      "HUMINT field team handheld SDR",
+      "NBWF Profile A · UHF 225–400 MHz · 25 kHz channels · short-burst tactical messenger",
+      "BGISS terminal on Bde DCIS C2 software",
+      "XMPP attachment relay via NFV blade · per-source compartmented STANAG 4774 labels"
     ],
     attackSurface:"Source-name compromise can lead to source loss. Mitigation: per-source compartmented labels, end-to-end signed attachment, no presence broadcast on the HUMINT XMPP roster."
   },
@@ -1428,9 +1772,9 @@ const USE_CASES = [
       volume:"High · FMV ~2 Mbps · still imagery bursts"
     },
     equipment:[
-      "Dedicated tactical data link from GCS to Bde DCIS",
-      "Systematic SitaWare Edge with ISR overlay (Bde ASAC)",
-      "Klas Voyager NFV blade hosting the GCS uplink VNF",
+      "Dedicated tactical UAS data link from GCS to Bde DCIS (typ. L-band 1.35–1.85 GHz or C-band 4–8 GHz, platform-specific)",
+      "ISR overlay on Bde ASAC C2 software",
+      "NFV blade hosting the GCS uplink VNF",
       "Multicast FMV distribution inside Bde enclave (IGMPv3 · DSCP AF41)"
     ],
     attackSurface:"UAS data link is jammable and spoofable. Mitigation: link-layer FFH, signed platform metadata, fallback to recorded burst transmit on jamming detection."
@@ -1451,10 +1795,10 @@ const USE_CASES = [
       volume:"Low · structured short-form"
     },
     equipment:[
-      "Systematic SitaWare Headquarters (Bde TOC)",
-      "Tasking & Order Services VNF on Klas Voyager",
-      "Cisco ESR6300 PCN gateway to AVN GP",
-      "Thales Synaps + SATURN Ed.4 PRF-151 for air-ground voice fallback"
+      "Bde TOC C2 stack with Tasking & Order Services VNF",
+      "ESSOR HDR UHF / L-band 225 MHz – 2.5 GHz · STANAG 4711 PCN gateway to AVN GP",
+      "SATURN Ed.4 PRF-151 · UHF 225–400 MHz with Fast Frequency Hopping for air-ground voice (STANAG 4372)",
+      "Short-validity tasking tokens · last-mile coords via separate brevity channel"
     ],
     attackSurface:"Tasking compromise leaks rotary timing and landing point coordinates. Mitigation: short-validity tasking tokens, last-mile coords delivered via separate brevity channel."
   },
@@ -1472,9 +1816,9 @@ const USE_CASES = [
       volume:"Low · MIP4 target packet"
     },
     equipment:[
-      "Saab 9LAND C2 dynamic targeting bus (or Systematic SitaWare)",
-      "Klas Voyager NFV blade · TST replication service",
-      "Thales Synaps vehicular SDR with ESSOR HDR · brevity voice fallback",
+      "Dynamic targeting bus on Bde DCIS C2 stack",
+      "NFV blade with MIP4 TST replication service",
+      "Vehicular SDR with ESSOR HDR · UHF / L-band 225 MHz – 2.5 GHz · brevity voice fallback",
       "DSCP EF reserved for the targeting cue flow"
     ],
     attackSurface:"Dynamic targeting is the most time-critical and EW-exposed flow on the Bde net. Mitigation: dual sensor confirmation, dual-bearer redundancy (digital + voice brevity), signed TST packet."
@@ -1493,10 +1837,10 @@ const USE_CASES = [
       volume:"Low · text + small attachments"
     },
     equipment:[
-      "Systematic SitaWare Edge (Coy CCIR Manager handheld)",
-      "L3Harris AN/PRC-163 dismounted SDR with NBWF",
-      "Klas Voyager NFV blade hosting the RFI service",
-      "Cisco ESR6300 PCN gateway from BG up to Bde"
+      "Coy CCIR Manager handheld with C2 software (RFI client)",
+      "Dismounted SDR running NBWF · UHF 225–400 MHz · 25 kHz channels",
+      "NFV blade hosting the RFI service (BG)",
+      "STANAG 4711 PCN gateway from BG up to Bde · ESSOR HDR back-haul (UHF / L-band 225 MHz – 2.5 GHz)"
     ],
     attackSurface:"RFI content discloses Coy's planning priorities. Mitigation: minimum-necessary phrasing, per-request label review, no presence broadcast on the RFI bus."
   },
@@ -1514,10 +1858,11 @@ const USE_CASES = [
       volume:"Low control-plane · medium for image transfer"
     },
     equipment:[
-      "Klas Voyager spare SFF blade (Coy reserve)",
-      "Cisco ESR6300 ruggedised router (PCN tunnel re-up)",
-      "Systematic SitaWare Edge restored from golden image",
-      "PacStar 400-Series field power kit · ESSOR HDR back-haul to BG"
+      "Spare SFF NFV blade (Coy reserve) + signed golden image",
+      "Ruggedised PCN-aware router · STANAG 4711 IPsec tunnel re-up",
+      "C2 software restored from golden image (signed VNF policy)",
+      "Field power kit (low SWaP-C) · ESSOR HDR back-haul to BG · UHF / L-band 225 MHz – 2.5 GHz",
+      "Per-blade key rotation on restore"
     ],
     attackSurface:"Spare blade key material could be captured along with the original. Mitigation: per-event key rotation, BG-side authoritative golden-image store, signed-VNF policy enforced at boot."
   }
@@ -1689,6 +2034,82 @@ function renderStats() {
   document.getElementById("stats-row").innerHTML = chips.map(c =>
     `<div class="stat-chip${c.gold ? ' gold' : ''}"><span class="n">${c.n}</span><span class="l">${c.l}</span></div>`
   ).join("");
+}
+
+/* ===========================================================
+   Annex A — UC × Vendor × NAF Architecture mapping
+   Per-UC: which manufacturer/brand-model realises each block,
+   plus the NAF view + service composition + waveform/freq band.
+   =========================================================== */
+const UC_NAF_VENDOR = [
+  { id:"UC-001", radio:"L3Harris AN/PRC-163 (Coy HQ) · Thales PR4G (dismounted)", nfv:"Klas Voyager (backpack edge router)", c2:"Systematic SitaWare Edge", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Voice (Core) + Tactical Messaging (Core) · Bearer: NBWF Profile A (STANAG 5630/5634) at VHF Low 30–88 MHz · MELPe-2400 over RTP/UDP/IPv4 · PFL-00446 (DSCP/IGMPv3)" },
+  { id:"UC-002", radio:"Thales Synaps (ESSOR HDR vehicular)", nfv:"Klas Voyager SFF blade", c2:"Systematic SitaWare HQ", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · PCN (Core Enterprise) + Situational Awareness · Bearer: ESSOR HDR (STANAG 5651) UHF 225–400 MHz / L-band ≤2.5 GHz + MIL Ka SATCOM 20/30 GHz · BGP-4 over STANAG 4711 IPsec" },
+  { id:"UC-003", radio:"— (strategic ingress)", nfv:"Klas Voyager (Bde DCIS)", c2:"Systematic SitaWare HQ (MIP4 ingest)", cds:"Advenica + Fox-IT", naf:"<strong>NOV-5 / NSOV-1</strong> · Information Management + Targeting · Transport: MIL Ka SATCOM 20/30 GHz + military fibre · STANAG 4774 labels validated at NNI · STANAG 4711 PCN tunnels" },
+  { id:"UC-004", radio:"Thales Synaps (BG) + L3Harris AN/PRC-163 + Thales PR4G (Coy)", nfv:"Klas Voyager", c2:"Systematic SitaWare Edge", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Voice (Core) · NBWF (STANAG 5630/5634) at VHF Low 30–88 MHz + UHF 225–400 MHz · MELPe over RTP/UDP" },
+  { id:"UC-005", radio:"L3Harris AN/PRC-163 + Thales Synaps", nfv:"Klas Voyager", c2:"Systematic SitaWare Edge (XMPP)", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Tactical Messaging (Core) · NBWF UHF 225–400 MHz · XMPP RFC 6120 over IPsec" },
+  { id:"UC-006", radio:"Rohde &amp; Schwarz SOVERON / L3Harris AN/PRC-163", nfv:"Klas Voyager", c2:"Systematic SitaWare Edge (NFFI)", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Situational Awareness (Joint Services) · NBWF VHF 30–88 MHz · NFFI STANAG 5527 over UDP" },
+  { id:"UC-007", radio:"L3Harris AN/PRC-163 + Thales Synaps back-haul", nfv:"Klas Voyager", c2:"Systematic SitaWare Edge / Saab 9LAND C2", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Targeting (Ops Planning) · NBWF UHF 225–400 MHz + ESSOR HDR back-haul · DSCP EF for fires" },
+  { id:"UC-008", radio:"Thales Synaps (ESSOR HDR)", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ (pub/sub)", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Environmental Services (COI) · ESSOR HDR UHF 225 MHz – L-band 2.5 GHz · METEOC packet over IP" },
+  { id:"UC-009", radio:"L3Harris AN/PRC-163 + R&amp;S SOVERON (fallback)", nfv:"Klas Voyager", c2:"Systematic SitaWare Frontline (COIST)", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Informal Messaging (Core) · NBWF UHF 225–400 MHz directional + ESSOR back-haul · IGMPv3 multicast" },
+  { id:"UC-010", radio:"L3Harris AN/PRC-163 + R&amp;S SOVERON", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ (MTF templating)", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Military Messaging (Core) · NBWF VHF 30–88 MHz + UHF 225–400 MHz · APP-11 MTF over XMPP" },
+  { id:"UC-011", radio:"Thales Synaps (ESSOR HDR)", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ + Saab 9LAND C2", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · Maneuver Planning (LAND/COI) · ESSOR HDR UHF 225 MHz – L-band 2.5 GHz · MIP4 BCM over IGMPv3 multicast" },
+  { id:"UC-012", radio:"Thales Synaps", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ (Military Messaging Service)", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · Military Messaging (Core Enterprise) · ESSOR HDR + STANAG 4711 PCN over black core" },
+  { id:"UC-013", radio:"Thales Synaps", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ collaboration suite", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · Office Collaboration (Audio/AV/Chat) · ESSOR HDR + IGMPv3 multicast video · STANAG 4711 PCN tunnel" },
+  { id:"UC-014", radio:"Thales Synaps + light MIL Ka SATCOM", nfv:"PacStar 400-Series (VTC codec) + Klas Voyager", c2:"Systematic SitaWare HQ MCU", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · VTC (Video-Based Collab / Core) · ESSOR HDR UHF/L-band + SHF Ka 20/30 GHz · DSCP AF41/EF" },
+  { id:"UC-015", radio:"Thales Synaps", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ (LOG schema)", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · Reports (Logistics) · ESSOR HDR + STANAG 4711 PCN tunnel · MIP4 LOG packet" },
+  { id:"UC-016", radio:"Thales Synaps (both nations)", nfv:"Klas Voyager", c2:"Systematic SitaWare Frontline ↔ Saab 9LAND C2", cds:"Advenica + Fox-IT", naf:"<strong>NOV-2 / NSOV-3</strong> · Situational Awareness (cross-national) · ESSOR HDR multicast · NFFI STANAG 5527 · STANAG 4774 label validation at every NNI" },
+  { id:"UC-017", radio:"Thales Synaps + R&amp;S SOVERON (NBWF fallback)", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ COP aggregator", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · Situational Awareness (degraded mode) · NBWF VHF Low 30–88 MHz fallback when ESSOR HDR jammed · compressed NFFI burst" },
+  { id:"UC-018", radio:"L3Harris AN/PRC-163 / R&amp;S SOVERON (recon leg) + Thales Synaps (BG leg)", nfv:"Klas Voyager (image compressor)", c2:"Systematic SitaWare HQ", cds:"—", naf:"<strong>NOV-2 / NSOV-3</strong> · Informal Messaging + Reports (Joint Services) · NBWF UHF directional 225–400 MHz on recon leg, ESSOR HDR on BG leg" },
+  { id:"UC-019", radio:"Thales Synaps (ESSOR HDR)", nfv:"Klas Voyager", c2:"Saab 9LAND C2 / Systematic SitaWare HQ (MIP4 fires bus)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Targeting Services / Ops Planning · ESSOR HDR UHF/L-band · MIP4 fires data model · DSCP EF reserved for fires" },
+  { id:"UC-020", radio:"Thales Synaps + L3Harris AN/PRC-163", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Voice + Targeting · ESSOR HDR UHF + NBWF VHF/UHF · MELPe + XMPP" },
+  { id:"UC-021", radio:"Thales Synaps + L3Harris AN/PRC-158 (SATURN Ed.4 PRF-151)", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ + Saab 9LAND C2 (airspace overlay)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Airspace Management (Air Services) · ESSOR HDR UHF/L-band + SATURN UHF 225–400 MHz FFH for air-ground · DSCP AF31/AF41" },
+  { id:"UC-022", radio:"Thales Synaps", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ (MIP4 target folder)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Targeting (handover) · ESSOR HDR UHF/L-band · MIP4 target-folder replication with dual-control sign-off" },
+  { id:"UC-023", radio:"Thales Synaps + R&amp;S SOVERON (EW assets)", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ EWCC tasking service", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · EW Services (Tasking &amp; Order) · ESSOR HDR + dedicated EW back-haul · DSCP CS4 reserved · short-validity tasking tokens" },
+  { id:"UC-024", radio:"— (strategic IP only)", nfv:"Klas Voyager (Bde ASAC)", c2:"Systematic SitaWare HQ MIP4 intel bus", cds:"Advenica + Fox-IT", naf:"<strong>NOV-5 / NSOV-1</strong> · Reports (Joint/COI) · STANAG 4711 PCN tunnel from theatre intel core to Bde · STANAG 4774 labels validated by CDS for cross-classification" },
+  { id:"UC-025", radio:"Thales Synaps", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ (Bde G4) + Frontline (BG S4)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Reports (Logistics) · ESSOR HDR UHF/L-band + STANAG 4711 PCN tunnel · MIP4 LOG schema · signed audit trail" },
+  { id:"UC-026", radio:"Thales Synaps", nfv:"Klas Voyager", c2:"Systematic SitaWare Edge (engineer overlay)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Maneuver Planning + Environmental (BCM) · ESSOR HDR UHF/L-band · IGMPv3 multicast inside Bde enclave · signed BCM" },
+  { id:"UC-027", radio:"L3Harris AN/PRC-163 (HUMINT field team)", nfv:"Klas Voyager (BGISS)", c2:"Systematic SitaWare Frontline", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Reports (Joint Services) · NBWF UHF 225–400 MHz short-burst tactical messenger · per-source compartmented STANAG 4774 labels" },
+  { id:"UC-028", radio:"Tactical UAS data link (typ. L-band 1.35–1.85 GHz or C-band 4–8 GHz, platform-specific)", nfv:"Klas Voyager (GCS uplink VNF)", c2:"Systematic SitaWare Edge (ISR overlay)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Targeting Services + Reports · Dedicated UAS data link + IGMPv3 multicast FMV inside Bde enclave · DSCP AF41" },
+  { id:"UC-029", radio:"Thales Synaps + L3Harris AN/PRC-158 (SATURN Ed.4 PRF-151)", nfv:"Klas Voyager", c2:"Systematic SitaWare HQ (T&amp;O Services VNF)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Tasking &amp; Order Services (COI) · ESSOR HDR UHF/L-band + SATURN UHF 225–400 MHz FFH for air-ground · short-validity tasking tokens" },
+  { id:"UC-030", radio:"Thales Synaps", nfv:"Klas Voyager", c2:"Saab 9LAND C2 / Systematic SitaWare HQ (dynamic targeting bus)", cds:"—", naf:"<strong>NOV-5 / NSOV-1</strong> · Targeting (dynamic) · ESSOR HDR UHF/L-band · MIP4 TST replication · DSCP EF · dual-sensor confirmation" },
+  { id:"UC-031", radio:"L3Harris AN/PRC-163 (Coy CCIR Manager handheld)", nfv:"Klas Voyager (BG RFI service)", c2:"Systematic SitaWare Edge", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Requests &amp; Responses (LAND Services) · NBWF UHF 225–400 MHz + ESSOR HDR back-haul up to Bde" },
+  { id:"UC-032", radio:"Thales Synaps (ESSOR back-haul to BG)", nfv:"Klas Voyager spare blade + PacStar 400-Series power", c2:"Systematic SitaWare Edge (signed golden image)", cds:"—", naf:"<strong>NOV-5 / NSOV-4</strong> · Core Enterprise Services (DCIS restore) · ESSOR HDR UHF/L-band · signed VNF policy + golden-image reseed · per-blade key rotation" }
+];
+
+function renderVendorNafTable(targetId, bandFilter) {
+  const rows = UC_NAF_VENDOR.filter(r => {
+    const uc = USE_CASES.find(u => u.id === r.id);
+    return uc && uc.band === bandFilter;
+  });
+  const header = `
+    <thead><tr>
+      <th style="width:14%">UC</th>
+      <th style="width:18%">Radio (Block 1)</th>
+      <th style="width:14%">NFV / HW (Block 2)</th>
+      <th style="width:18%">C2 software (Block 3)</th>
+      <th style="width:12%">CDS (Block 4)</th>
+      <th>NAF architecture design</th>
+    </tr></thead>`;
+  const body = rows.map(r => {
+    const uc = USE_CASES.find(u => u.id === r.id);
+    const cds = r.cds && r.cds !== "—" ? linkifyVendors(r.cds) : '<span class="none">—</span>';
+    return `
+      <tr>
+        <td class="uc-cell"><a href="#${r.id}">${r.id}</a><span class="ttl">${uc ? uc.title : ''}</span></td>
+        <td>${linkifyVendors(r.radio)}</td>
+        <td>${linkifyVendors(r.nfv)}</td>
+        <td>${linkifyVendors(r.c2)}</td>
+        <td>${cds}</td>
+        <td class="naf-cell">${r.naf}</td>
+      </tr>`;
+  }).join("");
+  document.getElementById(targetId).innerHTML = header + "<tbody>" + body + "</tbody>";
+}
+
+function renderAnnexA() {
+  renderVendorNafTable("naf-table-coy", "Company");
+  renderVendorNafTable("naf-table-bg",  "Battle Group");
+  renderVendorNafTable("naf-table-bde", "Brigade");
 }
 
 function renderQuickJump() {
@@ -1883,6 +2304,7 @@ renderStats();
 renderQuickJump();
 applyFilter();
 renderSerials();
+renderAnnexA();
 setupTopButton();
 </script>
 
