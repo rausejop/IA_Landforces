@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<!--
+  CAMARWAR_009.html — 2026-05-10
+  ============================================================================
+  PROMPT_TO_009 cambios sobre v008:
+  §1 SIM → ESTRATEGIA · mapa multidominio España exterior · OOB con misiones reales
+     (FLF Eslovaquia/Letonia/Rumanía · UNIFIL Marjayún · Atalanta Indico · NMI Iraq
+     · EUMAM Sahel/Mozambique/RCA/Somalia · EUFOR Bosnia · KFOR Kosovo) +
+     amenazas hostiles/terroristas/piratería en cada zona (Hezbolá · Daesh · JNIM
+     · ISGS · Al-Shabaab · ASWJ · piratas Somalia · Hutíes Mar Rojo · Rusia/Bielorrusia)
+     + tooltips en TODOS los meta-tiles · checkboxes Land/Doctrinal eliminados
+     · Phase Ladder adaptada (POSTURE/SHAPING/ACTIVE/HOT ZONE) · botón "▶ IR A
+     TÁCTICA" en dossier de unidades motorizadas con extrapolación al polígono.
+  §2 IoMT contenido movido a Manual sección 4 con: historia 214º Bn Indep. Asalto
+     UA OPFOR (Rys Pro · operación 13-04-2026) + capacidades MOD España IoMT con
+     enlaces oficiales verificados (SIRTAP Airbus · Tarsis Indra · Milano INTA ·
+     RAPAZ · Taurus Miriad · CDTI CPP · Leopard 2E · VCR Dragón · Pizarro · THeMIS).
+  §3 Pestaña IoMT eliminada del sidebar y view section limpia.
+  §4 C2 → TÁCTICA · 8 ALIADOS + 8 HOSTILES + carros NEUTRAL (inoperativos/reserva)
+     · 3 comandantes con símbolo militar (★ ALFA-CMD/HOTEL-CMD/NOVEMBER-CMD).
+     Soporte goToTacticalFromStrategy() · al pulsar "Ir a Táctica" en Estrategia,
+     extrapola coords reales al bbox La Raya 40.4920..40.4948 / -3.3380..-3.3338.
+  §5 Botones de orden FORMACIÓN (Cuña/Línea/Columna/Escalón) y FUNCIONES COMBATE
+     (Mando/Inteligencia/Maniobra/Fuegos/Apoyo Logístico/Protección) aplican al
+     bando activo (toggle ALIADO/HOSTIL). Carros inoperativos/reserva = NEUTRAL.
+  §6 EN/ES toggle ampliado · data-en en sidebar/headers/labels nuevos.
+
+  FUENTES OSINT (mayo 2026):
+    - Misiones exterior 2026 ES: https://www.defensa.gob.es/misiones/en_exterior/
+    - PDF misiones MOD: https://www.defensa.gob.es/Galerias/gabinete/red/2026/01/infografia-misiones-2026.pdf
+    - 214º Bn Asalto UA + 13-04-2026: https://united24media.com/latest-news/...
+    - SIRTAP Airbus oficial: https://www.airbus.com/en/products-services/defence/uas/sirtap
+    - FLF Letonia/Eslovaquia: https://emad.defensa.gob.es/operaciones/operaciones-en-el-exterior/
+    - Operación Atalanta: https://emad.defensa.gob.es/operaciones/operaciones-en-el-exterior/42-ATALANTA/
+    - Tank Arena Zakopane: https://www.tankarena.pl/
+  ============================================================================
+  CAMARWAR_008.html — 2026-05-10 (origen)
+  Build con captura máxima de la estructura C23_DIANA_NATO_WARFIGHTERS_v012.html
+  (rail + stage + dossier + cmdlog + classif banner + NATO meta-tiles + phase
+  ladder + force tally + layers filters + CoA turn) y doctrina verificada OSINT.
+
+  FUENTES OSINT VERIFICADAS (mayo 2026):
+    - Estructura ET: https://ejercito.defensa.gob.es/estructura/
+    - BRIEX 2035: https://ejercito.defensa.gob.es/estructura/briex_2035/
+    - BRIAC XII Guadarrama: https://ejercito.defensa.gob.es/unidades/Madrid/briacxii/
+    - PDC-01(A) Doctrina FAS (PDF):
+      https://publicaciones.defensa.gob.es/media/downloadable/files/links/p/d/pdc-01_a_doctrina_para_el_empleo_de_las_fas.pdf
+    - PD1-001 Empleo Fuerzas Terrestres (Dialnet):
+      https://dialnet.unirioja.es/servlet/articulo?codigo=3940530
+    - AJP-3.2 EDB Land Operations (UK GOV):
+      https://assets.publishing.service.gov.uk/media/62b45b2de90e0765cdf62e03/20220207-AJP3-2_EDB_Land_Ops.pdf
+    - ATP-3.2.1 Allied Land Tactics (STANAG 2605)
+    - ATP-3.2.1.3 Conduct of Land Tactical Operations
+    - APP-6(D) / MIL-STD-2525B: spatialillusions/milsymbol JS
+    - NATO DIANA 2026: https://www.diana.nato.int/
+    - CDTI CPP Robot Terrestre · €11,9M / 30 meses / FEDER
+    - Programa COINCIDENTE (DGEI ex-DGAM): hasta 600k€/proyecto
+    - Ucrania 13-04-2026: Roboneers Ironclad + Shablya M2 · 5ª Bde Asalto
+
+  COMPOSICIÓN BRIAC XII GUADARRAMA (verificada):
+    - RI "Asturias" 31 (1 BIMZ + 1 BI Protegido)
+    - RAC "Alcázar de Toledo" 61:
+        * BIC "León" I/61   (Batallón de Infantería de Carros · Leopard 2E)
+        * GCAC "Villaviciosa" II/61 (Grupo de Caballería Acorazado)
+    - GACA XII · BZAP XII · GLOG XII · BCG XII
+    - Lema: "Aprisa, Duro, Lejos"
+
+  REFERENCIA VISUAL: C23_DIANA_NATO_WARFIGHTERS_v012.html (en directorio local).
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAMARWAR 2.0 v009 · Estrategia · Táctica · IoMT en Manual</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Oswald:wght@500;700&family=JetBrains+Mono:wght@400;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* === LINCE-SIM Design System (Prompt_to_008 §1-2) ===
+     Paradigma: "Data-Over-Chrome" · Dark obligatorio · alto contraste
+     Tipografía: JetBrains Mono / Roboto Mono                          */
+  --c2-bg-main: #0a0c10;
+  --c2-bg-surface: #161b22;
+  --c2-border-tactical: #30363d;
+  --c2-friendly: #2196f3;
+  --c2-hostile: #f85149;
+  --c2-neutral: #7ee787;
+  --c2-accent: #00e5ff;
+  --c2-warning: #e3b341;
+  --c2-critical: #ff3e3e;
+  --c2-text-primary: #e6edf3;
+  --c2-text-muted: #8b949e;
+
+  /* Aliases compat con v007 (mapean a LINCE-SIM) */
+  --bg: var(--c2-bg-main);
+  --bg-elev: var(--c2-bg-surface);
+  --bg-panel: #0a0c10;
+  --border: var(--c2-border-tactical);
+  --text: var(--c2-text-primary);
+  --text-muted: var(--c2-text-muted);
+  --accent: var(--c2-accent);
+
+  /* Paleta NATO C23_DIANA (mantener para banner/topbar/markers) */
+  --bg-0:#04080f; --bg-1:#070d18; --bg-2:#0b1424; --bg-3:#101c33;
+  --line:#30363d; --line-2:#3d4554;
+  --ink:#e6edf3; --ink-dim:#92a1bd; --ink-mute:#8b949e;
+  --nato-blue:#004990; --nato-blue-2:#0b62c4; --nato-blue-3:#1b7be0;
+  --nato-gold:#FFC72C; --nato-white:#ffffff;
+  --allied: var(--c2-friendly);
+  --hostile: var(--c2-hostile);
+  --neutral: var(--c2-neutral);
+  --unknown: var(--c2-warning);
+  --mint: var(--c2-neutral); --amber: var(--c2-warning); --crimson: var(--c2-critical);
+}
+/* LINCE-SIM: tipografía monoespaciada por defecto en superficies tácticas */
+body { font-family:'Roboto Condensed','Inter', sans-serif; background:var(--c2-bg-main); color:var(--c2-text-primary); margin:0; padding:0; }
+.mono, .nato-meta .meta-val, .telemetry-card, .config-table input, .crud-mono input { font-family:'JetBrains Mono','Roboto Mono', monospace; letter-spacing:0.01em; }
+h1,h2,h3 { font-family:'Oswald', sans-serif; text-transform:uppercase; letter-spacing:0.05em; }
+/* Stage / dossier / cmdlog usan monoespaciada (data-over-chrome) */
+.dossier, .cmdlog, .rail, .nato-topbar, .classif { font-family:'JetBrains Mono','Roboto Mono', monospace; }
+.military-gradient { background:linear-gradient(135deg, #1a2e1a 0%, #0f1115 100%); }
+.card { background:var(--bg-elev); border:1px solid var(--border); border-radius:12px; transition:all 0.3s; }
+.card:hover { border-color:var(--accent); }
+.kpi-hero { background:radial-gradient(circle at top right, rgba(74,222,128,0.12), transparent 60%), #11161c; }
+.bar-track { background:#1f2731; border-radius:6px; overflow:hidden; }
+.bar-fill { background:linear-gradient(90deg, #16a34a, #4ade80); height:100%; }
+.pnl-table th,.pnl-table td { padding:0.75rem 1rem; }
+.pnl-table tbody tr:nth-child(odd) { background:rgba(255,255,255,0.02); }
+.pnl-table .row-hl { background:rgba(74,222,128,0.08); border-top:1px solid rgba(74,222,128,0.25); border-bottom:1px solid rgba(74,222,128,0.25); }
+
+[data-tip] { position:relative; cursor:help; border-bottom:1px dotted var(--text-muted); }
+[data-tip]:hover::after { content:attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%); background:#08090c; color:var(--accent); border:1px solid var(--accent); border-radius:8px; padding:0.6rem 0.85rem; font-size:0.7rem; line-height:1.45; white-space:normal; min-width:240px; max-width:340px; z-index:999; pointer-events:none; box-shadow:0 4px 16px rgba(0,0,0,0.5); text-transform:none; letter-spacing:normal; font-family:'Inter',sans-serif; font-weight:400; }
+
+/* ============ Top bar global ============ */
+.topbar { position:sticky; top:0; z-index:90; height:56px; background:var(--bg-panel); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 1.25rem; }
+.topbar-logo { display:flex; align-items:center; gap:0.7rem; }
+.logo-svg { width:34px; height:34px; color:var(--accent); }
+.brand-text { font-family:'Oswald'; font-weight:700; font-size:1.15rem; letter-spacing:0.04em; }
+.brand-accent { color:var(--accent); }
+.topbar-actions { display:flex; gap:0.5rem; }
+.topbar-btn { min-width:40px; height:40px; padding:0 0.75rem; border-radius:10px; background:transparent; border:1px solid var(--border); color:var(--text-muted); cursor:pointer; display:flex; align-items:center; gap:0.4rem; transition:all 0.2s; font-weight:700; font-size:0.78rem; font-family:'Oswald',sans-serif; letter-spacing:0.08em; }
+.topbar-btn:hover { color:var(--accent); border-color:var(--accent); background:rgba(74,222,128,0.06); }
+.topbar-btn svg { width:18px; height:18px; }
+.icon-sun { display:none; }
+body.light-mode .icon-moon { display:none; }
+body.light-mode .icon-sun { display:block; }
+
+/* ============ Sidebar ============ */
+.app-shell { display:flex; min-height:calc(100vh - 56px); }
+.sidebar { width:96px; flex-shrink:0; background:var(--bg-panel); border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; padding:1rem 0; gap:0.5rem; position:sticky; top:56px; height:calc(100vh - 56px); z-index:50; overflow-y:auto; }
+.nav-item { width:76px; padding:0.6rem 0.4rem; border-radius:12px; display:flex; flex-direction:column; align-items:center; gap:0.3rem; cursor:pointer; transition:all 0.2s; color:var(--text-muted); border:1px solid transparent; background:transparent; }
+.nav-item:hover { background:rgba(255,255,255,0.04); color:var(--text); }
+.nav-item.active { background:rgba(74,222,128,0.12); color:var(--accent); border-color:rgba(74,222,128,0.4); }
+.nav-item svg { width:22px; height:22px; stroke-width:1.6; }
+.nav-item span { font-size:8.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; text-align:center; line-height:1.1; }
+.main-pane { flex:1; min-width:0; }
+.view { display:none; animation:fadeIn 0.35s; }
+.view.active { display:block; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+/* ============ Pitch deck (compacted) ============ */
+.deck { position:relative; min-height:calc(100vh - 56px - 80px); }
+.slide { display:none; min-height:calc(100vh - 56px - 80px); padding:4rem 5rem; box-sizing:border-box; flex-direction:column; justify-content:center; animation:slideIn 0.4s; }
+.slide.active { display:flex; }
+@keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+.slide-num { position:absolute; top:2rem; right:3rem; font-family:'Oswald'; font-size:0.85rem; color:var(--accent); letter-spacing:0.3em; }
+.slide-tag { font-size:0.7rem; letter-spacing:0.4em; color:var(--accent); text-transform:uppercase; margin-bottom:1rem; }
+.deck-controls { position:sticky; bottom:0; background:rgba(8,9,12,0.95); backdrop-filter:blur(8px); border-top:1px solid var(--border); padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.deck-btn { background:var(--bg-elev); border:1px solid var(--border); color:var(--text); padding:0.6rem 1.4rem; border-radius:8px; cursor:pointer; font-weight:600; font-size:0.85rem; }
+.deck-btn:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
+.deck-btn:disabled { opacity:0.3; }
+.deck-dots { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
+.dot { width:10px; height:10px; border-radius:50%; background:var(--border); cursor:pointer; }
+.dot.active { background:var(--accent); transform:scale(1.3); }
+
+/* ============ Web view ============ */
+.hero-public { position:relative; min-height:70vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.price-card { background:linear-gradient(180deg,#14181f,#0f1115); border:1px solid var(--border); border-radius:16px; }
+.price-card.featured { border-color:var(--accent); box-shadow:0 0 40px rgba(74,222,128,0.15); }
+.gallery-img { width:100%; height:100%; object-fit:cover; }
+.gallery-tile { overflow:hidden; }
+.pos-top { object-position:50% 25%; } .pos-bottom { object-position:50% 75%; } .pos-left { object-position:25% 50%; } .pos-right { object-position:75% 50%; }
+.profile-avatar { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:linear-gradient(135deg,#1a2e1a,#0f1115); border:2px solid var(--border); }
+.profile-avatar svg { width:32px; height:32px; color:var(--accent); }
+
+/* ============ Plan ============ */
+.plan-subnav { position:sticky; top:56px; background:rgba(8,9,12,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--border); padding:0.75rem 2rem; z-index:40; display:flex; gap:0.5rem; overflow-x:auto; }
+.plan-subnav a { font-size:0.7rem; padding:0.45rem 0.85rem; border-radius:999px; white-space:nowrap; color:var(--text-muted); }
+.plan-subnav a:hover { background:rgba(255,255,255,0.06); color:var(--text); }
+
+/* ============ DIANA-style banner & workbench ============ */
+.classif { background:#0b8a4a; color:#fff; font-family:'JetBrains Mono', monospace; font-weight:700; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; padding:4px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #0a6b3a; }
+
+.nato-topbar { background:linear-gradient(90deg, var(--nato-blue) 0%, #0b3e7c 50%, #061a36 100%); border-bottom:2px solid var(--nato-blue-3); padding:8px 14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; position:relative; }
+.nato-topbar:before { content:""; position:absolute; left:0; right:0; top:0; height:3px; background:repeating-linear-gradient(90deg, var(--nato-blue) 0 64px, var(--nato-gold) 64px 80px); opacity:0.65; }
+
+.nato-brand { display:flex; align-items:center; gap:12px; }
+.nato-emblem { width:42px; height:42px; display:flex; align-items:center; justify-content:center; background:var(--nato-blue); border:1.5px solid var(--nato-gold); border-radius:50%; color:var(--nato-gold); font-weight:700; font-size:12px; font-family:'JetBrains Mono', monospace; }
+.nato-brand-text { color:#fff; font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:0.18em; }
+.nato-brand-text .gold { color:var(--nato-gold); }
+.nato-brand-text .muted { color:#a9c4ea; font-weight:400; font-size:10px; letter-spacing:0.16em; margin-top:3px; display:block; }
+
+.nato-meta { display:flex; gap:6px; flex-wrap:wrap; }
+.meta-block { display:flex; flex-direction:column; padding:4px 10px; min-width:90px; background:rgba(7,16,33,0.6); border:1px solid rgba(255,199,44,0.25); border-radius:2px; line-height:1.15; }
+.meta-label { font-size:9px; letter-spacing:0.22em; color:var(--nato-gold); font-weight:700; }
+.meta-val { font-size:12px; color:#fff; margin-top:2px; font-weight:700; font-family:'JetBrains Mono', monospace; }
+.meta-block.threat-green .meta-val { color:var(--mint); }
+.meta-block.threat-yellow .meta-val { color:#f5d65e; }
+.meta-block.threat-orange .meta-val { color:#ff9b3a; }
+.meta-block.threat-red .meta-val { color:var(--hostile); }
+
+/* Workbench grid */
+.workbench { display:grid; grid-template-columns:280px minmax(0,1fr) 340px; grid-template-rows:1fr 168px; min-height:calc(100vh - 56px - 26px - 60px); min-width:0; overflow:hidden; }
+.workbench.no-cmdlog { grid-template-rows:1fr; }
+.workbench.no-cmdlog .cmdlog { display:none; }
+.workbench.no-cmdlog .stage, .workbench.no-cmdlog .dossier { grid-row:1; }
+
+@media (max-width:1280px) { .workbench { grid-template-columns:240px minmax(0,1fr) 300px; } }
+@media (max-width:980px)  { .workbench { grid-template-columns:1fr; grid-template-rows:auto auto auto; } .rail,.stage,.dossier,.cmdlog { grid-column:1; grid-row:auto; } }
+
+.rail { grid-column:1; grid-row:1/3; min-width:0; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:10px; background:linear-gradient(180deg,#08111f,#060c16); border-right:1px solid var(--line); }
+.rail-sec { background:#091525; border:1px solid var(--line); border-radius:3px; padding:10px 12px; position:relative; }
+.rail-sec:before { content:""; position:absolute; left:0; top:8px; bottom:8px; width:2px; background:linear-gradient(180deg, var(--nato-gold), transparent 70%); }
+.sec-head { font-size:10.5px; letter-spacing:0.22em; font-weight:700; color:var(--nato-gold); margin-bottom:8px; padding-bottom:6px; border-bottom:1px dashed var(--line); display:flex; gap:10px; align-items:center; }
+.sec-n { font-family:'JetBrains Mono', monospace; color:var(--nato-blue-3); background:rgba(0,73,144,0.18); border:1px solid rgba(0,73,144,0.5); padding:1px 6px; border-radius:2px; font-size:10px; }
+
+/* Phase ladder */
+.phase-ladder { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; }
+.phase-step { position:relative; padding:8px 0 16px 22px; cursor:pointer; }
+.phase-step .phase-rail-dot { position:absolute; left:5px; top:11px; width:10px; height:10px; border-radius:50%; background:#091525; border:1.5px solid var(--ink-mute); }
+.phase-step .phase-rail-line { position:absolute; left:9.5px; top:21px; width:1.5px; bottom:-2px; background:var(--line); }
+.phase-step:last-child .phase-rail-line { display:none; }
+.phase-step.state-done .phase-rail-dot { background:var(--mint); border-color:var(--mint); }
+.phase-step.state-done .phase-rail-line { background:var(--mint); opacity:0.5; }
+.phase-step.state-active .phase-rail-dot { background:var(--nato-gold); border-color:var(--nato-gold); box-shadow:0 0 0 3px rgba(255,199,44,0.25); }
+.phase-head { display:flex; align-items:center; gap:8px; font-size:11.5px; }
+.phase-code { color:var(--nato-gold); font-weight:700; font-family:'JetBrains Mono', monospace; }
+.phase-name { font-weight:700; letter-spacing:0.1em; color:#fff; font-size:11px; }
+.phase-status { margin-left:auto; font-size:8.5px; letter-spacing:0.16em; padding:1px 5px; border-radius:2px; font-family:'JetBrains Mono', monospace; font-weight:700; }
+.phase-status.state-done { color:var(--mint); background:rgba(124,216,168,0.10); border:1px solid rgba(124,216,168,0.35); }
+.phase-status.state-active { color:var(--nato-gold); background:rgba(255,199,44,0.12); border:1px solid rgba(255,199,44,0.45); }
+.phase-status.state-pending { color:var(--ink-mute); background:rgba(91,102,117,0.08); border:1px solid var(--line-2); }
+.phase-blurb { color:var(--ink-dim); font-size:10.5px; line-height:1.4; margin:5px 0 0; }
+
+/* Force tally */
+.tally { display:flex; flex-direction:column; gap:6px; }
+.tally-row { display:flex; align-items:center; gap:8px; background:#0a1325; border:1px solid var(--line); border-radius:3px; padding:6px 8px; }
+.tally-row.side-NATO { border-left:3px solid var(--allied); }
+.tally-row.side-OPFOR { border-left:3px solid var(--hostile); }
+.tally-row.side-NEUTRAL { border-left:3px solid var(--neutral); }
+.tally-side { font-size:9.5px; letter-spacing:0.14em; font-weight:700; width:48px; flex:0 0 auto; }
+.side-NATO .tally-side { color:var(--allied); }
+.side-OPFOR .tally-side { color:var(--hostile); }
+.side-NEUTRAL .tally-side { color:var(--neutral); }
+.tally-bars { display:grid; grid-template-columns:repeat(5, 1fr); gap:3px; flex:1; }
+.tally-cell { background:#0d1a30; border:1px solid var(--line); padding:3px 4px; text-align:center; }
+.tally-d { font-size:8px; color:var(--ink-mute); letter-spacing:0.14em; font-weight:700; }
+.tally-v { font-size:12px; color:#fff; font-weight:700; line-height:1.1; font-family:'JetBrains Mono', monospace; }
+
+/* Filters chips */
+.filters { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
+.chip { display:inline-flex; align-items:center; gap:4px; font-size:9.5px; letter-spacing:0.14em; font-weight:700; padding:3px 7px; border:1px solid var(--line-2); border-radius:2px; background:#0a1325; color:var(--ink-mute); cursor:pointer; user-select:none; }
+.chip.on { color:#fff; border-color:var(--nato-blue-3); background:#102146; }
+.chip.side-NATO.on { border-color:var(--allied); color:var(--allied); }
+.chip.side-OPFOR.on { border-color:var(--hostile); color:var(--hostile); background:#2a0f10; }
+.chip.side-NEUTRAL.on { border-color:var(--neutral); color:var(--neutral); background:#0c2418; }
+.layer-toggles { display:flex; flex-direction:column; gap:5px; margin-top:6px; font-size:10.5px; color:var(--ink-dim); }
+.layer-toggles label { display:flex; gap:6px; align-items:center; cursor:pointer; }
+.layer-toggles input { accent-color:var(--nato-gold); }
+
+/* Stage / map · C23_DIANA-style con grid amber overlay (Prompt_to_008 §7) */
+.stage { grid-column:2; grid-row:1; position:relative; background:#020407; min-width:0; }
+.stage .leaflet-container { background:#0a121d; height:100%; width:100%; }
+.stage:after { content:""; position:absolute; inset:0; pointer-events:none; z-index:400;
+    background: linear-gradient(rgba(255,199,44,0.05) 1px, transparent 1px) 0 0/120px 120px,
+                linear-gradient(90deg, rgba(255,199,44,0.05) 1px, transparent 1px) 0 0/120px 120px;
+    mix-blend-mode:screen; }
+.hud { position:absolute; z-index:500; display:flex; gap:6px; flex-direction:column; pointer-events:none; }
+.hud-tl { top:12px; left:12px; }
+.hud-tr { top:12px; right:12px; align-items:flex-end; }
+.hud-bl { bottom:12px; left:12px; }
+.hud-pill { display:inline-flex; gap:8px; align-items:center; background:rgba(7,16,33,0.88); border:1px solid rgba(255,199,44,0.4); padding:5px 10px; border-radius:2px; backdrop-filter:blur(4px); font-size:10.5px; }
+.hud-k { color:var(--nato-gold); letter-spacing:0.18em; font-weight:700; font-size:9.5px; }
+.hud-v { color:#fff; font-size:11px; font-family:'JetBrains Mono', monospace; }
+.grid-key { display:flex; gap:14px; align-items:center; background:rgba(7,16,33,0.88); border:1px solid rgba(255,199,44,0.35); padding:6px 10px; font-size:10px; letter-spacing:0.14em; font-weight:700; color:var(--ink-dim); }
+.grid-key .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+.grid-key .dot.allied { background:var(--allied); }
+.grid-key .dot.hostile { background:var(--hostile); }
+.grid-key .dot.neut { background:var(--neutral); }
+
+/* Phase gate */
+.phase-gate { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:600; background:rgba(7,16,33,0.94); border:1px solid var(--nato-gold); border-radius:2px; padding:6px; backdrop-filter:blur(4px); box-shadow:0 0 20px rgba(255,199,44,0.15); }
+.gate-card { display:flex; flex-direction:column; padding:6px 12px; min-width:120px; }
+.gate-label { font-size:9px; letter-spacing:0.22em; color:var(--nato-gold); font-weight:700; }
+.gate-now { font-size:11px; color:#fff; font-weight:700; margin-top:2px; font-family:'JetBrains Mono', monospace; }
+.gate-btn { display:flex; flex-direction:column; align-items:flex-start; background:linear-gradient(180deg, var(--nato-blue-2), var(--nato-blue)); border:1px solid var(--nato-gold); color:#fff; cursor:pointer; padding:5px 12px; border-radius:2px; font-family:inherit; }
+.gate-btn:hover { background:linear-gradient(180deg, var(--nato-blue-3), var(--nato-blue-2)); }
+.gate-cta { font-size:10.5px; letter-spacing:0.16em; color:#fff; font-weight:700; }
+.gate-name { font-size:9.5px; letter-spacing:0.14em; color:#cfe2ff; font-weight:600; margin-top:1px; }
+
+/* Dossier */
+.dossier { grid-column:3; grid-row:1/3; background:linear-gradient(180deg,#08111f,#060c16); border-left:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+.dossier-head { display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#0a1426,#091321); }
+.dh-title { font-weight:700; letter-spacing:0.22em; font-size:11px; color:var(--nato-gold); }
+.dh-sub { font-size:9.5px; color:var(--ink-mute); letter-spacing:0.18em; margin-top:2px; }
+.dossier-body { flex:1; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:8px; }
+.dossier-empty { text-align:center; color:var(--ink-mute); padding:36px 12px; border:1px dashed var(--line); border-radius:3px; }
+.empty-glyph { font-size:32px; color:var(--line-2); margin-bottom:8px; }
+.empty-title { font-weight:700; letter-spacing:0.18em; font-size:10.5px; color:var(--ink-dim); }
+.empty-hint { font-size:10.5px; margin-top:4px; line-height:1.5; color:var(--ink-mute); }
+/* Dossier card LINCE-SIM (Prompt §7) */
+.d-card { background:var(--c2-bg-surface); border:1px solid var(--c2-border-tactical); border-radius:3px; padding:10px 12px; position:relative; }
+.d-card.side-NATO { border-left:3px solid var(--c2-friendly); }
+.d-card.side-OPFOR { border-left:3px solid var(--c2-hostile); }
+.d-card.side-NEUTRAL { border-left:3px solid var(--c2-neutral); }
+.d-card .d-desig { color: var(--c2-text-primary); }
+.d-desig { font-size:12px; font-weight:700; line-height:1.25; color:#fff; }
+.d-meta { font-size:9.5px; color:var(--ink-mute); margin-top:3px; letter-spacing:0.06em; }
+.d-row { display:flex; gap:8px; margin-top:5px; font-size:11px; }
+.d-row.d-stack { flex-direction:column; gap:3px; }
+.d-k { width:78px; flex:0 0 auto; color:var(--nato-gold); font-size:9.5px; letter-spacing:0.18em; font-weight:700; }
+.d-v { color:var(--ink); }
+.d-eq { margin:2px 0 0 0; padding:0; list-style:none; display:flex; flex-wrap:wrap; gap:4px; }
+.d-eq li { font-family:'JetBrains Mono', monospace; font-size:10px; background:#0a1426; border:1px solid var(--line); padding:2px 6px; border-radius:2px; color:var(--ink-dim); }
+.d-mission { font-size:11px; color:var(--ink-dim); line-height:1.45; padding-top:3px; }
+
+/* CmdLog */
+.cmdlog { grid-column:2; grid-row:2; background:#02050b; border-top:2px solid var(--nato-gold); display:flex; flex-direction:column; min-height:0; }
+.cmdlog-bar { display:flex; justify-content:space-between; align-items:center; padding:6px 14px; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#06101e,#040910); }
+.cmdlog-title { font-weight:700; letter-spacing:0.22em; font-size:11px; color:var(--nato-gold); }
+.cmdlog-meta { font-size:9.5px; color:var(--ink-mute); letter-spacing:0.16em; }
+.cmdlog-stream { flex:1; overflow-y:auto; padding:6px 14px; font-size:11px; line-height:1.55; font-family:'JetBrains Mono', monospace; background:repeating-linear-gradient(180deg, transparent 0 22px, rgba(255,255,255,0.014) 22px 23px); }
+.logline { display:grid; grid-template-columns:75px 70px 1fr; gap:8px; }
+.lts { color:#3d6e8c; }
+.lpfx { font-weight:700; letter-spacing:0.10em; }
+.pfx-C4ISR { color:var(--allied); } .pfx-ISTAR { color:var(--mint); } .pfx-ELINT { color:var(--amber); }
+.pfx-SACEUR { color:#c8a8ff; } .pfx-SYS { color:var(--ink-dim); } .pfx-NLP { color:#ffb6e6; }
+.pfx-COA { color:#9bf0ff; } .pfx-AIS { color:#7cd8a8; } .pfx-INTEL { color:#ffd28a; }
+.pfx-AUTO { color:var(--nato-gold); } .pfx-TURN { color:#fff; } .pfx-KINETIC { color:#ffb6e6; }
+.pfx-DOC { color:var(--nato-gold); }
+.lmsg { color:#c8e3ff; }
+.cmdlog-input { display:flex; gap:6px; padding:6px 10px; border-top:1px solid var(--line); background:#040910; }
+.cmdlog-input input { flex:1; background:#070f22; color:var(--ink); border:1px solid var(--line-2); padding:5px 9px; font-family:'JetBrains Mono', monospace; font-size:11px; border-radius:2px; }
+.cmdlog-input input:focus { outline:none; border-color:var(--nato-gold); }
+.cmdlog-input button { background:var(--nato-blue); color:#fff; border:1px solid var(--nato-gold); padding:5px 12px; font-family:inherit; font-weight:700; letter-spacing:0.16em; font-size:10.5px; cursor:pointer; }
+
+/* Markers / NATO milsymbol */
+.leaflet-div-icon { background:transparent !important; border:none !important; }
+.unit-marker-app6 { cursor:pointer; transition:transform 0.2s; filter:drop-shadow(0 0 5px rgba(0,0,0,0.8)); }
+.unit-marker-app6:hover { transform:scale(1.2); z-index:1000 !important; }
+
+/* Doctrine tags */
+.doctrine-tag { display:inline-block; background:rgba(255,199,44,0.12); color:var(--nato-gold); border:1px solid rgba(255,199,44,0.3); padding:0.15rem 0.45rem; font-family:'JetBrains Mono', monospace; font-size:0.6rem; border-radius:3px; letter-spacing:0.05em; margin:0 0.2rem 0.2rem 0; }
+
+.btn-ghost-sm { padding:4px 9px; font-size:10px; border:1px solid rgba(255,199,44,0.5); background:rgba(0,73,144,0.4); color:#fff; font-weight:700; letter-spacing:0.14em; cursor:pointer; border-radius:2px; font-family:inherit; }
+.btn-ghost-sm:hover { border-color:var(--nato-gold); background:rgba(0,73,144,0.7); }
+
+/* Config */
+.config-section { background:var(--bg-elev); border:1px solid var(--border); border-radius:12px; padding:1.25rem; margin-bottom:1rem; }
+.config-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; }
+.config-field { display:flex; flex-direction:column; gap:0.3rem; }
+.config-field label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); }
+.config-field input,.config-field select { background:var(--bg); border:1px solid var(--border); color:var(--text); padding:0.6rem 0.8rem; border-radius:6px; font-size:0.85rem; }
+.btn-secondary { background:transparent; color:var(--text); border:1px solid var(--border); padding:0.6rem 1.1rem; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.8rem; }
+.btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
+.btn-danger { background:transparent; color:#fc8181; border:1px solid rgba(245,101,101,0.4); padding:0.4rem 0.7rem; border-radius:6px; font-size:0.7rem; cursor:pointer; }
+/* CRUD buttons style (C23_DIANA Mission Editor pattern · Prompt §8) */
+.btn-edit { background:#0d2348; color:#9bc7ff; border:1px solid var(--c2-friendly); padding:4px 10px; font-weight:700; cursor:pointer; letter-spacing:0.14em; font-size:10px; border-radius:2px; margin-right:4px; font-family:inherit; }
+.btn-edit:hover { background:#0b62c4; color:#fff; }
+.btn-create { background:#0d3a2a; color:#7ce8b3; border:1px solid #16a35e; padding:7px 14px; font-weight:700; cursor:pointer; letter-spacing:0.18em; font-size:11px; border-radius:2px; font-family:inherit; }
+.btn-create:hover { background:#0f5238; box-shadow:0 0 10px rgba(22,163,94,0.4); }
+.btn-update { background:#08311e; color:#7ee787; border:1px solid #2f7a55; padding:4px 10px; font-weight:700; cursor:pointer; letter-spacing:0.14em; font-size:10px; border-radius:2px; margin-right:4px; font-family:inherit; }
+.btn-update:hover { background:#0b4a30; }
+.btn-del { background:#3a0e10; color:#ffb1ad; border:1px solid var(--c2-hostile); padding:4px 10px; font-weight:700; cursor:pointer; letter-spacing:0.14em; font-size:10px; border-radius:2px; font-family:inherit; }
+.btn-del:hover { background:#5a1418; }
+.crud-row-actions { display:flex; gap:4px; }
+.config-table { width:100%; font-size:0.78rem; }
+.config-table th { text-align:left; padding:0.5rem 0.6rem; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); border-bottom:1px solid var(--border); }
+.config-table td { padding:0.5rem 0.6rem; border-bottom:1px solid rgba(255,255,255,0.04); }
+.config-table input,.config-table select { background:transparent; border:1px solid transparent; color:var(--text); padding:0.3rem 0.5rem; width:100%; font-size:0.78rem; }
+.config-table input:focus { border-color:var(--accent); outline:none; background:var(--bg); }
+
+.toast { position:fixed; bottom:24px; right:24px; background:var(--bg-elev); border:1px solid var(--accent); color:var(--accent); padding:0.85rem 1.25rem; border-radius:8px; z-index:9999; opacity:0; transform:translateY(10px); transition:all 0.25s; font-size:0.85rem; font-weight:600; }
+.toast.show { opacity:1; transform:translateY(0); }
+
+.program-link { color:var(--accent); text-decoration:none; border-bottom:1px dotted var(--accent); }
+.program-link:hover { color:var(--nato-gold); }
+.source-cite { font-size:0.6rem; color:var(--text-muted); font-style:italic; margin-top:0.25rem; }
+.source-cite a { color:var(--accent); text-decoration:none; }
+
+.manual-section h3 { font-size:1.1rem; color:var(--accent); margin-top:1.6rem; margin-bottom:0.6rem; }
+.manual-section p,.manual-section li { font-size:0.88rem; color:var(--text-muted); line-height:1.6; }
+.manual-section code { background:var(--bg); padding:0.1rem 0.4rem; border-radius:4px; color:var(--accent); font-family:'JetBrains Mono', monospace; }
+.manual-section a { color:var(--accent); }
+
+body.light-mode { --bg:#f5f7fa; --bg-elev:#ffffff; --bg-panel:#ffffff; --border:#e2e8f0; --text:#1a1d23; --text-muted:#64748b; --accent:#16a34a; }
+body.light-mode .topbar,body.light-mode .sidebar { background:#ffffff; }
+body.light-mode .sidebar { background:#f1f5f9; }
+body.light-mode .nav-item.active { background:rgba(22,163,74,0.12); color:#16a34a; border-color:rgba(22,163,74,0.4); }
+body.light-mode .card { background:#ffffff; }
+
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background:#06101e; }
+::-webkit-scrollbar-thumb { background:#1a2a48; border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:#22355c; }
+</style>
+</head>
+<body class="antialiased">
+
+<header class="topbar">
+  <div class="topbar-logo">
+    <svg class="logo-svg" viewBox="0 0 48 48" fill="currentColor">
+      <rect x="3" y="28" width="42" height="11" rx="2.5"/>
+      <rect x="13" y="17" width="22" height="11" rx="3"/>
+      <rect x="32" y="20" width="14" height="3" rx="1.5"/>
+      <circle cx="9" cy="40.5" r="3.2" fill="#0f1115"/><circle cx="18" cy="40.5" r="3.2" fill="#0f1115"/><circle cx="27" cy="40.5" r="3.2" fill="#0f1115"/><circle cx="36" cy="40.5" r="3.2" fill="#0f1115"/>
+      <rect x="5" y="32" width="38" height="3" rx="1" opacity="0.4"/>
+    </svg>
+    <span class="brand-text">CAMAR<span class="brand-accent">WAR</span></span>
+    <span class="text-[10px] text-gray-500 ml-2 mono">v009 · Estrategia/Táctica</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="topbar-btn" id="theme-toggle">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2" x2="12" y2="4.5"/><line x1="12" y1="19.5" x2="12" y2="22"/><line x1="2" y1="12" x2="4.5" y2="12"/><line x1="19.5" y1="12" x2="22" y2="12"/></svg>
+    </button>
+    <button class="topbar-btn" id="lang-toggle"><span id="lang-label">EN</span></button>
+  </div>
+</header>
+
+<div class="app-shell">
+
+<aside class="sidebar">
+  <button class="nav-item active" data-target="view-web" onclick="switchView('view-web')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg><span>Web</span></button>
+  <button class="nav-item" data-target="view-pitch" onclick="switchView('view-pitch')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h18v12H3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 20.5h8M12 16.5v4"/></svg><span>Pitch</span></button>
+  <button class="nav-item" data-target="view-plan" onclick="switchView('view-plan')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V9m4 8V5m4 12v-6"/><rect x="3" y="3" width="18" height="18" rx="2" stroke-linejoin="round"/></svg><span>Plan</span></button>
+  <button class="nav-item" data-target="view-sim" onclick="switchView('view-sim')" title="Estrategia · Misiones España exterior"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg><span data-en="Strategy">Estrategia</span></button>
+  <button class="nav-item" data-target="view-c2" onclick="switchView('view-c2')" title="Táctica · Carros La Raya"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13a7 7 0 0114 0M8 13a4 4 0 018 0"/><circle cx="12" cy="13" r="1.4" fill="currentColor"/></svg><span data-en="Tactical">Táctica</span></button>
+  <button class="nav-item" data-target="view-config" onclick="switchView('view-config')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 008 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9 1.65 1.65 0 004.27 7.18l-.06-.06A2 2 0 117.04 4.29l.06.06A1.65 1.65 0 008.92 4.6 1.65 1.65 0 0010 3.09V3a2 2 0 014 0v.09c0 .67.39 1.27 1 1.51a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.24.61.84 1 1.51 1H21a2 2 0 010 4h-.09c-.67 0-1.27.39-1.51 1z"/></svg><span>Config</span></button>
+  <button class="nav-item" data-target="view-manual" onclick="switchView('view-manual')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2 4h7a4 4 0 014 4v13a3 3 0 00-3-3H2zM22 4h-7a4 4 0 00-4 4v13a3 3 0 013-3h8z"/></svg><span>Manual</span></button>
+</aside>
+
+<div class="main-pane">
+
+<!-- ============ WEB ============ -->
+<section id="view-web" class="view active">
+  <header class="hero-public">
+    <div class="absolute inset-0 z-0"><div class="absolute inset-0 bg-black/65 z-10"></div><img src="https://miniczolgi.pl/wp-content/uploads/2025/12/minitanks4.jpg" class="w-full h-full object-cover pos-top" onerror="this.style.opacity='0';"></div>
+    <div class="relative z-20 text-center px-6 py-20">
+      <span class="inline-block text-xs uppercase tracking-[0.4em] text-green-400 mb-4">Camarma de Esteruelas · Madrid 2026</span>
+      <h1 class="text-5xl md:text-7xl font-black mb-4">Conduce. Dispara. Conquista.</h1>
+      <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8 italic">El primer campo de mini-carros de combate hidráulicos reales de la Península Ibérica. Combate Airsoft con vehículos de 700 kg.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#booking" class="px-8 py-4 bg-green-500 text-black font-bold rounded-full hover:scale-105 transition">Reservar Misión</a>
+        <a href="#cómo-funciona" class="px-8 py-4 border border-white/20 rounded-full hover:bg-white/10 transition">Cómo Funciona</a>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-6 py-16 space-y-24">
+    <section id="cómo-funciona">
+      <h2 class="text-4xl font-bold text-center mb-12">Tu primera misión, paso a paso</h2>
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="card p-6 text-center"><div class="text-3xl mb-3">📅</div><h3 class="text-lg font-bold mb-2">1 · Reserva</h3><p class="text-sm text-gray-400">Online en menos de 2 minutos.</p></div>
+        <div class="card p-6 text-center"><div class="text-3xl mb-3">🎯</div><h3 class="text-lg font-bold mb-2">2 · Briefing</h3><p class="text-sm text-gray-400">15 min de seguridad y manejo.</p></div>
+        <div class="card p-6 text-center"><div class="text-3xl mb-3">🚜</div><h3 class="text-lg font-bold mb-2">3 · Combate</h3><p class="text-sm text-gray-400">60 min al mando de un MiniCzolgi v1.</p></div>
+        <div class="card p-6 text-center"><div class="text-3xl mb-3">🏆</div><h3 class="text-lg font-bold mb-2">4 · Victoria</h3><p class="text-sm text-gray-400">Recibe tu vídeo de la batalla.</p></div>
+      </div>
+    </section>
+    <!-- FIELD MANUAL · ESPECIFICACIONES TÉCNICAS (Prompt §5) -->
+    <section id="field-manual">
+      <div class="text-center mb-10">
+        <span class="text-xs uppercase tracking-[0.4em] text-cyan-300 mb-2 inline-block" data-en="FIELD MANUAL · TM-CW-2026 · MINICZOLGI v1">FIELD MANUAL · TM-CW-2026 · MINICZOLGI v1</span>
+        <h2 class="text-4xl font-bold" data-en="Technical Specifications">Especificaciones Técnicas</h2>
+        <p class="text-sm text-gray-400 mt-3 max-w-2xl mx-auto" data-en="Real-data field manual based on miniczolgi.pl official specs and ELGO-PLUS technical documentation. OSINT verified May 2026.">Manual técnico Field Manual basado en specs oficiales de miniczolgi.pl + documentación técnica ELGO-PLUS. OSINT verificado mayo 2026.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div class="card p-6">
+          <h3 class="text-lg font-bold text-cyan-300 mb-4 flex items-center gap-2"><span>⚙</span> <span data-en="Powerplant · Transmission">Planta Motriz · Transmisión</span></h3>
+          <ul class="text-sm space-y-2 text-gray-300">
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Engine">Motor</span><strong>Briggs &amp; Stratton Vanguard 2-cyl</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Displacement">Cilindrada</span><strong>570 cm³</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Power">Potencia</span><strong>18 HP</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Fuel">Combustible</span><strong data-en="Petrol">Gasolina</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Transmission">Transmisión</span><strong data-en="Hydraulic">Hidráulica</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Steering">Dirección</span><strong data-en="2 manual levers">2 palancas manuales</strong></li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-3 italic" data-en="Doctrinal note: hydraulic transmission delivers max torque at low rpm, optimal for all-terrain. Vanguard engines are field-proven on industrial machinery (Bobcat, Caterpillar lineups).">Nota doctrinal: la transmisión hidráulica entrega máximo par a bajas rpm, óptima para todo-terreno. Vanguard tiene rodaje en maquinaria industrial (Bobcat, Caterpillar).</p>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-bold text-cyan-300 mb-4 flex items-center gap-2"><span>📐</span> <span data-en="Dimensions · Mass">Dimensiones · Masa</span></h3>
+          <ul class="text-sm space-y-2 text-gray-300">
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Length">Longitud</span><strong>2,30 m</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Width">Anchura</span><strong>1,10 m</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Height (headrest)">Altura (reposacabezas)</span><strong>1,45 m</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Height (max · roll cage)">Altura máx. (jaula)</span><strong>1,50 m</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Curb weight">Masa operativa</span><strong>700 kg</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Top speed">Velocidad máx.</span><strong>~7 km/h</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Turret">Torreta</span><strong data-en="Rotating on bearings">Rotativa sobre rodamientos</strong></li>
+            <li class="flex justify-between"><span class="text-gray-400" data-en="Gun elevation">Elevación cañón</span><strong data-en="Manual (up/down)">Manual (asc/desc)</strong></li>
+          </ul>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-bold text-cyan-300 mb-4 flex items-center gap-2"><span>🛡</span> <span data-en="Construction · Armor">Construcción · Blindaje</span></h3>
+          <ul class="text-sm space-y-2 text-gray-300">
+            <li data-en="▸ Steel chassis with powder-coat finish">▸ Chasis de acero con acabado en polvo</li>
+            <li data-en="▸ Reinforced laminate armor panels">▸ Paneles de blindaje en laminado reforzado</li>
+            <li data-en="▸ Driver safety belts">▸ Cinturones de seguridad para conductor</li>
+            <li data-en="▸ Protective roll cage">▸ Jaula antivuelco protectora</li>
+            <li data-en="▸ Emergency engine shutdown button">▸ Pulsador de emergencia (kill switch)</li>
+            <li data-en="▸ Remote ignition/shutdown (~200 m range)">▸ Encendido/apagado remoto (~200 m alcance)</li>
+            <li data-en="▸ Standard mounts for paintball/airsoft markers">▸ Soportes estándar marcadores paintball/airsoft</li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-3 italic" data-en="Doctrinal note: laminate armor is sufficient against 6mm BB / paintball direct impact at &lt;5m. Roll cage rated FIA-spec equivalent for off-road events.">Nota doctrinal: el blindaje en laminado es suficiente frente a impacto directo BB 6mm/paintball a &lt;5m. Jaula antivuelco equivalente a especificación FIA para off-road.</p>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-bold text-cyan-300 mb-4 flex items-center gap-2"><span>📡</span> <span data-en="C2 Integration · IoMT">Integración C2 · IoMT</span></h3>
+          <ul class="text-sm space-y-2 text-gray-300">
+            <li data-en="▸ Real-time GPS telemetry (lat/lon/speed/fuel)">▸ Telemetría GPS en tiempo real (lat/lon/velocidad/combustible)</li>
+            <li data-en="▸ MQTT/DDS protocol over RF mesh (STANAG 4586 inspired)">▸ Protocolo MQTT/DDS sobre malla RF (inspirado STANAG 4586)</li>
+            <li data-en="▸ COP (Common Operational Picture) integration">▸ Integración COP (Common Operational Picture)</li>
+            <li data-en="▸ Hit detection sensor + RF kill confirmation">▸ Sensor detección impacto + confirmación RF</li>
+            <li data-en="▸ Geofence alerts on perimeter breach">▸ Alertas geofence en cruce de perímetro</li>
+          </ul>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-bold text-cyan-300 mb-4 flex items-center gap-2"><span>🔧</span> <span data-en="Operating Doctrine">Doctrina Operativa</span></h3>
+          <ul class="text-sm space-y-2 text-gray-300">
+            <li data-en="▸ Crew of 1 (driver) + optional gunner station">▸ Tripulación de 1 (conductor) + estación artillero opcional</li>
+            <li data-en="▸ Pre-flight checklist mandatory (5 min)">▸ Checklist pre-flight obligatoria (5 min)</li>
+            <li data-en="▸ Maximum 60 min continuous operation per session">▸ Máximo 60 min operación continua por sesión</li>
+            <li data-en="▸ Refuel at FARP (Forward Arming &amp; Refueling Point)">▸ Repostaje en FARP (Forward Arming &amp; Refueling Point)</li>
+            <li data-en="▸ Mandatory PPE: helmet (DOT/ECE), face mask, gloves">▸ EPI obligatorio: casco (DOT/ECE), máscara facial, guantes</li>
+          </ul>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-bold text-cyan-300 mb-4 flex items-center gap-2"><span>📋</span> <span data-en="Data &amp; Compliance">Datos &amp; Cumplimiento</span></h3>
+          <ul class="text-sm space-y-2 text-gray-300">
+            <li data-en="▸ Manufacturer: ELGO-PLUS / MiniCzolgi (Poland)">▸ Fabricante: ELGO-PLUS / MiniCzolgi (Polonia)</li>
+            <li data-en="▸ Spanish import via CAMARWAR S.L. (Madrid)">▸ Importación España vía CAMARWAR S.L. (Madrid)</li>
+            <li data-en="▸ EU CE compliant · category L7e (heavy quadricycle)">▸ EU CE cumple · categoría L7e (cuatriciclo pesado)</li>
+            <li data-en="▸ Insurance: 1 M€ liability + driver coverage">▸ Seguro: 1 M€ RC + conductor</li>
+            <li data-en="▸ Min driver age: 16 (with consent) · 18 unaccompanied">▸ Edad mín conductor: 16 (con autorización) · 18 sin acompañante</li>
+          </ul>
+          <p class="text-[10px] text-gray-600 mt-3 italic">📎 Ref: <a href="https://miniczolgi.pl/" target="_blank" class="program-link">miniczolgi.pl</a> · <a href="https://elgoplus.com/" target="_blank" class="program-link">elgoplus.com</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="booking">
+      <h2 class="text-4xl font-bold text-center mb-3" data-en="Combat Modalities">Modalidades de Combate</h2>
+      <p class="text-center text-gray-400 mb-10" data-en="Edad mínima 16 años · perfil profesional · estrategia · simulación · doctrina">Edad mínima 16 años · perfil profesional · estrategia · simulación · doctrina</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="price-card p-5">
+          <span class="text-[10px] uppercase text-gray-500 tracking-widest" data-en="Skirmish · 1 mission">Escaramuza · 1 misión</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Escaramuza</h3>
+          <div class="text-3xl font-black text-cyan-300"><span data-bind="price-escaramuza">150</span> €</div>
+          <ul class="text-xs space-y-1 text-gray-300 mt-3">
+            <li data-en="✓ 1 match (1h)">✓ 1 partida (1h)</li>
+            <li data-en="✓ 1,000 BBs included">✓ 1.000 bolas incluidas</li>
+            <li data-en="✓ Pre-combat briefing">✓ Briefing previo</li>
+          </ul>
+        </div>
+        <div class="price-card p-5">
+          <span class="text-[10px] uppercase text-gray-500 tracking-widest" data-en="Training Day · 4 missions">Training Day · 4 misiones</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Training Day</h3>
+          <div class="text-3xl font-black text-cyan-300"><span data-bind="price-training">600</span> €</div>
+          <ul class="text-xs space-y-1 text-gray-300 mt-3">
+            <li data-en="✓ Tactical formation training">✓ Formación táctica</li>
+            <li data-en="✓ 4 progressive missions">✓ 4 misiones progresivas</li>
+            <li data-en="✓ Field Manual + AAR">✓ Field Manual + AAR</li>
+          </ul>
+        </div>
+        <div class="price-card featured p-5 relative">
+          <span class="absolute top-2 right-2 bg-cyan-500 text-black text-[9px] uppercase font-bold px-2 py-0.5 rounded-full" data-en="Pro choice">Pro choice</span>
+          <span class="text-[10px] uppercase text-cyan-300 tracking-widest" data-en="MilSim · Weekend">MilSim · Fin de Semana</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">MilSim</h3>
+          <div class="text-3xl font-black text-cyan-300"><span data-bind="price-milsim">1.200</span> €</div>
+          <ul class="text-xs space-y-1 text-gray-300 mt-3">
+            <li data-en="✓ Full weekend">✓ Fin de semana completo</li>
+            <li data-en="✓ Multi-phase scenario">✓ Escenario multi-fase</li>
+            <li data-en="✓ Realistic ROE + AJP-3.2">✓ ROE realistas · AJP-3.2</li>
+            <li data-en="✓ BMS-LINCE training">✓ Entrenamiento BMS-LINCE</li>
+          </ul>
+        </div>
+        <div class="price-card p-5">
+          <span class="text-[10px] uppercase text-gray-500 tracking-widest" data-en="Campaign · annual">Campaña · anual</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Campaña</h3>
+          <div class="text-3xl font-black text-cyan-300"><span data-bind="price-campana">4.800</span> €</div>
+          <ul class="text-xs space-y-1 text-gray-300 mt-3">
+            <li data-en="✓ Annual subscription">✓ Suscripción anual</li>
+            <li data-en="✓ 5 sessions/month">✓ 5 sesiones/mes</li>
+            <li data-en="✓ Priority slot booking">✓ Reserva prioritaria</li>
+            <li data-en="✓ Internal league">✓ Liga interna</li>
+          </ul>
+        </div>
+        <div class="price-card p-5">
+          <span class="text-[10px] uppercase text-gray-500 tracking-widest" data-en="Teamwork · Corporate">Teamwork · Corporate</span>
+          <h3 class="text-xl font-bold mt-1 mb-2">Teamwork</h3>
+          <div class="text-3xl font-black text-cyan-300"><span data-bind="price-teamwork">8.000</span> €</div>
+          <ul class="text-xs space-y-1 text-gray-300 mt-3">
+            <li data-en="✓ Groups 16 vs 16">✓ Grupos 16 vs 16</li>
+            <li data-en="✓ Private day">✓ Jornada privada</li>
+            <li data-en="✓ Custom branding">✓ Branding personalizado</li>
+            <li data-en="✓ Catering optional">✓ Catering opcional</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card p-6 mt-8 border-2 bg-purple-900/10" style="border-color:#b794f4">
+        <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+          <div>
+            <span class="text-xs uppercase tracking-widest font-bold" style="color:#b794f4">🎖️ Programa Institucional · IoMT (Internet of Military Things)</span>
+            <h3 class="text-2xl font-bold mt-1" data-en="Institutional Program · State Security &amp; Defence">Programa Institucional · Seguridad &amp; Defensa</h3>
+            <p class="text-sm text-gray-300 mt-2 max-w-2xl" data-en="Training and exercise platform for State Security Forces (FCSE), Interior, Defence, Intelligence and Presidency clients. Joint targeting platform / Tactical Combat Cloud.">Formación y entrenamiento de unidades de Fuerzas y Cuerpos de Seguridad del Estado. Cliente <strong>Seguridad · Interior · Defensa · Inteligencia · Presidencia</strong>. Plataforma de Targeting Conjunto · Nube Táctica de Combate.</p>
+            <p class="text-xs text-gray-400 mt-2" data-en="Aligned with: CDTI CPP &quot;Robot Terrestre&quot; (€11.9M), COINCIDENTE/DGEI (up to €600k), NATO DIANA Phase I (€100k), EDF.">Alineado con: <strong>CDTI CPP Robot Terrestre</strong> (€11,9M), <strong>COINCIDENTE/DGEI</strong> (hasta €600k), <strong>NATO DIANA Phase I</strong> (€100k), <strong>European Defence Funds (EDF)</strong>.</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <span class="text-[10px] uppercase tracking-widest text-gray-400" data-en="Up to · per project">Hasta · por proyecto</span>
+            <div class="text-4xl font-black" style="color:#b794f4"><span data-bind="price-defense">1.000.000</span> €</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t border-white/10 py-8 px-6 text-center text-xs text-gray-500">© 2026 CAMARWAR S.L. · Camarma de Esteruelas</footer>
+</section>
+
+
+<!-- ============ PITCH (compacto) ============ -->
+<section id="view-pitch" class="view">
+  <div class="deck">
+    <div class="slide active" data-slide="1"><span class="slide-num">01 / 12</span><div class="text-center"><div class="inline-flex items-center gap-3 mb-8"><div class="w-20 h-20 bg-green-500 rounded-2xl flex items-center justify-center text-black font-black text-4xl">CW</div><span class="text-5xl font-black tracking-tighter">CAMAR<span class="text-green-500">WAR</span></span></div><h1 class="text-6xl md:text-7xl font-black mb-6 leading-tight">Combate Mecanizado<br><span class="text-green-400">Civil + Defensa</span></h1><p class="text-2xl text-gray-400 italic">Madrid 2026 · doctrina conjunta PDC-01(A) · AJP-3.2</p></div></div>
+    <div class="slide" data-slide="2"><span class="slide-num">02 / 12</span><span class="slide-tag">Problema</span>
+      <h2 class="text-5xl font-black mb-10">Saturación del ocio sin valor diferencial <span class="text-cyan-300">vs.</span> Defensa sin entornos de prueba ágiles.</h2>
+      <div class="grid md:grid-cols-2 gap-6 max-w-5xl">
+        <div class="card p-6"><h3 class="text-2xl font-bold mb-2 text-red-300">Lado civil</h3><p class="text-lg text-gray-400">Paintball/airsoft commoditizado. Producto premium para adultos profesionales (estrategia · simulación · doctrina) sin oferta diferenciada.</p></div>
+        <div class="card p-6"><h3 class="text-2xl font-bold mb-2 text-red-300">Lado defensa</h3><p class="text-lg text-gray-400">CDTI CPP, COINCIDENTE/DGEI, NATO DIANA y EDF carecen de testbeds privados ágiles para validar UGV/IoMT. Ucrania ya capturó posiciones rusas con UGV solo (13-04-2026).</p></div>
+      </div>
+    </div>
+    <div class="slide" data-slide="3"><span class="slide-num">03 / 12</span><span class="slide-tag">Solución</span><h2 class="text-6xl font-black mb-8">Una flota. <span class="text-green-400">Tres clientes.</span></h2><div class="grid md:grid-cols-3 gap-6"><div class="card p-6"><h3 class="text-3xl font-bold text-green-400 mb-2">B2C</h3></div><div class="card p-6"><h3 class="text-3xl font-bold text-green-400 mb-2">B2B</h3></div><div class="card p-6 border-2 border-purple-500/50"><h3 class="text-3xl font-bold text-purple-300 mb-2">B2G</h3></div></div></div>
+    <div class="slide" data-slide="4"><span class="slide-num">04 / 12</span><span class="slide-tag">Mercado</span><h2 class="text-6xl font-black mb-10">Tecnología Dual.</h2><div class="grid md:grid-cols-3 gap-6"><div class="card p-10 text-center"><span class="text-sm uppercase text-gray-500">SAM Civil</span><div class="text-7xl font-black text-white my-4">240 M€</div></div><div class="card p-10 text-center border-2 border-purple-500"><span class="text-sm uppercase text-purple-400">SAM Defensa</span><div class="text-7xl font-black text-purple-300 my-4">15 B€</div></div><div class="card p-10 text-center border-2 border-green-500"><span class="text-sm uppercase text-green-400">SOM Y5</span><div class="text-7xl font-black text-green-400 my-4">3,5 M€</div></div></div></div>
+    <div class="slide" data-slide="5"><span class="slide-num">05 / 12</span><span class="slide-tag">Producto</span><h2 class="text-6xl font-black mb-10"><span class="text-green-400">16+4</span> carros · C2 STANAG 4586.</h2></div>
+    <div class="slide" data-slide="6"><span class="slide-num">06 / 12</span><span class="slide-tag">Modelo</span><h2 class="text-6xl font-black mb-10">B2C estable · margen B2G.</h2><div class="grid md:grid-cols-3 gap-6"><div class="card p-8"><span class="text-sm uppercase text-gray-500">Walk-in</span><div class="text-5xl font-black text-green-400 mt-4"><span data-bind="price-walkin">100</span> €</div></div><div class="card p-8"><span class="text-sm uppercase text-gray-500">Sub.</span><div class="text-5xl font-black text-green-400 mt-4"><span data-bind="price-subscription">250</span> €</div></div><div class="card p-8"><span class="text-sm uppercase text-gray-500">Defense</span><div class="text-5xl font-black text-purple-300 mt-4"><span data-bind="price-defense">1.000.000</span> €</div></div></div></div>
+    <div class="slide" data-slide="7"><span class="slide-num">07 / 12</span><span class="slide-tag">Tracción</span><h2 class="text-6xl font-black mb-10">Cartas de Intención pendientes.</h2></div>
+    <div class="slide" data-slide="8">
+      <span class="slide-num">08 / 12</span><span class="slide-tag">Competencia</span>
+      <h2 class="text-4xl font-black mb-8">Mercado existente · diferenciación profesional + dual-use.</h2>
+      <div class="card overflow-x-auto mb-6">
+        <table class="w-full text-base">
+          <thead class="text-xs uppercase text-gray-500 border-b border-white/10">
+            <tr><th class="text-left p-3">Operador</th><th class="text-left p-3">País</th><th class="text-left p-3">Enfoque</th><th class="text-left p-3">Ticket</th><th class="text-left p-3">Vínculo</th></tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <tr><td class="p-3"><a href="https://www.tankarena.pl/" target="_blank" class="program-link">Tank Arena Zakopane</a></td><td>Polonia (Tatra)</td><td class="text-gray-400">Ocio paintball familiar · 6+ años</td><td>~35-135 €</td><td class="text-yellow-400 text-xs">Mismo fabricante (ELGO) · acuerdo posible</td></tr>
+            <tr><td class="p-3"><a href="https://mallorcapaintball.com/experiencias/mini-tank/" target="_blank" class="program-link">Mallorca Paintball · Mini Tank</a></td><td>España (IB)</td><td class="text-gray-400">Ocio costero · turistas · 4 carros</td><td>~25 €+</td><td class="text-yellow-400 text-xs">Mismo fabricante · partnership IB</td></tr>
+            <tr><td class="p-3">Drive a Tank</td><td>EE.UU. (MN)</td><td class="text-gray-400">Conducción carros restaurados</td><td class="text-red-400">599 $ premium</td><td class="text-gray-500 text-xs">Mercado distinto</td></tr>
+            <tr><td class="p-3">Tank Wars Events</td><td>UK</td><td class="text-gray-400">Eventos carros restaurados</td><td class="text-red-400">180 £</td><td class="text-gray-500 text-xs">Mercado distinto</td></tr>
+            <tr class="bg-cyan-900/15 border-y" style="border-color:rgba(0,229,255,0.4)">
+              <td class="p-3 font-black text-cyan-300">CAMARWAR</td>
+              <td class="text-cyan-300">España (Madrid)</td>
+              <td class="text-cyan-300 font-bold">Adulto profesional · doctrina · simulación · testbed B2G</td>
+              <td class="text-cyan-300 font-bold">150-8.000 €</td>
+              <td class="text-cyan-300 text-xs">Único con plataforma DIANA dual-use</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm text-gray-400 italic">Tank Arena (PL) y Mallorca Paintball (ES) usan vehículos del mismo fabricante (<strong>ELGO-PLUS / MiniCzolgi</strong>). Ambas están <strong>orientadas a ocio</strong>; CAMARWAR se diferencia por enfoque <strong>adulto profesional</strong> · estrategia · simulación · doctrina militar y experimentación dual-use. Edad mínima 16. Acuerdos comerciales posibles para no canibalizar mercado.</p>
+    </div>
+    <div class="slide" data-slide="9"><span class="slide-num">09 / 12</span><span class="slide-tag">GTM</span><h2 class="text-5xl font-black mb-10">B2G + B2B + universidades CESEDEN/IE/IESE.</h2></div>
+    <div class="slide" data-slide="10"><span class="slide-num">10 / 12</span><span class="slide-tag">Equipo</span><h2 class="text-5xl font-black mb-8">OTAN · IoT · DIANA · advisory militar pendiente.</h2></div>
+    <div class="slide" data-slide="11"><span class="slide-num">11 / 12</span><span class="slide-tag">Resumen Ejecutivo</span><h2 class="text-5xl font-black mb-8">Facturación · Margen · Beneficio · 3 años.</h2><div class="card overflow-x-auto"><table class="w-full text-xl"><thead class="text-sm uppercase text-gray-500 border-b border-white/10"><tr><th class="text-left p-4">k€</th><th class="text-right p-4">Y1</th><th class="text-right p-4">Y2</th><th class="text-right p-4">Y3</th></tr></thead><tbody class="divide-y divide-white/5"><tr><td class="p-4 font-bold">Facturación</td><td class="p-4 text-right" data-bind="exec-rev-y1">410</td><td class="p-4 text-right" data-bind="exec-rev-y2">735</td><td class="p-4 text-right" data-bind="exec-rev-y3">1.180</td></tr><tr class="bg-green-900/15 border-y border-green-500/30"><td class="p-4 font-bold text-green-400">EBITDA</td><td class="p-4 text-right font-black text-green-400" data-bind="exec-ebitda-y1">100</td><td class="p-4 text-right font-black text-green-400" data-bind="exec-ebitda-y2">285</td><td class="p-4 text-right font-black text-green-400" data-bind="exec-ebitda-y3">570</td></tr><tr class="bg-green-900/25"><td class="p-4 font-black uppercase">Beneficio Neto</td><td class="p-4 text-right font-black text-green-400" data-bind="exec-net-y1">60</td><td class="p-4 text-right font-black text-green-400" data-bind="exec-net-y2">190</td><td class="p-4 text-right font-black text-green-400" data-bind="exec-net-y3">405</td></tr></tbody></table></div></div>
+    <div class="slide" data-slide="12"><span class="slide-num">12 / 12</span><span class="slide-tag">The Ask</span><h2 class="text-6xl font-black mb-8">Ronda.</h2><div class="grid md:grid-cols-2 gap-6"><div class="card p-8"><h3 class="text-2xl font-bold mb-5 text-green-400">Términos</h3><ul class="text-xl space-y-3"><li class="flex justify-between"><span class="text-gray-400">Capital</span><strong class="text-green-400">500.000 €</strong></li><li class="flex justify-between"><span class="text-gray-400">Pre-money</span><strong>1.500.000 €</strong></li><li class="flex justify-between"><span class="text-gray-400">Post-money</span><strong>2.000.000 €</strong></li><li class="flex justify-between border-t border-white/10 pt-3"><span class="text-gray-400">Equity</span><strong class="text-green-400 text-2xl">25%</strong></li></ul></div><div class="card p-8"><h3 class="text-2xl font-bold mb-5 text-purple-300">Uso de fondos</h3><ul class="text-lg space-y-3"><li class="flex justify-between"><span class="text-gray-400">Flota (16+4)</span><strong>78%</strong></li><li class="flex justify-between"><span class="text-gray-400">Acondicionamiento</span><strong>10%</strong></li><li class="flex justify-between"><span class="text-gray-400">Software C2/IoMT</span><strong>7%</strong></li><li class="flex justify-between"><span class="text-gray-400">Marketing/legal</span><strong>3%</strong></li><li class="flex justify-between"><span class="text-gray-400">WC</span><strong>2%</strong></li></ul></div></div></div>
+  </div>
+  <div class="deck-controls"><button id="prev-slide" class="deck-btn">‹ Anterior</button><div class="deck-dots" id="deck-dots"></div><button id="next-slide" class="deck-btn">Siguiente ›</button></div>
+</section>
+
+
+<!-- ============ PLAN ============ -->
+<section id="view-plan" class="view">
+  <nav class="plan-subnav">
+    <a href="#plan-thesis">Tesis</a><a href="#plan-pnl">P&amp;L</a><a href="#plan-defense">Defensa</a><a href="#plan-doctrine">Doctrina</a><a href="#plan-ask">Ronda</a>
+  </nav>
+  <main class="max-w-7xl mx-auto px-6 py-16 space-y-24">
+    <section id="plan-thesis" class="space-y-10">
+      <div class="text-center"><h2 class="text-5xl font-black uppercase italic">Tesis de Inversión</h2></div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div class="kpi-hero card p-6 text-center"><span class="block text-[10px] uppercase text-gray-500 mb-2" data-tip="TIR (Tasa Interna de Retorno) a 5 años — tasa de descuento que hace VAN=0. IRR en inglés.">TIR 5y</span><span class="block text-4xl font-black text-green-400">62 %</span></div>
+        <div class="kpi-hero card p-6 text-center"><span class="block text-[10px] uppercase text-gray-500 mb-2" data-tip="VAN (Valor Actual Neto) descontado al WACC 12%. NPV en inglés.">VAN @ 12%</span><span class="block text-4xl font-black text-green-400">680 k€</span></div>
+        <div class="kpi-hero card p-6 text-center"><span class="block text-[10px] uppercase text-gray-500 mb-2" data-tip="Payback — meses para que el flujo acumulado iguale el CAPEX.">Payback</span><span class="block text-4xl font-black text-green-400">22 m</span></div>
+        <div class="kpi-hero card p-6 text-center"><span class="block text-[10px] uppercase text-gray-500 mb-2" data-tip="EBITDA Año 3 — capacidad operativa de generar caja.">EBITDA Y3</span><span class="block text-4xl font-black text-green-400" data-bind="kpi-ebitda-y3">570 k€</span></div>
+        <div class="kpi-hero card p-6 text-center"><span class="block text-[10px] uppercase text-gray-500 mb-2" data-tip="Flota Operativa — carros disponibles para sesiones (operativos + reserva).">Flota Op.</span><span class="block text-4xl font-black text-green-400"><span data-bind="fleet-op">16</span>+<span data-bind="fleet-spare">4</span></span></div>
+      </div>
+    </section>
+
+    <section id="plan-pnl" class="space-y-6">
+      <div class="text-center"><h2 class="text-4xl font-black uppercase">Cuenta de Resultados (k€)</h2></div>
+      <div class="card overflow-x-auto">
+        <table class="pnl-table w-full text-sm">
+          <thead class="text-xs uppercase tracking-widest text-gray-500 border-b border-white/10"><tr><th class="text-left">Concepto</th><th class="text-right">Y1</th><th class="text-right">Y2</th><th class="text-right">Y3</th><th class="text-right">Y4</th><th class="text-right">Y5</th></tr></thead>
+          <tbody>
+            <tr><td>B2C walk-in</td><td class="text-right" data-bind="rev-b2c-y1" data-base="240">240</td><td class="text-right" data-bind="rev-b2c-y2" data-base="420">420</td><td class="text-right" data-bind="rev-b2c-y3" data-base="640">640</td><td class="text-right" data-bind="rev-b2c-y4" data-base="820">820</td><td class="text-right" data-bind="rev-b2c-y5" data-base="980">980</td></tr>
+            <tr><td>Suscripciones</td><td class="text-right" data-bind="rev-sub-y1" data-base="80">80</td><td class="text-right" data-bind="rev-sub-y2" data-base="155">155</td><td class="text-right" data-bind="rev-sub-y3" data-base="240">240</td><td class="text-right" data-bind="rev-sub-y4" data-base="320">320</td><td class="text-right" data-bind="rev-sub-y5" data-base="395">395</td></tr>
+            <tr><td>Corporate</td><td class="text-right" data-bind="rev-corp-y1" data-base="90">90</td><td class="text-right" data-bind="rev-corp-y2" data-base="160">160</td><td class="text-right" data-bind="rev-corp-y3" data-base="220">220</td><td class="text-right" data-bind="rev-corp-y4" data-base="285">285</td><td class="text-right" data-bind="rev-corp-y5" data-base="345">345</td></tr>
+            <tr class="bg-purple-900/15"><td class="text-purple-300">Defensa B2G</td><td class="text-right text-purple-300" data-bind="rev-def-y1">0</td><td class="text-right text-purple-300" data-bind="rev-def-y2">0</td><td class="text-right text-purple-300" data-bind="rev-def-y3">80</td><td class="text-right text-purple-300" data-bind="rev-def-y4">175</td><td class="text-right text-purple-300" data-bind="rev-def-y5">280</td></tr>
+            <tr class="row-hl"><td class="font-bold uppercase">Revenue Total</td><td class="text-right font-bold" data-bind="rev-tot-y1">410</td><td class="text-right font-bold" data-bind="rev-tot-y2">735</td><td class="text-right font-bold" data-bind="rev-tot-y3">1180</td><td class="text-right font-bold" data-bind="rev-tot-y4">1600</td><td class="text-right font-bold" data-bind="rev-tot-y5">2000</td></tr>
+            <tr class="row-hl"><td class="font-bold uppercase">EBITDA</td><td class="text-right font-bold text-green-400" data-bind="ebitda-y1">100</td><td class="text-right font-bold text-green-400" data-bind="ebitda-y2">285</td><td class="text-right font-bold text-green-400" data-bind="ebitda-y3">570</td><td class="text-right font-bold text-green-400" data-bind="ebitda-y4">780</td><td class="text-right font-bold text-green-400" data-bind="ebitda-y5">1020</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="plan-defense" class="military-gradient p-10 rounded-3xl border border-purple-500/30 space-y-6">
+      <div class="text-center"><h2 class="text-4xl font-black uppercase text-purple-300">Programas de Defensa Elegibles · OSINT 2026</h2></div>
+      <div class="card overflow-x-auto"><table class="w-full text-sm"><thead class="text-xs uppercase tracking-widest text-gray-500 border-b border-white/10"><tr><th class="text-left p-3">Programa</th><th class="text-left p-3">Organismo</th><th class="text-right p-3">Presupuesto</th><th class="text-left p-3">Match</th></tr></thead><tbody id="programs-tbody"></tbody></table></div>
+    </section>
+
+    <section id="plan-doctrine" class="card p-8">
+      <h2 class="text-3xl font-black uppercase mb-6">Doctrina aplicada · OSINT verificado</h2>
+      <div class="grid md:grid-cols-2 gap-6 text-sm">
+        <div>
+          <h3 class="text-lg font-bold text-green-400 mb-3">🇪🇸 Publicaciones Doctrinales Conjuntas (PDC) y ET (PD)</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><span class="doctrine-tag">PDC-01(A)</span> Doctrina para el empleo de las FAS · ISBN 978-84-9091-318-5 · 2018 · 176pp</li>
+            <li><span class="doctrine-tag">PDC-02</span> Marco legal para el empleo de las FAS</li>
+            <li><span class="doctrine-tag">PD1-001</span> Empleo de las Fuerzas Terrestres · dic 2011 (sustituye DO1-001)</li>
+            <li><span class="doctrine-tag">PD2-001</span> Operaciones · <span class="doctrine-tag">PD2-002</span> Funciones de Combate</li>
+            <li><span class="doctrine-tag">PD3-301</span> Doctrina y Estrategias de Contrainsurgencia</li>
+            <li><strong>6 Funciones de Combate ET</strong>: Mando · Inteligencia · Maniobra · Fuegos · Apoyo Logístico · Protección</li>
+            <li><strong>6 Tipos de Campaña</strong>: Cooperación militar paz · Apoyo a autoridades civiles · Operaciones de paz · Estabilización · Combate general · Intervención limitada</li>
+          </ul>
+          <p class="source-cite mt-3">📎 <a href="https://publicaciones.defensa.gob.es/media/downloadable/files/links/p/d/pdc-01_a_doctrina_para_el_empleo_de_las_fas.pdf" target="_blank">PDC-01(A) PDF</a> · <a href="https://dialnet.unirioja.es/servlet/articulo?codigo=3940530" target="_blank">PD1-001 Dialnet</a></p>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-green-400 mb-3">🇪🇺🛡️ Allied Joint Doctrine (AJP) / ATP</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li><span class="doctrine-tag">AJP-3.2 EDB</span> Allied Joint Doctrine for Land Operations · feb 2022</li>
+            <li><span class="doctrine-tag">ATP-3.2.1</span> Allied Land Tactics · STANAG 2605</li>
+            <li><span class="doctrine-tag">ATP-3.2.2</span> C2 of Allied Land Forces</li>
+            <li><span class="doctrine-tag">ATP-3.2.1.3</span> Conduct of Land Tactical Operations · entornos especiales</li>
+            <li><span class="doctrine-tag">AJP-3</span> Allied Joint Doctrine for the Conduct of Operations</li>
+            <li><strong>Maneuverist core functions</strong> (ATP-3.2.1): <strong>Find · Fix · Strike · Exploit</strong></li>
+            <li><strong>STANAG 4586</strong>: UCS · Unmanned Control System</li>
+            <li><strong>APP-6(D)</strong> / MIL-STD-2525B · SIDC 15-char</li>
+          </ul>
+          <p class="source-cite mt-3">📎 <a href="https://assets.publishing.service.gov.uk/media/62b45b2de90e0765cdf62e03/20220207-AJP3-2_EDB_Land_Ops.pdf" target="_blank">AJP-3.2 EDB PDF (UK GOV)</a></p>
+        </div>
+      </div>
+      <div class="mt-6 grid md:grid-cols-2 gap-6 text-sm">
+        <div class="bg-black/40 p-5 rounded">
+          <h4 class="text-sm font-bold text-yellow-400 mb-2">BRIAC XII "Guadarrama" · composición real</h4>
+          <p class="text-gray-400 text-xs">Lema: <em>"Aprisa, Duro, Lejos"</em>. Equipo principal: Leopard 2E (~60T, ~11M€/u).</p>
+          <ul class="text-xs text-gray-300 mt-2 space-y-1">
+            <li>▸ <strong>RI "Asturias" 31</strong> (1 BIMZ + 1 BI Protegido)</li>
+            <li>▸ <strong>RAC "Alcázar de Toledo" 61</strong>: <strong>BIC "León" I/61</strong> + <strong>GCAC "Villaviciosa" II/61</strong></li>
+            <li>▸ GACA XII · BZAP XII · GLOG XII · BCG XII</li>
+          </ul>
+        </div>
+        <div class="bg-black/40 p-5 rounded">
+          <h4 class="text-sm font-bold text-yellow-400 mb-2">BRIEX 2035 · Brigada Experimental</h4>
+          <p class="text-gray-400 text-xs">Rol asignado a <strong>BRILEG II "Rey Alfonso XIII"</strong> (Viator, Almería). Test bench de la Fuerza 35: 4 brigadas pesadas + 2 medias VCR Dragón + 1 air assault. Plataforma principal: VCR 8x8 Dragón (TESS Defence).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="plan-ask" class="military-gradient p-10 rounded-3xl border border-green-500/30 space-y-8">
+      <div class="text-center"><h2 class="text-5xl font-black uppercase italic">La Ronda</h2></div>
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="card p-6 text-center"><span class="block text-xs uppercase text-gray-500">Capital</span><span class="block text-3xl font-black text-green-400 mt-2">500 k€</span></div>
+        <div class="card p-6 text-center"><span class="block text-xs uppercase text-gray-500">Equity</span><span class="block text-3xl font-black text-green-400 mt-2">25%</span></div>
+        <div class="card p-6 text-center"><span class="block text-xs uppercase text-gray-500">Pre-money</span><span class="block text-3xl font-black text-green-400 mt-2">1,5 M€</span></div>
+        <div class="card p-6 text-center"><span class="block text-xs uppercase text-gray-500">Post-money</span><span class="block text-3xl font-black text-green-400 mt-2">2,0 M€</span></div>
+      </div>
+    </section>
+  </main>
+</section>
+
+
+<!-- ============ ESTRATEGIA (was SIM) · multidominio España exterior ============ -->
+<section id="view-sim" class="view">
+  <div class="classif">
+    <span data-en="NATO UNCLASSIFIED · CAMARWAR STRATEGY · MULTIDOMAIN">NATO UNCLASSIFIED · CAMARWAR ESTRATEGIA · MULTIDOMINIO</span>
+    <span>STANAG 4774/4778 · APP-6(D) · AJP-3.2 EDB · ATP-3.2.1</span>
+    <span data-en="SPANISH ARMED FORCES · MISSIONS ABROAD 2026">FUERZAS ARMADAS ESPAÑOLAS · MISIONES EXTERIOR 2026</span>
+  </div>
+
+  <header class="nato-topbar">
+    <div class="nato-brand">
+      <div class="nato-emblem">ES</div>
+      <div class="nato-brand-text">CAMARWAR · <span class="gold" data-en="STRATEGY · MULTIDOMAIN COP">ESTRATEGIA · COP MULTIDOMINIO</span><span class="muted" data-en="17 INTERNATIONAL MISSIONS · ~3,000 TROOPS · MARITIME / LAND / AIR / SPACE / CYBER">17 MISIONES INTERNACIONALES · ~3.000 EFECTIVOS · MARITIME / LAND / AIR / SPACE / CYBER</span></div>
+    </div>
+    <div class="nato-meta" id="nato-meta-tiles">
+      <div class="meta-block" data-tip="DTG ZULU · Date-Time Group en hora UTC/Zulu. Formato HHMMZ (NATO standard).&#10;Se actualiza cada segundo."><div class="meta-label">DTG ZULU</div><div class="meta-val mono" id="dtg-zulu">—</div></div>
+      <div class="meta-block threat-yellow" data-tip="THREAT LEVEL · Nivel de amenaza compuesto.&#10;GREEN · baseline · sin actividad hostil&#10;YELLOW · alerta · tensiones (eFP Letonia/Eslovaquia, sur Líbano)&#10;ORANGE · crisis activa (Atalanta · Indico)&#10;RED · combate / Article 5"><div class="meta-label">THREAT</div><div class="meta-val">YELLOW</div></div>
+      <div class="meta-block" data-tip="PHASE · fase doctrinal de la operación.&#10;Posture · Shaping · Active · Hot zones&#10;Click on Phase Ladder en el rail para avanzar."><div class="meta-label">PHASE</div><div class="meta-val mono" id="meta-phase">SHAPING</div></div>
+      <div class="meta-block" data-tip="MODE · modo de operación del sistema.&#10;MANUAL · CMDR selecciona CoAs&#10;AUTO · foundation-model stub elige CoAs&#10;Toggle desde NLP CMDR input."><div class="meta-label">MODE</div><div class="meta-val mono" id="meta-mode">MANUAL</div></div>
+      <div class="meta-block" data-tip="FPCON · Force Protection Condition (AJP-3.14)&#10;ALPHA · normal&#10;BRAVO · increased&#10;CHARLIE · imminent&#10;DELTA · attack underway"><div class="meta-label">FPCON</div><div class="meta-val">BRAVO</div></div>
+      <div class="meta-block" data-tip="CBRN ALERT (AJP-3.23)&#10;GREEN · sin amenaza NRBQ&#10;YELLOW · amenaza posible · MOPP-1&#10;RED · ataque NRBQ confirmado · MOPP-4"><div class="meta-label">CBRN</div><div class="meta-val">GREEN</div></div>
+      <div class="meta-block" data-tip="PNT · Positioning, Navigation, Timing (AJP-3.3)&#10;NOMINAL · GPS sin interferencia&#10;DEGRADED · jamming GPS detectado&#10;DENIED · GPS-denied environment · INS only"><div class="meta-label">PNT</div><div class="meta-val">NOMINAL</div></div>
+      <div class="meta-block" data-tip="CIS PACE plan (AJP-6)&#10;P · Primary · canal principal SATCOM/HF&#10;A · Alternate · canal de respaldo&#10;C · Contingency · radio HF/VHF&#10;E · Emergency · mensajería diferida"><div class="meta-label">CIS PACE</div><div class="meta-val">P</div></div>
+      <div class="meta-block" data-tip="JTC PHASE · Joint Targeting Cycle (AJP-3.9)&#10;Fase 1: Commander's Intent&#10;Fase 2: Target Development (estamos aquí)&#10;Fase 3: Capabilities Analysis&#10;Fase 4: Force Assignment · 5: Mission Planning · 6: Combat Assessment"><div class="meta-label">JTC PHASE</div><div class="meta-val mono">2/6</div></div>
+      <div class="meta-block" data-tip="OP TYPE · tipo operación (PDC-01(A))&#10;COMBATE GENERAL · INTERVENCIÓN LIMITADA&#10;ESTABILIZACIÓN · APOYO PAZ&#10;APOYO AUT. CIVILES · COOP. MIL. PAZ"><div class="meta-label">OP TYPE</div><div class="meta-val mono">PSO</div></div>
+    </div>
+  </header>
+
+  <div class="workbench" id="sim-workbench">
+    <aside class="rail" id="sim-rail">
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">01</span>PHASE LADDER</div>
+        <ol class="phase-ladder" id="phase-ladder"></ol>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">02</span>FORCE TALLY</div>
+        <div class="tally" id="force-tally"></div>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">03</span><span data-en="LAYERS · FILTERS">CAPAS · FILTROS</span></div>
+        <div class="filters" id="filters-side"></div>
+        <div class="filters" id="filters-domain"></div>
+        <p class="text-[10px] text-gray-500 mt-2 italic" data-en="Multidomain COP: Maritime / Land / Air / Space / Cyberspace">COP multidominio: Maritime / Land / Air / Space / Cyberspace</p>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">04</span>CoA · ACH MATRIX</div>
+        <div id="coa-list"></div>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">05</span>DOCTRINA</div>
+        <div class="text-xs text-gray-400 leading-relaxed">
+          <div><span class="doctrine-tag">PDC-01(A)</span></div>
+          <div><span class="doctrine-tag">PD1-001</span><span class="doctrine-tag">PD2-001</span><span class="doctrine-tag">PD2-002</span></div>
+          <div><span class="doctrine-tag">AJP-3.2 EDB</span><span class="doctrine-tag">ATP-3.2.1</span></div>
+          <div><span class="doctrine-tag">STANAG 4586</span><span class="doctrine-tag">APP-6(D)</span></div>
+          <p class="mt-2 text-[10px] text-gray-500"><strong>Find · Fix · Strike · Exploit</strong> (ATP-3.2.1)</p>
+        </div>
+      </section>
+    </aside>
+
+    <main class="stage">
+      <div id="sim-map" style="position:absolute;inset:0;"></div>
+      <div class="hud hud-tl">
+        <div class="hud-pill"><span class="hud-k">AOR</span><span class="hud-v">PENÍNSULA IBÉRICA · CANARIAS · PLAZAS NORTEAFRICANAS</span></div>
+        <div class="hud-pill"><span class="hud-k">UNITS</span><span class="hud-v" id="sim-units">—</span></div>
+      </div>
+      <div class="hud hud-tr">
+        <div class="grid-key"><span><span class="dot allied"></span>FRIEND</span><span><span class="dot hostile"></span>HOSTILE</span><span><span class="dot neut"></span>NEUTRAL</span></div>
+      </div>
+      <div class="phase-gate">
+        <div class="gate-card"><span class="gate-label">CURRENT PHASE</span><span class="gate-now" id="gate-current">D-3 · SHAPING</span></div>
+        <button class="gate-btn" onclick="advancePhase()"><span class="gate-cta">▶ ADVANCE</span><span class="gate-name" id="gate-next">→ D-DAY · OFFENSIVE</span></button>
+      </div>
+    </main>
+
+    <aside class="dossier" id="sim-dossier">
+      <header class="dossier-head"><div><div class="dh-title">DOSSIER · UNIT</div><div class="dh-sub">Click any unit on map</div></div></header>
+      <div class="dossier-body" id="sim-dossier-body">
+        <div class="dossier-empty"><div class="empty-glyph">⊞</div><div class="empty-title">SIN UNIDAD SELECCIONADA</div><div class="empty-hint">Pulsa un símbolo APP-6 sobre el mapa para abrir su ficha doctrinal</div></div>
+      </div>
+    </aside>
+
+    <section class="cmdlog">
+      <header class="cmdlog-bar"><div><div class="cmdlog-title">COMMAND LOG · SIMULACIÓN</div></div><div class="cmdlog-meta" id="log-meta">stream live</div></header>
+      <div class="cmdlog-stream" id="cmdlog-stream"></div>
+      <div class="cmdlog-input"><input type="text" id="nlp-input" placeholder="CMDR &gt; tally | phase 2 | turn | doctrina | help" onkeydown="if(event.key==='Enter') handleNlp(this.value);this.value=''"><button onclick="const i=document.getElementById('nlp-input');handleNlp(i.value);i.value='';">SEND</button></div>
+    </section>
+  </div>
+</section>
+
+
+<!-- ============ TÁCTICA (was C2) · 8 vs 8 + comandantes + órdenes ============ -->
+<section id="view-c2" class="view">
+  <div class="classif">
+    <span data-en="OPERATIONAL · CAMARWAR TACTICAL">OPERACIONAL · CAMARWAR TÁCTICA</span>
+    <span>STANAG 4586 · MQTT/DDS · MIL-STD-2525B</span>
+    <span data-en="LA RAYA INDUSTRIAL POLYGON · CAMARMA · LIVE 16 CARROS">POLÍGONO LA RAYA · CAMARMA · LIVE 16 CARROS</span>
+  </div>
+  <header class="nato-topbar">
+    <div class="nato-brand">
+      <div class="nato-emblem">CW</div>
+      <div class="nato-brand-text">CAMARWAR · <span class="gold" data-en="TACTICAL · 8 ALLIED vs 8 HOSTILE">TÁCTICA · 8 ALIADOS vs 8 HOSTILES</span><span class="muted" data-en="REAL POSITION · ORDERS TO INDIVIDUAL OR FORMATION · MQTT/DDS LIVE">POSICIÓN REAL · ÓRDENES INDIVIDUALES O DE FORMACIÓN · MQTT/DDS LIVE</span></div>
+    </div>
+    <div class="nato-meta">
+      <div class="meta-block" data-tip="Carros aliados (FRIEND) operativos en este combate. Reciben órdenes desde C2."><div class="meta-label">ALLIED</div><div class="meta-val" id="c2-allied-count">8</div></div>
+      <div class="meta-block" data-tip="Carros hostiles (OPFOR) en este combate. Simulación de oponente."><div class="meta-label">HOSTILE</div><div class="meta-val" id="c2-hostile-count">8</div></div>
+      <div class="meta-block" data-tip="Carros neutrales (inoperativos / no activados / reserva) en este combate."><div class="meta-label">NEUTRAL</div><div class="meta-val" id="c2-neutral-count">4</div></div>
+      <div class="meta-block" data-tip="Formación táctica actual aplicada al bando seleccionado.&#10;CUÑA · LÍNEA · COLUMNA · ESCALÓN"><div class="meta-label">FORMATION</div><div class="meta-val mono" id="c2-formation">CUÑA</div></div>
+      <div class="meta-block" data-tip="Bando seleccionado para recibir órdenes (ALLIED / HOSTILE)."><div class="meta-label">BAND</div><div class="meta-val mono" id="c2-band">ALLIED</div></div>
+    </div>
+  </header>
+  <div class="workbench no-cmdlog" id="c2-workbench">
+    <aside class="rail">
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">01</span><span data-en="BAND SELECTOR">BANDO ACTIVO</span></div>
+        <div class="flex gap-2 flex-wrap">
+          <button class="btn-ghost-sm" id="band-allied-btn" onclick="setBand('ALLIED')" style="border-color:var(--c2-friendly);color:var(--c2-friendly)">ALIADO</button>
+          <button class="btn-ghost-sm" id="band-hostile-btn" onclick="setBand('HOSTILE')" style="border-color:var(--c2-hostile);color:var(--c2-hostile)">HOSTIL</button>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2 italic" data-en="Orders apply to the active band">Las órdenes aplican al bando activo</p>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">02</span><span data-en="TACTICAL FORMATION">FORMACIÓN TÁCTICA</span></div>
+        <p class="text-[10px] text-gray-400 mb-2 leading-relaxed">PD2-002 · ATP-3.2.1 · maneuverist approach</p>
+        <div class="flex gap-2 flex-wrap">
+          <button class="btn-ghost-sm" onclick="setFormation('cuña')">▶ Cuña</button>
+          <button class="btn-ghost-sm" onclick="setFormation('línea')">━ Línea</button>
+          <button class="btn-ghost-sm" onclick="setFormation('columna')">▮ Columna</button>
+          <button class="btn-ghost-sm" onclick="setFormation('escalón')">⌐ Escalón</button>
+        </div>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">03</span><span data-en="COMBAT FUNCTIONS · ORDERS">FUNCIONES COMBATE · ÓRDENES</span></div>
+        <p class="text-[10px] text-gray-400 mb-2 leading-relaxed">PD2-002 · 6 funciones · órdenes individuales o a formación</p>
+        <div class="flex gap-1 flex-wrap">
+          <button class="btn-ghost-sm" onclick="issueCombatOrder('Mando')" style="font-size:9.5px">⚐ Mando (C2)</button>
+          <button class="btn-ghost-sm" onclick="issueCombatOrder('Inteligencia')" style="font-size:9.5px">👁 Inteligencia</button>
+          <button class="btn-ghost-sm" onclick="issueCombatOrder('Maniobra')" style="font-size:9.5px">⚙ Maniobra</button>
+          <button class="btn-ghost-sm" onclick="issueCombatOrder('Fuegos')" style="font-size:9.5px">🔥 Fuegos</button>
+          <button class="btn-ghost-sm" onclick="issueCombatOrder('Apoyo Logístico')" style="font-size:9.5px">📦 Apoyo Log.</button>
+          <button class="btn-ghost-sm" onclick="issueCombatOrder('Protección')" style="font-size:9.5px">🛡 Protección</button>
+        </div>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">04</span><span data-en="COMMANDERS">COMANDANTES</span></div>
+        <div id="c2-commanders-list" class="text-[10px] text-gray-300"></div>
+      </section>
+      <section class="rail-sec">
+        <div class="sec-head"><span class="sec-n">05</span><span data-en="CARROS · CRUD">CARROS · CRUD</span></div>
+        <div id="c2-carros-list"></div>
+        <button class="btn-ghost-sm mt-2 w-full" onclick="addCarroQuick()" data-en="+ ADD CARRO">+ AÑADIR CARRO</button>
+      </section>
+    </aside>
+    <main class="stage">
+      <div id="c2-map" style="position:absolute;inset:0;"></div>
+      <div class="hud hud-tl"><div class="hud-pill"><span class="hud-k">FIELD</span><span class="hud-v">LA RAYA · 40.493N · -3.336W · ~120×80m</span></div></div>
+      <div class="hud hud-bl"><div class="grid-key"><span><span class="dot allied"></span>ALIADO</span><span><span class="dot hostile"></span>HOSTIL</span><span><span class="dot neut"></span>NEUTRAL</span></div></div>
+    </main>
+    <aside class="dossier">
+      <header class="dossier-head"><div><div class="dh-title" data-en="DOSSIER · CARRO">DOSSIER · CARRO</div><div class="dh-sub" data-en="Live telemetry · MQTT/DDS">Telemetría live · MQTT/DDS</div></div></header>
+      <div class="dossier-body" id="c2-dossier-body">
+        <div class="dossier-empty"><div class="empty-glyph">▩</div><div class="empty-title" data-en="CLICK A CARRO">PULSA UN CARRO</div><div class="empty-hint" data-en="Select a symbol on the map to view individual telemetry">Selecciona un símbolo en el mapa para ver telemetría individual</div></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+
+<!-- ============ IoMT view ELIMINADA en v009 (Prompt_to_009 §3) ============
+     Contenido movido a Manual · sección IoMT con:
+     · Historia 214º Batallón Independiente de Asalto (Ucrania OPFOR)
+     · Capacidades MOD España IoMT con enlaces oficiales verificados
+     ===================================================================== -->
+
+
+<!-- ============ CONFIG ============ -->
+<section id="view-config" class="view">
+  <main class="max-w-6xl mx-auto px-6 py-12 space-y-6">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div><h1 class="text-3xl font-black uppercase">Configuración Global</h1><p class="text-gray-400 text-sm mt-1">CRUD que recalcula todas las vistas.</p></div>
+      <div class="flex gap-2"><button class="btn-secondary" onclick="exportConfig()">⬇ Exportar JSON</button><label class="btn-secondary cursor-pointer">⬆ Importar<input type="file" accept=".json" style="display:none" onchange="importConfig(event)"></label><button class="btn-secondary" onclick="resetConfig()">↻ Reset</button></div>
+    </div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4 text-cyan-300">🌐 Misiones España exterior · fuente PDF</h2><p class="text-[11px] text-gray-400 mb-3">URL del PDF oficial del MOD desde el cual se actualizan las misiones de España en el exterior. Por defecto: infografía MOD 2026.</p><div class="config-field"><label>URL PDF misiones (ej. defensa.gob.es)</label><input type="url" data-state="missions_pdf_url" style="width:100%"></div><p class="text-[10px] text-gray-500 mt-2 italic">Default: <code style="font-size:9.5px;color:var(--c2-accent)">https://www.defensa.gob.es/Galerias/gabinete/red/2026/01/infografia-misiones-2026.pdf</code></p></div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4 text-green-400">🚜 Flota</h2><div class="config-grid"><div class="config-field"><label>Carros operativos</label><input type="number" data-state="fleet.operational"></div><div class="config-field"><label>Reserva</label><input type="number" data-state="fleet.spare"></div><div class="config-field"><label>Coste/u (€)</label><input type="number" data-state="fleet.cost_per_unit"></div></div></div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4 text-cyan-300">💶 Precios · Modalidades LINCE-SIM</h2>
+      <div class="config-grid">
+        <div class="config-field"><label>Escaramuza (€)</label><input type="number" data-state="pricing.escaramuza"></div>
+        <div class="config-field"><label>Training Day (€)</label><input type="number" data-state="pricing.training"></div>
+        <div class="config-field"><label>MilSim fin semana (€)</label><input type="number" data-state="pricing.milsim"></div>
+        <div class="config-field"><label>Campaña anual (€)</label><input type="number" data-state="pricing.campana"></div>
+        <div class="config-field"><label>Teamwork (€)</label><input type="number" data-state="pricing.teamwork"></div>
+        <div class="config-field"><label>Defense IoMT (€/contrato)</label><input type="number" data-state="pricing.defense_program"></div>
+      </div>
+      <p class="text-[10px] text-gray-500 mt-3 italic">Modalidades: Escaramuza (150€/1 partida+1.000 bolas+briefing) · Training Day (600€/formación+4 misiones) · MilSim (1.200€/fin semana) · Campaña (4.800€/anual·5 sesiones/mes) · Teamwork (8.000€/grupos 16x16). Cualquier cambio recalcula automáticamente Web/Pitch/Plan.</p>
+    </div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4" style="color:#b794f4">🎖️ Programas Defensa · Mission Editor OOB</h2><p class="text-[10px] text-gray-500 mb-3 italic">CRUD completo · botones EDIT (focus) · UPDATE (save+rerender) · DELETE (remove). Cualquier cambio recalcula Web/Pitch/Plan/Maps/Tally al instante.</p><table class="config-table" id="cfg-programs"><thead><tr><th>Programa</th><th>Organismo</th><th>URL</th><th>Presupuesto</th><th>Match</th><th>ACCIONES</th></tr></thead><tbody></tbody></table><button class="btn-create mt-3" onclick="addProgram()">+ CREATE PROGRAMA</button></div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4 text-blue-300">🪖 ORBAT ET · Mission Editor</h2><table class="config-table" id="cfg-orbat"><thead><tr><th>ID</th><th>Designación</th><th>Tipo</th><th>SIDC</th><th>Lat</th><th>Lon</th><th>ACCIONES</th></tr></thead><tbody></tbody></table><button class="btn-create mt-3" onclick="addUnit()">+ CREATE UNIDAD</button></div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4" style="color:#b794f4">🤖 Capacidades IoMT MOD España</h2><table class="config-table" id="cfg-iomt"><thead><tr><th>Sistema</th><th>Tipo</th><th>Status</th><th>Notas</th><th>ACCIONES</th></tr></thead><tbody></tbody></table><button class="btn-create mt-3" onclick="addIomt()">+ CREATE CAPACIDAD</button></div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4 text-cyan-300">🎯 Carros · Flota CAMARWAR</h2><table class="config-table" id="cfg-carros"><thead><tr><th>ID</th><th>Callsign</th><th>Status</th><th>Munición</th><th>Combustible</th><th>ACCIONES</th></tr></thead><tbody></tbody></table><button class="btn-create mt-3" onclick="addCarro()">+ CREATE CARRO</button></div>
+    <div class="config-section"><h2 class="text-lg font-bold mb-4 text-green-400">📤 Estado Actual</h2><pre id="state-preview" class="mono text-xs bg-black/40 p-4 rounded overflow-x-auto" style="max-height:240px"></pre></div>
+  </main>
+</section>
+
+
+<!-- ============ MANUAL ============ -->
+<section id="view-manual" class="view">
+  <main class="max-w-4xl mx-auto px-6 py-12 manual-section" id="manual-content"></main>
+</section>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/milsymbol@2.2.0/dist/milsymbol.js"></script>
+<script>
+// =============================================================
+// CAMARWAR_STATE v008 — OSINT + DIANA structure capture
+// =============================================================
+const DEFAULT_STATE = {
+    meta: { version:'009', site:'Camarma de Esteruelas · La Raya', osint_date:'2026-05-10' },
+    fleet: { operational:16, spare:4, cost_per_unit:19500, location:'Camarma de Esteruelas · La Raya' },
+    // Modalidades LINCE-SIM (Prompt_to_008 §3)
+    pricing: {
+        walkin:100, subscription:250, corporate:300, defense_program:1000000,
+        escaramuza:150,    // 1 partida + 1.000 bolas + briefing
+        training:600,      // Training Day · 4 misiones
+        milsim:1200,       // MilSim · fin de semana
+        campana:4800,      // Campaña anual · 5 sesiones/mes
+        teamwork:8000      // Teamwork corporate · grupos 16x16
+    },
+
+    // URL configurable PDF misiones exteriores (Prompt §1)
+    missions_pdf_url: 'https://www.defensa.gob.es/Galerias/gabinete/red/2026/01/infografia-misiones-2026.pdf',
+    // Misiones España exterior 2026 verificadas vía OSINT (multidominio)
+    spanish_army: [
+        // Cuartel General nacional
+        { id:'cge', sidc:'SFGPUH-------E--', designation:'Cuartel General del Ejército de Tierra', type:'HQ', loc:'Madrid', lat:40.418, lon:-3.703, echelon:'XXXX', side:'NATO', domain:'LAND', group:'hq', equipment:['CGE'], mission:'Estado Mayor del Ejército de Tierra · liderazgo nacional' },
+        { id:'emad', sidc:'SFGPUH-------E--', designation:'EMAD · Estado Mayor de la Defensa', type:'JOINT HQ', loc:'Madrid', lat:40.4250, lon:-3.6920, echelon:'XXXX', side:'NATO', domain:'LAND', group:'hq', equipment:['JEMAD'], mission:'C2 conjunto FAS · MOPS misiones exterior' },
+
+        // FLF · Flanco Este OTAN
+        { id:'flf-eslo', sidc:'SFGPUCAA-----H--', designation:'FLF Eslovaquia · Battlegroup ES (LEAD 2026)', type:'BG Mech (lead)', loc:'Lešť, Eslovaquia', lat:48.628, lon:19.594, echelon:'BG', side:'NATO', domain:'LAND', group:'mision', equipment:['~800 efectivos','+200 vehículos','VCR Pizarro','VAMTAC','Centauro','Liderazgo BG · Multinational Brigade'], mission:'eFP Eastern Flank · ES toma comando 2026 (releva CZE jul-2024) · mayor despliegue exterior actual' },
+        { id:'flf-let', sidc:'SFGPUCAA-----H--', designation:'FLF Letonia · MN Brigade Adazi', type:'BG Mech', loc:'Adazi, Letonia', lat:57.077, lon:24.355, echelon:'BG', side:'NATO', domain:'LAND', group:'mision', equipment:['~600 efectivos','VCR Pizarro','NASAMS battery'], mission:'eFP Eastern Flank · framework CA · rotaciones XVII/XVIII' },
+        { id:'flf-rum', sidc:'SFGPUCAA-----H--', designation:'eVA Rumanía · contingente ES', type:'Detachment', loc:'Cincu, Rumanía', lat:45.737, lon:24.728, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['~200 efectivos'], mission:'eVA flanco Este · contribución ES' },
+
+        // ONU UNIFIL Líbano
+        { id:'unifil', sidc:'SFGPUCI------H--', designation:'UNIFIL Sector Este · Base Miguel de Cervantes', type:'INF Sector HQ (lead ES)', loc:'Marjayún, Líbano', lat:33.357, lon:35.589, echelon:'BDE', side:'NATO', domain:'LAND', group:'mision', equipment:['658 efectivos','Sector East Comand ES','VAMTAC','BMR'], mission:'ONU UNIFIL · ES lidera Sector Este desde 2024 · Blue Line Israel/Líbano · misión más numerosa' },
+
+        // Iraq Coalición + NMI
+        { id:'iraq-cor', sidc:'SFGPUCI------H--', designation:'OIR/CJTF Iraq · Coalición anti-Daesh', type:'Training Det', loc:'Camp Besmaya / Camp Taji, Iraq', lat:33.216, lon:44.560, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['Asesores','Instructores'], mission:'CJTF-OIR · adiestramiento Iraqi Security Forces · A&A' },
+        { id:'iraq-nmi', sidc:'SFGPUCI------H--', designation:'NMI · NATO Mission Iraq', type:'Training Det', loc:'Bagdad, Iraq', lat:33.315, lon:44.366, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['Asesores institucionales'], mission:'NATO Mission Iraq · capacity-building Min. Defensa Iraq' },
+
+        // EUNAVFOR Atalanta
+        { id:'atalanta-canarias', sidc:'SFSPCLFF-------', designation:'F-86 \'Canarias\' · EUNAVFOR Atalanta', type:'Frigate (FFG)', loc:'Indico · vic Somalia', lat:5.000, lon:55.000, echelon:'FFG', side:'NATO', domain:'MARITIME', group:'mision', equipment:['Santa María-class FFG','SH-60B','SCANEAGLE UAS','SOMTU embarcado'], mission:'EUNAVFOR Atalanta · contra-piratería océano Indico · relevo F-82 Victoria 20-feb-2026' },
+        { id:'atalanta-orion', sidc:'SFAPMFQ--------', designation:'Destacamento Orión · DAT Yibuti', type:'Maritime Patrol AC', loc:'Aeropuerto de Yibuti', lat:11.572, lon:43.148, echelon:'DET', side:'NATO', domain:'AIR', group:'mision', equipment:['P-3M Orion / D-4 / Vigma','Vigilancia marítima'], mission:'Atalanta MPA Det · ISR sobre Indico desde Yibuti' },
+        { id:'atalanta-hq', sidc:'SFGPUH-------E--', designation:'EU OHQ Atalanta · Rota', type:'OPERATIONAL HQ', loc:'Rota, Cádiz', lat:36.626, lon:-6.348, echelon:'XXX', side:'NATO', domain:'MARITIME', group:'hq', equipment:['EU OHQ'], mission:'OHQ Atalanta · Cuartel General Operacional EU desde 2019' },
+
+        // EU Africa
+        { id:'eutm-mali', sidc:'SFGPUCI------H--', designation:'EUTM/EUMPM Sahel · Senegal', type:'Training Det', loc:'Dakar, Senegal', lat:14.760, lon:-17.366, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['Instructores'], mission:'EUMPM · sustituto EUTM Mali tras retirada · capacity-building Sahel' },
+        { id:'eutm-rca', sidc:'SFGPUCI------H--', designation:'EUTM Centroafricana', type:'Training Det', loc:'Bangui, R. Centroafricana', lat:4.394, lon:18.558, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['Instructores'], mission:'EUTM RCA · adiestramiento Forces Armées Centrafricaines' },
+        { id:'eutm-soma', sidc:'SFGPUCI------H--', designation:'EUTM/EUMAM Somalia', type:'Training Det', loc:'Mogadiscio, Somalia', lat:2.046, lon:45.318, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['Instructores'], mission:'EUMAM Somalia · capacity-building Somali National Army' },
+        { id:'eutm-mozam', sidc:'SFGPUCI------H--', designation:'EUMAM Mozambique', type:'Training Det', loc:'Maputo / Cabo Delgado', lat:-25.969, lon:32.573, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['Instructores Tropas Especiales'], mission:'EUMAM · adiestramiento Forças Armadas Moçambicanas (insurgencia Cabo Delgado)' },
+
+        // EUFOR Bosnia
+        { id:'eufor-althea', sidc:'SFGPUCI------H--', designation:'EUFOR Althea · Camp Butmir', type:'INF Det', loc:'Sarajevo (Camp Butmir)', lat:43.851, lon:18.387, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['LOTs · Liaison Observation Teams'], mission:'EUFOR Althea · Bosnia y Herzegovina · estabilidad post-Dayton' },
+        { id:'kfor', sidc:'SFGPUCI------H--', designation:'KFOR · Kosovo (rotaciones)', type:'INF Det', loc:'Camp Villaggio Italia', lat:42.660, lon:21.166, echelon:'DET', side:'NATO', domain:'LAND', group:'mision', equipment:['Pelotones'], mission:'KFOR · estabilidad Kosovo · framework IT' },
+
+        // Espacio y Ciber
+        { id:'cgsccd', sidc:'SFGPUCS------H--', designation:'MCCE · Mando Conjunto Ciberespacio', type:'CYBER Cmd', loc:'Madrid', lat:40.420, lon:-3.700, echelon:'III', side:'NATO', domain:'CYBER', group:'mando', equipment:['CERT FAS','SOC defensivo'], mission:'Defensa ciberespacio · DCO/OCO · BAT-DEF' },
+        { id:'mcoe-space', sidc:'SFGPUCV------H--', designation:'MCOE Espacio · Mando Conjunto Espacio', type:'SPACE Cmd', loc:'Torrejón, Madrid', lat:40.480, lon:-3.453, echelon:'III', side:'NATO', domain:'SPACE', group:'mando', equipment:['SST · Surveillance Tracking','PAZ satellite link'], mission:'Vigilancia espacial · SSA · activado 2020 · cooperación CMOE OTAN' },
+
+        // ===== CG ET retained for context =====
+        { id:'cge-old', sidc:'SFGPUH-------E--', designation:'Cuartel General del ET (referencia)', type:'HQ', loc:'Madrid', lat:40.418, lon:-3.703, echelon:'XXXX', side:'NATO', domain:'LAND', group:'hq', equipment:['Inmemorial del Rey'], mission:'Referencia OOB nacional' },
+        { id:'futer', sidc:'SFGPUH-------E--', designation:'FUTER · Fuerza Terrestre', type:'HQ Comp.', loc:'Sevilla', lat:37.392, lon:-5.994, echelon:'XXX', side:'NATO', domain:'LAND', group:'hq', equipment:['MAM','Divisiones'], mission:'Generación y empleo de la fuerza' },
+        { id:'madoc', sidc:'SFGPUH-------E--', designation:'MADOC · Adiestramiento y Doctrina', type:'HQ Doctr.', loc:'Granada', lat:37.176, lon:-3.598, echelon:'XXX', side:'NATO', domain:'LAND', group:'hq', equipment:['CCDC','MUF'], mission:'PD1-001/PD2-001/PD2-002 · enseñanza' },
+        { id:'male', sidc:'SFGPUH-------E--', designation:'MALE · Apoyo Logístico', type:'HQ Log.', loc:'Madrid', lat:40.448, lon:-3.685, echelon:'XXX', side:'NATO', domain:'LAND', group:'hq', equipment:[], mission:'Apoyo logístico al ET (AJP-4)' },
+        { id:'mam', sidc:'SFGPUH-------E--', designation:'MAM · Mando Apoyo a la Maniobra', type:'HQ', loc:'Burgos', lat:42.341, lon:-3.696, echelon:'XX', side:'NATO', domain:'LAND', group:'hq', equipment:['Artillería','Ingenieros','NBQ'], mission:'Capacidades de apoyo de combate' },
+
+        // División Castillejos — combat brigades
+        { id:'div-cast', sidc:'SFGPUCA------D--', designation:'División "Castillejos"', type:'INF DIV HQ', loc:'Bétera, Valencia', lat:39.587, lon:-0.461, echelon:'XX', side:'NATO', domain:'LAND', group:'castillejos', equipment:[], mission:'CG · brigadas de combate' },
+        { id:'bri-aragon', sidc:'SFGPUCAA-----H--', designation:'BRIMZ "Aragón" I', type:'Mech Inf BDE', loc:'San Gregorio, Zaragoza', lat:41.781, lon:-0.943, echelon:'X', side:'NATO', domain:'LAND', group:'castillejos', equipment:['Pizarro','Centauro','VAMTAC'], mission:'Brigada mecanizada' },
+        { id:'brileg', sidc:'SFGPUCI------H--', designation:'BRILEG II "Rey Alfonso XIII" · BRIEX 2035', type:'Legion BDE (Experimental)', loc:'Viator, Almería', lat:36.880, lon:-2.426, echelon:'X', side:'NATO', domain:'LAND', group:'castillejos', equipment:['VCR Dragón','VAMTAC','BMR'], mission:'BRIEX 2035 · Fuerza 35 testbed' },
+        { id:'bri-galicia', sidc:'SFGPUCI------H--', designation:'BRILAT "Galicia" VII', type:'Light Inf BDE', loc:'Figueirido, Pontevedra', lat:42.382, lon:-8.567, echelon:'X', side:'NATO', domain:'LAND', group:'castillejos', equipment:['VAMTAC','BMR'], mission:'Infantería ligera aerotransportable' },
+        { id:'bri-guzman', sidc:'SFGPUCI------H--', designation:'BRI "Guzmán el Bueno" X', type:'Light Inf BDE', loc:'Cerro Muriano, Córdoba', lat:38.003, lon:-4.770, echelon:'X', side:'NATO', domain:'LAND', group:'castillejos', equipment:['Pizarro','Centauro'], mission:'Brigada mecanizada · ejercicio Égida 2025' },
+        { id:'bri-extremadura', sidc:'SFGPUCAA-----H--', designation:'BRIMZ "Extremadura" XI', type:'Mech Inf BDE', loc:'Botoa, Badajoz', lat:38.880, lon:-6.971, echelon:'X', side:'NATO', domain:'LAND', group:'castillejos', equipment:['Pizarro','M113'], mission:'Brigada mecanizada' },
+        { id:'bri-guadarrama', sidc:'SFGPUCAH-----H--', designation:'BRIAC "Guadarrama" XII', type:'Armored BDE', loc:'El Goloso, Madrid', lat:40.538, lon:-3.696, echelon:'X', side:'NATO', domain:'LAND', group:'castillejos', equipment:['Leopard 2E','Pizarro','RAC Alcázar Toledo 61','BIC León I/61','GCAC Villaviciosa II/61'], mission:'"Aprisa, Duro, Lejos" · puño acorazado del ET' },
+
+        // División San Marcial — alta disponibilidad
+        { id:'div-sm', sidc:'SFGPUCI------D--', designation:'División "San Marcial"', type:'Spec DIV HQ', loc:'Burgos', lat:42.341, lon:-3.696, echelon:'XX', side:'NATO', domain:'LAND', group:'sanmarcial', equipment:[], mission:'Capacidades alta disponibilidad' },
+        { id:'bripac', sidc:'SFGPUCIA-----H--', designation:'BRIPAC "Almogávares" VI', type:'Airborne BDE', loc:'Paracuellos del Jarama', lat:40.499, lon:-3.531, echelon:'X', side:'NATO', domain:'LAND', group:'sanmarcial', equipment:['VAMTAC','BMR Paracaidista'], mission:'Asalto aéreo · paracaidista' },
+        { id:'mtm', sidc:'SFGPUCIM-----H--', designation:'Mando Tropas de Montaña', type:'Mountain Cmd', loc:'Jaca, Huesca', lat:42.569, lon:-0.547, echelon:'X', side:'NATO', domain:'LAND', group:'sanmarcial', equipment:['BMR','VAMTAC'], mission:'Operaciones en montaña (ATP-3.2.1.3)' },
+        { id:'mcoe', sidc:'SFGPUCS------H--', designation:'MOE "Órdenes Militares"', type:'SOF Cmd', loc:'Rabasa, Alicante', lat:38.391, lon:-0.512, echelon:'III', side:'NATO', domain:'LAND', group:'sanmarcial', equipment:['VAMTAC SOF'], mission:'Operaciones especiales' },
+        { id:'famet', sidc:'SFGPUCV------H--', designation:'FAMET · Fuerzas Aeromóviles', type:'Aviation Cmd', loc:'Colmenar Viejo', lat:40.665, lon:-3.766, echelon:'III', side:'NATO', domain:'LAND', group:'sanmarcial', equipment:['NH-90','Tigre HAP','EC-135','Chinook'], mission:'Aviación de combate y transporte' },
+
+        // Mandos territoriales
+        { id:'bri-canarias', sidc:'SFGPUCI------H--', designation:'BRI "Canarias" XVI · Mando Canarias', type:'Light Inf BDE', loc:'Las Palmas/Tenerife', lat:28.108, lon:-15.418, echelon:'X', side:'NATO', domain:'LAND', group:'mando', equipment:['VAMTAC'], mission:'Defensa territorial archipiélago' },
+        { id:'cgceuta', sidc:'SFGPUCI------H--', designation:'COMGECEUTA', type:'Garrison Cmd', loc:'Ceuta', lat:35.886, lon:-5.346, echelon:'X', side:'NATO', domain:'LAND', group:'mando', equipment:['Tercio Legión','Regulares'], mission:'Defensa Plaza Norteafricana' },
+        { id:'cgmelilla', sidc:'SFGPUCI------H--', designation:'COMGEMEL', type:'Garrison Cmd', loc:'Melilla', lat:35.291, lon:-2.937, echelon:'X', side:'NATO', domain:'LAND', group:'mando', equipment:['Regulares'], mission:'Defensa Plaza Norteafricana' },
+        { id:'cgbaleares', sidc:'SFGPUCI------H--', designation:'COMGEBAL', type:'Garrison Cmd', loc:'Palma', lat:39.572, lon:2.649, echelon:'X', side:'NATO', domain:'LAND', group:'mando', equipment:[], mission:'Defensa territorial Baleares' }
+    ],
+
+    // Amenazas hostiles/terroristas/piratería en zonas de operación España (Prompt §1)
+    // Coordenadas verificadas OSINT mayo 2026
+    threats: [
+        // Hostiles cerca de Líbano (UNIFIL Sector Este)
+        { id:'h-hezbola', name:'Hezbolá · sur Líbano', sidc:'SHGPUCI------H--', type:'Non-State Armed Group', severity:'high', side:'OPFOR', domain:'LAND', lat:33.275, lon:35.480, mission:'Posiciones armadas vic Blue Line · amenaza directa Sector Este UNIFIL', source:'OSINT INFOBAE 2026-03' },
+        { id:'h-idf', name:'IDF · Israel Defence Forces', sidc:'SNGPUCAA-----H--', type:'State Force', severity:'med', side:'NEUTRAL', domain:'LAND', lat:33.100, lon:35.580, mission:'IDF en zona Israel · alta tensión con Hezbolá · operaciones cross-border' },
+
+        // Daesh / ISIS en Iraq y Sahel
+        { id:'h-daesh-iraq', name:'Daesh · ISIS Iraq remanentes', sidc:'SHGPUCI------H--', type:'Terrorist Organization', severity:'med', side:'OPFOR', domain:'LAND', lat:34.130, lon:43.860, mission:'Células remanentes Anbar/Niniveh · amenaza CJTF-OIR' },
+        { id:'h-jnim', name:'JNIM · Jamaat Nusrat al-Islam wal-Muslimin', sidc:'SHGPUCI------H--', type:'Terrorist Organization', severity:'high', side:'OPFOR', domain:'LAND', lat:13.700, lon:-2.000, mission:'Yihadismo Sahel · al-Qaeda affiliated · activo Mali/BF/Níger' },
+        { id:'h-isgs', name:'ISGS · Estado Islámico Gran Sahara', sidc:'SHGPUCI------H--', type:'Terrorist Organization', severity:'high', side:'OPFOR', domain:'LAND', lat:14.500, lon:0.500, mission:'Daesh-affiliated · zona triple frontera Mali/BF/Níger' },
+
+        // Al-Shabaab Somalia
+        { id:'h-shabaab', name:'Al-Shabaab · Somalia', sidc:'SHGPUCI------H--', type:'Terrorist Organization', severity:'high', side:'OPFOR', domain:'LAND', lat:1.900, lon:45.000, mission:'Al-Qaeda affiliated · amenaza EUMAM Somalia + Atalanta land' },
+
+        // Mozambique · ASWJ Cabo Delgado
+        { id:'h-aswj', name:'ASWJ · Ahlu Sunna Wa Jama (Cabo Delgado)', sidc:'SHGPUCI------H--', type:'Terrorist Organization', severity:'high', side:'OPFOR', domain:'LAND', lat:-12.000, lon:40.500, mission:'IS-affiliated · insurgencia · objetivo EUMAM Mozambique' },
+
+        // Piratería Indico
+        { id:'h-piratas-som', name:'Piratería somalí · Cuerno África', sidc:'SHSPCLPI-------', type:'Maritime Threat (Pirates)', severity:'high', side:'OPFOR', domain:'MARITIME', lat:5.500, lon:50.500, mission:'Repunte ataques 2026 · oportunidad por crisis Ormuz · objetivo Atalanta' },
+        { id:'h-piratas-houthi', name:'Hutíes · Mar Rojo', sidc:'SHGPUCFG-------', type:'Maritime Threat (State-sponsored)', severity:'high', side:'OPFOR', domain:'MARITIME', lat:14.800, lon:43.000, mission:'Misiles AShM/UAV vs SLOC Mar Rojo · Yemen' },
+
+        // Hostiles Flanco Este OTAN
+        { id:'h-rus-bielo', name:'Bielorrusia · 6th Sep Gds Mech Bde', sidc:'SHGPUCAA-----H--', type:'State Force', severity:'med', side:'OPFOR', domain:'LAND', lat:53.680, lon:23.830, mission:'Frontera Polonia/Lituania · Suwalki gap concern · cerca FLF Eslovaquia' },
+        { id:'h-rus-kal', name:'Rusia · 11th Army Corps Kaliningrad', sidc:'SHGPUCAA-----H--', type:'State Force', severity:'high', side:'OPFOR', domain:'LAND', lat:54.590, lon:22.200, mission:'A2/AD bastion · Iskander-M · Bastion-P · cerca FLF Letonia' },
+
+        // Tránsito SLOC España
+        { id:'h-estrecho', name:'Estrecho de Gibraltar · SLOC tránsito', sidc:'SNGPU-------H--', type:'Critical Infrastructure', severity:'med', side:'NEUTRAL', domain:'MARITIME', lat:36.014, lon:-5.611, mission:'Punto crítico tránsito naval · vigilancia Armada' },
+        { id:'h-canarias', name:'Crisis migratoria Canarias', sidc:'SNGPU-------H--', type:'Border', severity:'high', side:'NEUTRAL', domain:'LAND', lat:28.108, lon:-15.418, mission:'Frente Sur · Mando de Canarias · BRI XVI' },
+        { id:'h-ceuta-mel', name:'Frontera Sur Ceuta/Melilla', sidc:'SHGPU-------H--', type:'Border Pressure', severity:'med', side:'OPFOR', domain:'LAND', lat:35.589, lon:-4.140, mission:'Plazas Norteafricanas · COMGECEUTA + COMGEMEL' }
+    ],
+
+    // Fases adaptadas a amenazas España exterior (Prompt §1 · v009)
+    phases: [
+        { id:0, code:'P-1', name:'POSTURE', blurb:'Despliegue rotacional · eFP Letonia/Eslovaquia · Líbano UNIFIL · Atalanta Indico · vigilancia.', state:'done' },
+        { id:1, code:'P-2', name:'SHAPING', blurb:'Configuración multidominio · enlace STANAG 4586 · COP integrada con OTAN/EU/UN/coalición.', state:'active' },
+        { id:2, code:'P-3', name:'ACTIVE', blurb:'Misión activa · Find/Fix/Strike/Exploit (ATP-3.2.1) · respuesta a piratería · contra-Daesh · proteger LOCs.', state:'pending' },
+        { id:3, code:'P-4', name:'HOT ZONE', blurb:'Escalada · activación Article 5 / EU Solidarity Clause · refuerzo masivo · evacuación NEO si procede.', state:'pending' }
+    ],
+    // CoAs adaptados a misiones exterior de España
+    coas_strategy: [
+        { id:'cs1', side:'NATO', name:'Sostener flanco Este OTAN', desc:'Battle Group Eslovaquia (lead ES 2026) + FLF Letonia + Rumanía' },
+        { id:'cs2', side:'NATO', name:'Sector Este UNIFIL Líbano', desc:'Base Miguel de Cervantes Marjayún · 658 efectivos' },
+        { id:'cs3', side:'NATO', name:'Atalanta · proteger SLOC Indico', desc:'Fragata Canarias + SOMTU + DAT Orión Yibuti' },
+        { id:'cs4', side:'NATO', name:'Coalición anti-Daesh Iraq', desc:'NMI + Inherent Resolve · adiestramiento + asesoramiento' },
+        { id:'cs5', side:'NATO', name:'EUMAM África · capacity-building', desc:'Mozambique · Centroafricana · Senegal' }
+    ],
+
+    // CoAs ACH-style
+    coas: [
+        { id:'c1', side:'NATO', name:'Defensa territorial estática', desc:'Empleo de FUTER en defensa territorial (PDC-01(A))' },
+        { id:'c2', side:'NATO', name:'Refuerzo flanco Sur', desc:'BRIPAC + BRILEG II hacia Ceuta/Melilla' },
+        { id:'c3', side:'NATO', name:'Empleo BRIAC XII', desc:'"Aprisa, Duro, Lejos" · Leopard 2E como punto de penetración' }
+    ],
+
+    // Programas defensa verificados
+    defense_programs: [
+        { id:'cdti-cpp', name:'CDTI CPP · Robot Terrestre', body:'CDTI · MOD · FEDER', budget:11905308, status:'open · 30 meses', match:'high', url:'https://www.cdti.es/', notes:'UGV pesado multipropósito · Taurus de Miriad Global' },
+        { id:'coincidente', name:'Programa COINCIDENTE 2026', body:'DGEI (ex-DGAM)', budget:600000, status:'rolling · loitering munitions / GNSS-denied', match:'high', url:'https://www.tecnologiaeinnovacion.defensa.gob.es/es-es/presentacion/imasd/paginas/coincidente.aspx', notes:'Hasta 600k€ · coincidente@oc.mde.es' },
+        { id:'diana', name:'NATO DIANA Challenge 2026 · Autonomy & Unmanned Systems', body:'NATO DIANA', budget:100000, status:'150 firmas · 24 países · 16 acc. sites', match:'high', url:'https://www.diana.nato.int/', notes:'Phase I €100k · cha-26-09' },
+        { id:'nif', name:'NATO Innovation Fund', body:'NATO NIF', budget:5000000, status:'rolling', match:'med', url:'https://www.nif.fund/' },
+        { id:'edf', name:'EDF 2026 · Battle Tank Future', body:'EU Commission · DG DEFIS', budget:1200000, status:'open · Sep 2026', match:'high', url:'https://defence-industry-space.ec.europa.eu/eu-defence-industry/european-defence-fund-edf_en' },
+        { id:'eda-sentinel', name:'EDA Sentinel Strike · loitering swarm', body:'EDA', budget:2000000, status:'open', match:'med', url:'https://eda.europa.eu/' }
+    ],
+
+    // Capacidades MOD España verificadas
+    iomt_capabilities: [
+        { id:'sirtap', name:'SIRTAP', type:'UAS Táctico High Endurance (Airbus DS)', status:'1er vuelo 2026 · CEUS Moguer', notes:'750kg · 21.000ft · +20h · contrato €500M · ET pide variante armada' },
+        { id:'tarsis', name:'Tarsis · Aertec/Indra', type:'UAS Clase I/II (RAPAZ)', status:'En servicio · 49 unidades adjudicadas', notes:'Indra absorbió Aertec DAS · Tarsis-W con micromisiles 50mm láser' },
+        { id:'milano', name:'Milano · INTA', type:'UAS Clase I (RAPAZ)', status:'Programa RAPAZ', notes:'Drones <150kg' },
+        { id:'rapaz', name:'Programa RAPAZ', type:'Paraguas UAS <150kg', status:'Activo', notes:'Tarsis + Milano' },
+        { id:'taurus', name:'Taurus · Miriad Global', type:'UGV terrestre IA 100% nacional', status:'Demostrador (alineado CDTI CPP)', notes:'Estaciones drones embarcados' },
+        { id:'cpp-ugv', name:'CDTI CPP Robot Terrestre', type:'UGV pesado multipropósito', status:'Licitación · 30 meses · €11,9M', notes:'FEDER + MOD · ISR, evac médica, transporte' },
+        { id:'leopard-2e', name:'Leopard 2E', type:'MBT 60T (BRIAC XII)', status:'En servicio + modernización', notes:'Carro principal del ET' },
+        { id:'vcr-dragon', name:'VCR 8x8 "Dragón"', type:'VCR (TESS Defence)', status:'40 entregadas 16-ene-2026 · 348 total', notes:'Indra+EM&E+SAPA+GD-Santa Bárbara · base BRIEX 2035' },
+        { id:'pizarro', name:'VCI Pizarro · ASCOD', type:'IFV Phase II', status:'En servicio', notes:'Vehículo combate de infantería' },
+        { id:'themis', name:'THeMIS · Milrem', type:'UGV ligero (vía Escribano)', status:'Evaluación ET · potencial >100u', notes:'Multifunción · ISR/log/armado' }
+    ],
+
+    iomt_doctrine: [
+        'Saturación autónoma — UA captó posición rusa solo con UGV+UAV el 13-04-2026.',
+        'Ironclad de Roboneers + módulo Shablya M2 · 5ª Bde de Asalto UA.',
+        'Q1-2026: 24.500 misiones UGV · 25.000 UGVs contratados H1-2026.',
+        'Human-on-the-loop · IA gobierna ejecución, humano supervisa intención.',
+        'Find · Fix · Strike · Exploit (ATP-3.2.1) aplicado a swarm autónomo.',
+        'Fusión sensores · COP STANAG 4586 vía MQTT/DDS.',
+        'ROE precargadas · zonas neutrales protegidas · LOAC.'
+    ],
+
+    iomt_assets: [
+        { id:'ugv-1', name:'UGV CW-Ironclad #1', type:'UGV', status:'auto', lat:40.494, lon:-3.336 },
+        { id:'ugv-2', name:'UGV CW-Ratel #2', type:'UGV', status:'auto', lat:40.4938, lon:-3.3355 },
+        { id:'uav-1', name:'UAV FPV CW-Tarsis #1', type:'UAV', status:'loiter', lat:40.495, lon:-3.336 },
+        { id:'c2-hmi', name:'C2 humano · HMI loop', type:'C2', status:'standby', lat:40.493, lon:-3.339 }
+    ]
+};
+
+// v009 · Generación 8 ALIADOS + 8 HOSTILES + (op-16) NEUTRALES (Prompt §5)
+// Polígono La Raya ~120×80m → bbox lat 40.4920..40.4948 (Δ=0.0028) · lon -3.3380..-3.3338 (Δ=0.0042)
+function generateCarros(op, sp) {
+    const arr = [];
+    const baseLat=40.4935, baseLon=-3.3358;
+    // Hasta 8 carros aliados operativos (FRIEND)
+    const numAllied = Math.min(8, op);
+    for (let i=0;i<numAllied;i++) arr.push({
+        id:'CW-A'+String(i+1).padStart(2,'0'),
+        callsign:'ALFA-'+(i+1),
+        status:'operational', side:'ALLIED', crewed:true,
+        ammo:200-Math.floor(Math.random()*40),
+        fuel:70+Math.floor(Math.random()*25),
+        lat: baseLat - i*0.00012,
+        lon: baseLon - 0.0006 + i*0.00006
+    });
+    // Hasta 8 carros hostiles (HOSTILE) en zona OPFOR (cuadrante opuesto del polígono)
+    const numHostile = Math.min(8, op);
+    for (let i=0;i<numHostile;i++) arr.push({
+        id:'CW-H'+String(i+1).padStart(2,'0'),
+        callsign:'HOTEL-'+(i+1),
+        status:'operational', side:'HOSTILE', crewed:true,
+        ammo:200-Math.floor(Math.random()*40),
+        fuel:70+Math.floor(Math.random()*25),
+        lat: baseLat - 0.0010 - i*0.00010,
+        lon: baseLon + 0.0004 + i*0.00010
+    });
+    // Carros inoperativos / no activados → NEUTRAL (los excedentes y reserva)
+    const remainingOp = Math.max(0, op - 16);
+    for (let i=0;i<remainingOp;i++) arr.push({
+        id:'CW-N'+String(i+1).padStart(2,'0'),
+        callsign:'NEUTRAL-'+(i+1),
+        status:'inoperative', side:'NEUTRAL', crewed:false,
+        ammo:0, fuel:0,
+        lat: baseLat + 0.0006, lon: baseLon - 0.0010 + i*0.00018
+    });
+    for (let i=0;i<sp;i++) arr.push({
+        id:'CW-SP'+(i+1), callsign:'SIERRA-'+(i+1),
+        status:'reserve', side:'NEUTRAL', crewed:false,
+        ammo:200, fuel:100,
+        lat: baseLat - 0.0014 + i*0.00018, lon: baseLon - 0.0014
+    });
+    return arr;
+}
+
+// v009 · Comandantes con localización y símbolo militar (Prompt §5)
+function commanders() {
+    return [
+        { id:'cmd-allied', side:'ALLIED', designation:'Comandante Aliado · CMDR-A', sidc:'SFGPUH-------E--', echelon:'•', lat:40.4940, lon:-3.3380, role:'Mando táctico bando aliado', callsign:'ALFA-CMD' },
+        { id:'cmd-hostile', side:'HOSTILE', designation:'Comandante Hostil · CMDR-H', sidc:'SHGPUH-------E--', echelon:'•', lat:40.4925, lon:-3.3340, role:'Mando táctico bando hostil', callsign:'HOTEL-CMD' },
+        { id:'cmd-neutral', side:'NEUTRAL', designation:'Marshal Jefe · NEUTRAL', sidc:'SNGPUH-------E--', echelon:'•', lat:40.4945, lon:-3.3360, role:'Árbitro · seguridad · evacuación', callsign:'NOVEMBER-CMD' }
+    ];
+}
+let activeBand = 'ALLIED';
+function setBand(b) {
+    activeBand = b;
+    document.getElementById('c2-band').textContent = b;
+    pushLog('TURN', `Bando activo: ${b}`, 'success');
+}
+DEFAULT_STATE.carros = generateCarros(DEFAULT_STATE.fleet.operational, DEFAULT_STATE.fleet.spare);
+
+let CAMARWAR_STATE = JSON.parse(JSON.stringify(DEFAULT_STATE));
+const BASE_STATE = JSON.parse(JSON.stringify(DEFAULT_STATE));
+let activePhase = 1;
+// Filtros LINCE-SIM con 5 dominios C23_DIANA (Maritime/Land/Air/Space/Cyberspace)
+let filterState = { NATO:true, OPFOR:true, NEUTRAL:true, LAND:true, MARITIME:true, AIR:true, SPACE:true, CYBER:true, SEA:true, SUB:true };
+let cmdLog = [];
+
+function loadStateFromStorage() { try { const s=localStorage.getItem('camarwar_state_v009'); if (s) CAMARWAR_STATE=Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)),JSON.parse(s)); } catch(e) {} }
+function saveStateToStorage() { try { localStorage.setItem('camarwar_state_v009', JSON.stringify(CAMARWAR_STATE)); } catch(e) {} }
+
+// =============================================================
+// View / theme / lang / deck
+// =============================================================
+function switchView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelector('[data-target="' + id + '"]').classList.add('active');
+    window.scrollTo({ top:0, behavior:'smooth' });
+    if (id === 'view-sim') setTimeout(() => simMap && simMap.invalidateSize(), 200);
+    if (id === 'view-c2') setTimeout(() => c2Map && c2Map.invalidateSize(), 200);
+    if (id === 'view-config') renderStatePreview();
+    if (id === 'view-manual') renderManual();
+}
+document.getElementById('theme-toggle').addEventListener('click', () => document.body.classList.toggle('light-mode'));
+(function() {
+    let cl='es'; const btn=document.getElementById('lang-toggle'); const lbl=document.getElementById('lang-label');
+    btn.addEventListener('click', () => {
+        const t=cl==='es'?'en':'es';
+        document.querySelectorAll('[data-en]').forEach(el => { const c=el.innerHTML; el.innerHTML=el.dataset.en; el.dataset.en=c; });
+        cl=t; document.documentElement.lang=t; lbl.textContent=t==='es'?'EN':'ES';
+    });
+})();
+(function() {
+    const slides=document.querySelectorAll('.slide'); if (!slides.length) return;
+    const total=slides.length; let cur=0;
+    const dots=document.getElementById('deck-dots');
+    for (let i=0;i<total;i++) { const d=document.createElement('div'); d.className='dot'+(i===0?' active':''); d.addEventListener('click',()=>go(i)); dots.appendChild(d); }
+    function go(i) { if (i<0||i>=total) return; slides[cur].classList.remove('active'); slides[i].classList.add('active'); dots.children[cur].classList.remove('active'); dots.children[i].classList.add('active'); cur=i; document.getElementById('prev-slide').disabled=cur===0; document.getElementById('next-slide').disabled=cur===total-1; }
+    document.getElementById('prev-slide').addEventListener('click',()=>go(cur-1));
+    document.getElementById('next-slide').addEventListener('click',()=>go(cur+1));
+    document.addEventListener('keydown', e => { if (!document.getElementById('view-pitch').classList.contains('active')) return; if (e.key==='ArrowRight') go(cur+1); if (e.key==='ArrowLeft') go(cur-1); });
+    document.getElementById('prev-slide').disabled=true;
+})();
+function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+
+// =============================================================
+// CmdLog
+// =============================================================
+function fmtZulu(d) { const p=n=>String(n).padStart(2,'0'); return p(d.getUTCHours())+p(d.getUTCMinutes())+'Z'; }
+function pushLog(prefix, msg, tone) {
+    cmdLog.unshift({ ts:fmtZulu(new Date()), prefix, msg, tone:tone||'info' });
+    if (cmdLog.length > 100) cmdLog.pop();
+    renderCmdLog();
+}
+function renderCmdLog() {
+    const el=document.getElementById('cmdlog-stream'); if (!el) return;
+    el.innerHTML = cmdLog.map(l => `<div class="logline tone-${l.tone}"><span class="lts mono">${l.ts}</span><span class="lpfx pfx-${l.prefix}">[${l.prefix}]</span><span class="lmsg">${l.msg}</span></div>`).join('');
+}
+function handleNlp(t) {
+    const text=(t||'').trim(); if (!text) return;
+    pushLog('NLP', `CMDR &gt; ${text}`, 'info');
+    const lc=text.toLowerCase();
+    if (/tally|fuerz|strength/.test(lc)) {
+        const cnt=CAMARWAR_STATE.spanish_army.length;
+        pushLog('SYS', `Friendly LAND: ${cnt} unidades · OPFOR threats: ${CAMARWAR_STATE.threats.length}`, 'info');
+    } else if (/phase\s*(\d)/.test(lc)) {
+        const m=lc.match(/phase\s*(\d)/); if (m) advancePhaseTo(+m[1]);
+    } else if (/turn|advance/.test(lc)) advancePhase();
+    else if (/doctrina|doctrine/.test(lc)) pushLog('DOC','PDC-01(A) · PD1-001 · PD2-002 · AJP-3.2 EDB · ATP-3.2.1 · STANAG 4586','info');
+    else if (/help|\?/.test(lc)) pushLog('SYS','Comandos: tally · phase 0..3 · turn · doctrina · help','info');
+    else pushLog('SYS','Comando no reconocido. Usa "help".','warn');
+}
+
+function advancePhase() { const next=Math.min(activePhase+1, 3); advancePhaseTo(next); }
+function advancePhaseTo(n) {
+    if (n<0||n>3) return;
+    activePhase=n;
+    CAMARWAR_STATE.phases.forEach((ph,i) => { ph.state = i<n?'done':i===n?'active':'pending'; });
+    pushLog('TURN', `Fase avanzada a ${CAMARWAR_STATE.phases[n].code} · ${CAMARWAR_STATE.phases[n].name}`, 'success');
+    document.getElementById('meta-phase').textContent = CAMARWAR_STATE.phases[n].code + ' · ' + CAMARWAR_STATE.phases[n].name;
+    document.getElementById('gate-current').textContent = CAMARWAR_STATE.phases[n].code + ' · ' + CAMARWAR_STATE.phases[n].name;
+    const next = n<3?CAMARWAR_STATE.phases[n+1]:null;
+    document.getElementById('gate-next').textContent = next?'→ '+next.code+' · '+next.name:'· final';
+    renderPhaseLadder();
+    saveStateToStorage();
+}
+
+// =============================================================
+// MAPS
+// =============================================================
+// v009 · IoMT view eliminada → solo simMap (Estrategia) y c2Map (Táctica)
+let simMap, c2Map, iomtMap, simLayer, c2Layer, iomtLayer; // iomt vars retenidas como no-op para compat
+// C23_DIANA-style: CARTO Voyager (más claro y legible que dark_all)
+const dark_tile='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+const tile_attr='&copy; OpenStreetMap &copy; CARTO';
+
+function milIcon(sidc, opts={}) {
+    if (typeof ms === 'undefined') return L.divIcon({ className:'fb', html:'<div style="width:30px;height:22px;background:#3895FF;border:2px solid #fff;"></div>', iconSize:[30,22], iconAnchor:[15,11] });
+    try { const sym=new ms.Symbol(sidc, { size:30, ...opts }); return L.divIcon({ className:'unit-marker-app6', html:sym.asSVG(), iconSize:[sym.getSize().width, sym.getSize().height], iconAnchor:[sym.getAnchor().x, sym.getAnchor().y] }); }
+    catch(e) { return L.divIcon({ className:'fb', html:'<div style="width:30px;height:22px;background:#3895FF;border:2px solid #fff;"></div>', iconSize:[30,22], iconAnchor:[15,11] }); }
+}
+
+function initSimMap() {
+    if (simMap) return;
+    simMap = L.map('sim-map', { zoomControl:true }).setView([39.5, -3.7], 6);
+    L.tileLayer(dark_tile, { attribution:tile_attr, subdomains:'abcd' }).addTo(simMap);
+    simLayer = L.layerGroup().addTo(simMap);
+    renderSimMap();
+    pushLog('SYS', 'Mapa SIM inicializado · zoom Iberian theatre', 'info');
+    pushLog('DOC', 'Doctrina cargada: PDC-01(A) · PD1-001 · AJP-3.2 EDB', 'info');
+}
+// Map SEA/SUB → MARITIME para que el filtro de dominio C23_DIANA funcione coherente
+function passDomainFilter(dom) {
+    if (dom==='SEA'||dom==='SUB') return filterState.MARITIME;
+    return filterState[dom] !== false;
+}
+function renderSimMap() {
+    if (!simLayer) return; simLayer.clearLayers();
+    CAMARWAR_STATE.spanish_army.forEach(u => {
+        if (!filterState[u.side]||!passDomainFilter(u.domain)) return;
+        const m=L.marker([u.lat,u.lon], { icon:milIcon(u.sidc) }).addTo(simLayer);
+        m.bindTooltip(u.designation, { direction:'top', offset:[0,-15] });
+        m.on('click', () => showDossier('sim-dossier-body', u, 'NATO'));
+    });
+    if (document.getElementById('lyr-threats')?.checked) {
+        CAMARWAR_STATE.threats.forEach(t => {
+            if (!filterState[t.side]||!passDomainFilter(t.domain)) return;
+            const m=L.marker([t.lat,t.lon], { icon:milIcon(t.sidc) }).addTo(simLayer);
+            m.bindTooltip(t.name, { direction:'top', offset:[0,-15] });
+            m.on('click', () => showDossier('sim-dossier-body', t, t.side));
+        });
+    }
+    document.getElementById('sim-units').textContent = CAMARWAR_STATE.spanish_army.length + ' FR · ' + CAMARWAR_STATE.threats.length + ' THR';
+}
+
+function initC2Map() {
+    if (c2Map) return;
+    c2Map = L.map('c2-map', { zoomControl:true }).setView([40.4935,-3.3358], 18);
+    L.tileLayer(dark_tile, { attribution:tile_attr, subdomains:'abcd' }).addTo(c2Map);
+    c2Layer = L.layerGroup().addTo(c2Map);
+    // Polígono La Raya bbox real
+    L.rectangle([[40.4920,-3.3380],[40.4948,-3.3338]], { color:'#FFC72C', weight:2, fillOpacity:0.04, dashArray:'4,3' }).bindTooltip('CAMARWAR · Polígono La Raya · ~120×80m').addTo(c2Map);
+    // Línea divisoria zona aliada / zona hostil
+    L.polyline([[40.4934,-3.3380],[40.4934,-3.3338]], { color:'#FFC72C', weight:1, dashArray:'2,4', opacity:0.5 }).bindTooltip('Línea divisoria · zona ALIADA al norte / zona HOSTIL al sur').addTo(c2Map);
+    renderC2Map();
+}
+function renderC2Map() {
+    if (!c2Layer) return; c2Layer.clearLayers();
+    CAMARWAR_STATE.carros.forEach(c => {
+        // SIDC militar acorazado por bando · neutral si inoperativo/reserva (Prompt §5)
+        let sidc;
+        if (c.side==='HOSTILE') sidc = 'SHGPUCAH-----H--';
+        else if (c.side==='NEUTRAL' || c.status==='inoperative' || c.status==='reserve') sidc = 'SNGPUCAH-----H--';
+        else sidc = 'SFGPUCAH-----H--';
+        const m=L.marker([c.lat,c.lon], { icon:milIcon(sidc, { size:26 }) }).addTo(c2Layer);
+        m.bindTooltip(`${c.id} · ${c.callsign} · ${c.side||'ALLIED'}`, { direction:'top' });
+        m.on('click', () => showDossier('c2-dossier-body', {
+            designation:c.id+' · '+c.callsign+' · '+(c.side||'ALLIED'),
+            type:'Mini Carro Combate · MiniCzolgi v1',
+            loc:'Polígono La Raya · Camarma',
+            equipment:[`ammo: ${c.ammo}`, `fuel: ${c.fuel}%`, `status: ${c.status}`, c.crewed?'tripulado':'sin tripular', c.fromStrategy?`extrapolado de: ${c.fromStrategy}`:''].filter(x=>x),
+            mission: c.side==='HOSTILE' ? 'OPFOR · oposición simulada · entrenamiento' : c.side==='NEUTRAL' ? 'Inoperativo / no activado · stand-by' : 'Aliado · combate Airsoft activo',
+            sidc: sidc,
+            echelon:'•',
+            lat: c.lat, lon: c.lon
+        }, c.side||'NATO'));
+    });
+    // Comandantes (3): aliado, hostil, neutral (marshal jefe)
+    commanders().forEach(cmd => {
+        const m = L.marker([cmd.lat, cmd.lon], { icon:milIcon(cmd.sidc, { size:30 }) }).addTo(c2Layer);
+        m.bindTooltip('★ '+cmd.designation, { direction:'top' });
+        m.on('click', () => showDossier('c2-dossier-body', {
+            designation:'★ '+cmd.designation, type:'Comandante · '+cmd.role, loc:'La Raya', equipment:[`callsign: ${cmd.callsign}`, `bando: ${cmd.side}`], mission:cmd.role, sidc:cmd.sidc, echelon:cmd.echelon, lat:cmd.lat, lon:cmd.lon
+        }, cmd.side==='ALLIED'?'NATO':cmd.side==='HOSTILE'?'OPFOR':'NEUTRAL'));
+    });
+    document.getElementById('c2-allied-count').textContent  = CAMARWAR_STATE.carros.filter(c=>c.side==='ALLIED').length;
+    document.getElementById('c2-hostile-count').textContent = CAMARWAR_STATE.carros.filter(c=>c.side==='HOSTILE').length;
+    document.getElementById('c2-neutral-count').textContent = CAMARWAR_STATE.carros.filter(c=>c.side==='NEUTRAL').length;
+    // Render comandantes list en rail
+    const cmdEl = document.getElementById('c2-commanders-list');
+    if (cmdEl) cmdEl.innerHTML = commanders().map(c => `<div style="padding:4px 0;border-bottom:1px dashed rgba(255,255,255,0.04);"><strong style="color:#fff;font-size:10.5px;">★ ${c.designation}</strong><div style="color:var(--ink-mute);font-size:9px;">${c.callsign} · ${c.role}</div></div>`).join('');
+}
+
+// v009 · Órdenes a carros (Prompt §5)
+function issueCombatOrder(funcion) {
+    const targets = CAMARWAR_STATE.carros.filter(c => c.side === activeBand);
+    if (!targets.length) { toast('✗ Sin unidades en bando '+activeBand); return; }
+    targets.forEach(c => { c.lastOrder = funcion; c.lastOrderTs = new Date().toISOString(); });
+    pushLog('COA', `ORDEN ${activeBand} · función ${funcion} · ${targets.length} carros notificados vía MQTT/DDS`, 'success');
+    pushLog('KINETIC', `Tripulantes ejecutan en vida real · resultado se reflejará en mapa`, 'info');
+    saveStateToStorage();
+    renderC2Panel();
+    toast(`✓ Orden ${funcion} → ${activeBand} (${targets.length} carros)`);
+}
+
+// v009 · IoMT vista eliminada · contenido movido a Manual sección IoMT (Prompt §2/§3)
+function initIomtMap() { /* no-op · vista removida */ }
+function renderIomtMap() { /* no-op · vista removida */ }
+function renderIomtPanel() { /* no-op · vista removida (panels en Manual) */ }
+
+// =============================================================
+// Dossier
+// =============================================================
+function showDossier(targetId, u, side) {
+    const el=document.getElementById(targetId); if (!el) return;
+    const eq=(u.equipment||[]).map(e=>`<li>${e}</li>`).join('');
+    // Detectar si es unidad motorizada (mech/armored/IFV/MBT/BG/BCT) → habilitar botón "Ir a Táctica"
+    const isMotorized = /mech|acorazada|armored|MBT|IFV|BG|BCT|BDE|brigade|bg mech/i.test((u.type||'') + ' ' + (u.designation||'') + ' ' + (u.equipment||[]).join(' '));
+    const goTactical = isMotorized && targetId==='sim-dossier-body'
+        ? `<div class="d-row" style="margin-top:10px;border-top:1px dashed var(--c2-border-tactical);padding-top:10px"><button class="btn-create" style="width:100%" onclick="goToTacticalFromStrategy('${u.id||u.name}', ${u.lat}, ${u.lon})">▶ IR A TÁCTICA · extrapolar a La Raya</button></div>` : '';
+    const sourceCite = u.source?`<div class="source-cite mt-2">📎 ${u.source}</div>`:'';
+    el.innerHTML = `<div class="d-card side-${side}">
+        <div class="d-desig">${u.designation||u.name}</div>
+        <div class="d-meta mono">${u.type||u.designation} · ${u.echelon||''} · ${u.loc||''}</div>
+        ${eq?`<div class="d-row d-stack"><div class="d-k">EQUIPMENT</div><ul class="d-eq">${eq}</ul></div>`:''}
+        ${u.mission?`<div class="d-row d-stack"><div class="d-k">MISSION</div><div class="d-mission">${u.mission}</div></div>`:''}
+        <div class="d-row d-stack"><div class="d-k">SIDC</div><div class="d-v mono">${u.sidc||'—'}</div></div>
+        <div class="d-row d-stack"><div class="d-k">COORDS</div><div class="d-v mono">${(u.lat||0).toFixed(4)}°N · ${(u.lon||0).toFixed(4)}°E</div></div>
+        ${sourceCite}
+        ${goTactical}
+    </div>`;
+    pushLog('INTEL', `Dossier abierto: ${u.designation||u.name}`, 'info');
+}
+
+// Extrapolación de Estrategia → Táctica · v009 Prompt §4
+// Mapea coordenadas reales a posiciones dentro del polígono La Raya (Camarma)
+function goToTacticalFromStrategy(unitId, srcLat, srcLon) {
+    // Polígono La Raya (Camarma) bbox aprox
+    const polygon = { latMin:40.4920, latMax:40.4948, lonMin:-3.3380, lonMax:-3.3338 };
+    // Coordenadas de origen de las misiones (rango global aprox)
+    const srcRange = { latMin:-30, latMax:60, lonMin:-20, lonMax:60 };
+    // Normalizar y mapear (preservando relación relativa de las unidades)
+    function normalize(v, vmin, vmax, tmin, tmax) {
+        const t = Math.max(0, Math.min(1, (v - vmin) / (vmax - vmin)));
+        return tmin + t * (tmax - tmin);
+    }
+    // Extrapolar destino dentro del polígono
+    const targetLat = normalize(srcLat, srcRange.latMin, srcRange.latMax, polygon.latMin, polygon.latMax);
+    const targetLon = normalize(srcLon, srcRange.lonMin, srcRange.lonMax, polygon.lonMin, polygon.lonMax);
+    // Reposicionar el primer carro aliado operativo en esa posición · marcador "from-strategy"
+    const carro = CAMARWAR_STATE.carros.find(c => c.status==='operational');
+    if (carro) {
+        carro.lat = targetLat;
+        carro.lon = targetLon;
+        carro.fromStrategy = unitId;
+        pushLog('KINETIC', `Extrapolación Estrategia→Táctica · ${unitId} → CW-${carro.id} en ${targetLat.toFixed(5)}°N · ${targetLon.toFixed(5)}°W`, 'success');
+    }
+    // Switch a vista Táctica
+    switchView('view-c2');
+    setTimeout(() => { renderC2Map(); renderC2Panel(); toast('▶ TÁCTICA · posición extrapolada de Estrategia'); }, 250);
+}
+
+// =============================================================
+// Rail panels (phase ladder + tally + filters + coa)
+// =============================================================
+function renderPhaseLadder() {
+    const el=document.getElementById('phase-ladder'); if (!el) return;
+    el.innerHTML = CAMARWAR_STATE.phases.map(ph => `
+        <li class="phase-step state-${ph.state}" onclick="advancePhaseTo(${ph.id})">
+            <div class="phase-rail-dot"></div><div class="phase-rail-line"></div>
+            <div><div class="phase-head"><span class="phase-code">${ph.code}</span><span class="phase-name">${ph.name}</span><span class="phase-status state-${ph.state}">${ph.state.toUpperCase()}</span></div>
+            <p class="phase-blurb">${ph.blurb}</p></div>
+        </li>`).join('');
+}
+function renderTally() {
+    const el=document.getElementById('force-tally'); if (!el) return;
+    const sides=['NATO','OPFOR','NEUTRAL'];
+    const tally={};
+    // C23_DIANA-style: 5 dominios Maritime/Land/Air/Space/Cyberspace (Prompt §7)
+    const domains=['LAND','MARITIME','AIR','SPACE','CYBER'];
+    sides.forEach(s => { tally[s]={ LAND:0, MARITIME:0, AIR:0, SPACE:0, CYBER:0 }; });
+    function bumpDomain(side, dom) {
+        if (!tally[side]) return;
+        const d = dom==='SEA'||dom==='SUB' ? 'MARITIME' : dom;
+        if (tally[side][d] !== undefined) tally[side][d]++;
+    }
+    CAMARWAR_STATE.spanish_army.forEach(u => bumpDomain(u.side, u.domain));
+    CAMARWAR_STATE.threats.forEach(t => bumpDomain(t.side, t.domain));
+    el.innerHTML = sides.map(s => `<div class="tally-row side-${s}">
+        <div class="tally-side">${s==='NATO'?'ALLIED':s==='OPFOR'?'HOSTILE':'NEUTRAL'}</div>
+        <div class="tally-bars">
+            ${domains.map(d => `<div class="tally-cell"><div class="tally-d">${d==='MARITIME'?'MAR':d==='CYBER'?'CYB':d==='SPACE'?'SPC':d.slice(0,3)}</div><div class="tally-v mono">${String(tally[s][d]||0).padStart(2,'0')}</div></div>`).join('')}
+        </div>
+    </div>`).join('');
+}
+function renderFilters() {
+    const sd=document.getElementById('filters-side');
+    if (sd) sd.innerHTML = ['NATO','OPFOR','NEUTRAL'].map(s => `<label class="chip side-${s} ${filterState[s]?'on':''}"><input type="checkbox" ${filterState[s]?'checked':''} onchange="filterState['${s}']=this.checked;renderSimMap();renderFilters();">${s==='NATO'?'ALLIED':s==='OPFOR'?'HOSTILE':'NEUTRAL'}</label>`).join('');
+    const dm=document.getElementById('filters-domain');
+    // C23_DIANA-style: filtros 5 dominios Maritime/Land/Air/Space/Cyberspace
+    if (dm) dm.innerHTML = ['LAND','MARITIME','AIR','SPACE','CYBER'].map(d => `<label class="chip ${filterState[d]?'on':''}"><input type="checkbox" ${filterState[d]?'checked':''} onchange="filterState['${d}']=this.checked;renderSimMap();renderFilters();">${d}</label>`).join('');
+}
+function renderCoaList() {
+    const el=document.getElementById('coa-list'); if (!el) return;
+    el.innerHTML = CAMARWAR_STATE.coas.map(c => `<div style="background:#0a1426;border:1px solid var(--line);border-left:3px solid var(--allied);padding:6px 8px;margin-bottom:6px;font-size:10.5px;">
+        <strong style="color:#fff;">${c.name}</strong>
+        <div style="color:var(--ink-mute);font-size:9.5px;margin-top:2px;">${c.desc}</div>
+    </div>`).join('');
+}
+
+// =============================================================
+// Carros / IoMT / Programs / ORBAT panels
+// =============================================================
+function renderC2Panel() {
+    const list=document.getElementById('c2-carros-list'); if (!list) return;
+    list.innerHTML = CAMARWAR_STATE.carros.map((c,idx) => `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,0.04);font-size:10.5px;">
+        <div style="flex:1;min-width:0;"><div style="color:#fff;font-weight:700;">${c.id} · ${c.callsign}</div><div style="color:var(--ink-mute);font-size:9.5px;">${c.status} · fuel ${c.fuel}%</div></div>
+        <button class="btn-danger" onclick="removeCarro(${idx})">×</button>
+    </div>`).join('');
+}
+function renderIomtPanel() {
+    const cap=document.getElementById('iomt-capabilities'); if (!cap) return;
+    cap.innerHTML = CAMARWAR_STATE.iomt_capabilities.map(c => `<div style="padding:5px 0;border-bottom:1px dashed rgba(255,255,255,0.04);font-size:10.5px;"><strong style="color:#fff;">${c.name}</strong><div style="color:var(--ink-mute);font-size:9.5px;">${c.type} · ${c.status}</div></div>`).join('');
+    const doc=document.getElementById('iomt-doctrine'); if (doc) doc.innerHTML = CAMARWAR_STATE.iomt_doctrine.map(d => `<div style="font-size:10px;color:var(--ink-dim);line-height:1.45;margin-bottom:5px;">▸ ${d}</div>`).join('');
+}
+function renderProgramsBigTable() {
+    const tb=document.getElementById('programs-tbody'); if (!tb) return;
+    tb.innerHTML = CAMARWAR_STATE.defense_programs.map(p => {
+        const fmt=new Intl.NumberFormat('es-ES').format(p.budget);
+        const linkHtml=p.url?`<a href="${p.url}" target="_blank" class="program-link">${p.name} ↗</a>`:p.name;
+        return `<tr class="border-b border-white/5"><td class="p-3 font-semibold">${linkHtml}${p.notes?`<div class="text-[10px] text-gray-500 mt-1 italic">${p.notes}</div>`:''}</td><td class="p-3 text-gray-400">${p.body}</td><td class="p-3 text-right text-purple-300 font-bold">${fmt} €</td><td class="p-3"><span style="font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:4px;font-weight:700;background:rgba(74,222,128,0.18);color:#86efac;">${p.match.toUpperCase()}</span></td></tr>`;
+    }).join('');
+}
+
+// CRUD config
+function renderProgramsTable() {
+    const tb=document.querySelector('#cfg-programs tbody'); if (!tb) return; tb.innerHTML='';
+    CAMARWAR_STATE.defense_programs.forEach((p,idx) => {
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td><input value="${p.name}" data-idx="${idx}" data-key="name"></td><td><input value="${p.body}" data-idx="${idx}" data-key="body"></td><td><input value="${p.url||''}" data-idx="${idx}" data-key="url"></td><td><input type="number" value="${p.budget}" data-idx="${idx}" data-key="budget"></td><td><select data-idx="${idx}" data-key="match"><option value="high" ${p.match==='high'?'selected':''}>high</option><option value="med" ${p.match==='med'?'selected':''}>med</option><option value="low" ${p.match==='low'?'selected':''}>low</option></select></td><td><div class="crud-row-actions"><button class="btn-edit" title="Edit (focus)" onclick="this.closest('tr').querySelectorAll('input,select')[0].focus()">EDIT</button><button class="btn-update" title="Update (save)" onclick="renderProgramsBigTable();saveStateToStorage();toast('✓ Update');">UPDATE</button><button class="btn-del" onclick="removeProgram(${idx})">DELETE</button></div></td>`;
+        tb.appendChild(tr);
+    });
+    tb.querySelectorAll('input,select').forEach(inp => { inp.addEventListener('change', () => { const i=+inp.dataset.idx, k=inp.dataset.key; CAMARWAR_STATE.defense_programs[i][k]=inp.type==='number'?Number(inp.value):inp.value; renderProgramsBigTable(); saveStateToStorage(); }); });
+}
+function addProgram() { CAMARWAR_STATE.defense_programs.push({ id:'p'+Date.now(), name:'Nuevo', body:'?', budget:0, status:'open', match:'low', url:'' }); renderProgramsTable(); renderProgramsBigTable(); saveStateToStorage(); }
+function removeProgram(idx) { CAMARWAR_STATE.defense_programs.splice(idx,1); renderProgramsTable(); renderProgramsBigTable(); saveStateToStorage(); }
+
+function renderOrbatTable() {
+    const tb=document.querySelector('#cfg-orbat tbody'); if (!tb) return; tb.innerHTML='';
+    CAMARWAR_STATE.spanish_army.forEach((u,idx) => {
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td><input value="${u.id}" data-idx="${idx}" data-key="id"></td><td><input value="${u.designation}" data-idx="${idx}" data-key="designation"></td><td><input value="${u.type}" data-idx="${idx}" data-key="type"></td><td><input value="${u.sidc}" class="mono" style="font-size:0.65rem" data-idx="${idx}" data-key="sidc"></td><td><input type="number" step="0.001" value="${u.lat}" data-idx="${idx}" data-key="lat"></td><td><input type="number" step="0.001" value="${u.lon}" data-idx="${idx}" data-key="lon"></td><td><div class="crud-row-actions"><button class="btn-edit" onclick="this.closest('tr').querySelectorAll('input')[0].focus()">EDIT</button><button class="btn-update" onclick="renderSimMap();renderTally();saveStateToStorage();toast('✓ Unidad actualizada');">UPDATE</button><button class="btn-del" onclick="removeUnit(${idx})">DELETE</button></div></td>`;
+        tb.appendChild(tr);
+    });
+    tb.querySelectorAll('input').forEach(inp => { inp.addEventListener('change', () => { const i=+inp.dataset.idx, k=inp.dataset.key; CAMARWAR_STATE.spanish_army[i][k]=inp.type==='number'?Number(inp.value):inp.value; renderSimMap(); renderTally(); saveStateToStorage(); }); });
+}
+function addUnit() { CAMARWAR_STATE.spanish_army.push({ id:'u'+Date.now(), sidc:'SFGPUCI------H--', designation:'Nueva', type:'INF', side:'NATO', domain:'LAND', loc:'?', lat:40.4, lon:-3.7, echelon:'X', group:'mando' }); renderOrbatTable(); renderSimMap(); renderTally(); saveStateToStorage(); }
+function removeUnit(idx) { CAMARWAR_STATE.spanish_army.splice(idx,1); renderOrbatTable(); renderSimMap(); renderTally(); saveStateToStorage(); }
+
+function renderIomtTable() {
+    const tb=document.querySelector('#cfg-iomt tbody'); if (!tb) return; tb.innerHTML='';
+    CAMARWAR_STATE.iomt_capabilities.forEach((c,idx) => {
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td><input value="${c.name}" data-idx="${idx}" data-key="name"></td><td><input value="${c.type}" data-idx="${idx}" data-key="type"></td><td><input value="${c.status}" data-idx="${idx}" data-key="status"></td><td><input value="${c.notes||''}" data-idx="${idx}" data-key="notes"></td><td><div class="crud-row-actions"><button class="btn-edit" onclick="this.closest('tr').querySelectorAll('input')[0].focus()">EDIT</button><button class="btn-update" onclick="renderIomtPanel();saveStateToStorage();toast('✓ Capacidad actualizada');">UPDATE</button><button class="btn-del" onclick="removeIomt(${idx})">DELETE</button></div></td>`;
+        tb.appendChild(tr);
+    });
+    tb.querySelectorAll('input').forEach(inp => { inp.addEventListener('change', () => { const i=+inp.dataset.idx, k=inp.dataset.key; CAMARWAR_STATE.iomt_capabilities[i][k]=inp.value; renderIomtPanel(); saveStateToStorage(); }); });
+}
+function addIomt() { CAMARWAR_STATE.iomt_capabilities.push({ id:'c'+Date.now(), name:'Nueva', type:'?', status:'?', notes:'' }); renderIomtTable(); renderIomtPanel(); saveStateToStorage(); }
+function removeIomt(idx) { CAMARWAR_STATE.iomt_capabilities.splice(idx,1); renderIomtTable(); renderIomtPanel(); saveStateToStorage(); }
+
+function renderCarrosTable() {
+    const tb=document.querySelector('#cfg-carros tbody'); if (!tb) return; tb.innerHTML='';
+    CAMARWAR_STATE.carros.forEach((c,idx) => {
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td><input value="${c.id}" data-idx="${idx}" data-key="id"></td><td><input value="${c.callsign}" data-idx="${idx}" data-key="callsign"></td><td><select data-idx="${idx}" data-key="status"><option value="operational" ${c.status==='operational'?'selected':''}>operational</option><option value="reserve" ${c.status==='reserve'?'selected':''}>reserve</option></select></td><td><input type="number" value="${c.ammo}" data-idx="${idx}" data-key="ammo"></td><td><input type="number" value="${c.fuel}" data-idx="${idx}" data-key="fuel"></td><td><div class="crud-row-actions"><button class="btn-edit" onclick="this.closest('tr').querySelectorAll('input,select')[0].focus()">EDIT</button><button class="btn-update" onclick="renderC2Panel();renderC2Map();saveStateToStorage();toast('✓ Carro actualizado');">UPDATE</button><button class="btn-del" onclick="removeCarro(${idx})">DELETE</button></div></td>`;
+        tb.appendChild(tr);
+    });
+    tb.querySelectorAll('input,select').forEach(inp => { inp.addEventListener('change', () => { const i=+inp.dataset.idx, k=inp.dataset.key; CAMARWAR_STATE.carros[i][k]=inp.type==='number'?Number(inp.value):inp.value; renderC2Panel(); renderC2Map(); saveStateToStorage(); }); });
+}
+function addCarro() { const id='CW-'+String(CAMARWAR_STATE.carros.length+1).padStart(2,'0'); CAMARWAR_STATE.carros.push({ id, callsign:'NUEVO', status:'operational', crewed:true, ammo:200, fuel:100, lat:40.4935, lon:-3.3358 }); renderCarrosTable(); renderC2Panel(); renderC2Map(); saveStateToStorage(); }
+function addCarroQuick() { addCarro(); }
+function removeCarro(idx) { CAMARWAR_STATE.carros.splice(idx,1); renderCarrosTable(); renderC2Panel(); renderC2Map(); saveStateToStorage(); }
+
+// v009 · Formación táctica aplica solo al bando activo (Prompt §5)
+function setFormation(f) {
+    if (!c2Map) return;
+    const baseLat = activeBand==='HOSTILE' ? 40.4925 : 40.4938;
+    const baseLon = activeBand==='HOSTILE' ? -3.3345 : -3.3362;
+    CAMARWAR_STATE.carros.filter(c => c.side===activeBand && c.status==='operational').forEach((c,i) => {
+        if (f==='cuña')        { c.lat=baseLat-i*0.00010; c.lon=baseLon-0.0004+i*0.00005; }
+        else if (f==='línea')   { c.lat=baseLat;            c.lon=baseLon-0.0006+i*0.00010; }
+        else if (f==='columna') { c.lat=baseLat-i*0.00008;  c.lon=baseLon; }
+        else if (f==='escalón') { c.lat=baseLat-i*0.00009;  c.lon=baseLon+i*0.00009; }
+    });
+    document.getElementById('c2-formation').textContent = f.toUpperCase();
+    renderC2Map(); saveStateToStorage();
+    pushLog('KINETIC', `${activeBand} · Formación ${f.toUpperCase()} aplicada · doctrina PD3-301 · ATP-3.2.1`, 'success');
+}
+
+function getStatePath(p) { return p.split('.').reduce((o,k)=>(o||{})[k], CAMARWAR_STATE); }
+function setStatePath(p, v) { const parts=p.split('.'); const last=parts.pop(); const o=parts.reduce((x,k)=>x[k], CAMARWAR_STATE); o[last]=v; }
+function bindConfigInputs() {
+    document.querySelectorAll('[data-state]').forEach(inp => {
+        const p=inp.dataset.state; inp.value=getStatePath(p)??'';
+        inp.addEventListener('change', () => {
+            const v=inp.type==='number'?Number(inp.value):inp.value;
+            setStatePath(p,v);
+            if (p==='fleet.operational' || p==='fleet.spare') { CAMARWAR_STATE.carros=generateCarros(CAMARWAR_STATE.fleet.operational, CAMARWAR_STATE.fleet.spare); renderCarrosTable(); renderC2Panel(); }
+            recalcAll(); saveStateToStorage(); toast('✓');
+        });
+    });
+}
+function renderStatePreview() { const el=document.getElementById('state-preview'); if (el) el.textContent = JSON.stringify(CAMARWAR_STATE, null, 2); }
+
+function timestamp() { const d=new Date(); const p=n=>String(n).padStart(2,'0'); return `${String(d.getFullYear()).slice(-2)}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`; }
+function exportConfig() { const fn=`CAMARWAR_v${timestamp()}.json`; const blob=new Blob([JSON.stringify(CAMARWAR_STATE,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=fn; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast('✓ '+fn); pushLog('SYS', 'Configuración exportada: '+fn, 'success'); }
+function importConfig(ev) { const f=ev.target.files[0]; if (!f) return; const r=new FileReader(); r.onload=e=>{ try { CAMARWAR_STATE=Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)),JSON.parse(e.target.result)); saveStateToStorage(); recalcAll(); bindConfigInputs(); renderProgramsTable(); renderOrbatTable(); renderIomtTable(); renderCarrosTable(); renderStatePreview(); toast('✓ Importado'); } catch(err) { toast('✗'); } }; r.readAsText(f); }
+function resetConfig() { if (!confirm('¿Restaurar?')) return; CAMARWAR_STATE=JSON.parse(JSON.stringify(DEFAULT_STATE)); saveStateToStorage(); recalcAll(); bindConfigInputs(); renderProgramsTable(); renderOrbatTable(); renderIomtTable(); renderCarrosTable(); renderStatePreview(); toast('✓ Reset'); }
+
+function recalcAll() {
+    const s=CAMARWAR_STATE;
+    const wScale=s.pricing.walkin/BASE_STATE.pricing.walkin;
+    const subScale=s.pricing.subscription/BASE_STATE.pricing.subscription;
+    const corpScale=s.pricing.corporate/BASE_STATE.pricing.corporate;
+    const fScale=s.fleet.operational/BASE_STATE.fleet.operational;
+
+    document.querySelectorAll('[data-bind="price-walkin"]').forEach(el=>el.textContent=s.pricing.walkin);
+    document.querySelectorAll('[data-bind="price-subscription"]').forEach(el=>el.textContent=s.pricing.subscription);
+    document.querySelectorAll('[data-bind="price-corporate"]').forEach(el=>el.textContent=s.pricing.corporate);
+    document.querySelectorAll('[data-bind="price-defense"]').forEach(el=>el.textContent=new Intl.NumberFormat('es-ES').format(s.pricing.defense_program));
+    // Nuevas modalidades LINCE-SIM
+    document.querySelectorAll('[data-bind="price-escaramuza"]').forEach(el=>el.textContent=s.pricing.escaramuza);
+    document.querySelectorAll('[data-bind="price-training"]').forEach(el=>el.textContent=s.pricing.training);
+    document.querySelectorAll('[data-bind="price-milsim"]').forEach(el=>el.textContent=new Intl.NumberFormat('es-ES').format(s.pricing.milsim));
+    document.querySelectorAll('[data-bind="price-campana"]').forEach(el=>el.textContent=new Intl.NumberFormat('es-ES').format(s.pricing.campana));
+    document.querySelectorAll('[data-bind="price-teamwork"]').forEach(el=>el.textContent=new Intl.NumberFormat('es-ES').format(s.pricing.teamwork));
+    document.querySelectorAll('[data-bind="fleet-op"]').forEach(el=>el.textContent=s.fleet.operational);
+    document.querySelectorAll('[data-bind="fleet-spare"]').forEach(el=>el.textContent=s.fleet.spare);
+
+    function rebind(prefix, scale) { ['y1','y2','y3','y4','y5'].forEach(y => document.querySelectorAll(`[data-bind="${prefix}-${y}"]`).forEach(el => { const b=+el.dataset.base; if (!isNaN(b)) el.textContent=Math.round(b*scale*fScale); })); }
+    rebind('rev-b2c', wScale); rebind('rev-sub', subScale); rebind('rev-corp', corpScale);
+
+    ['y1','y2','y3','y4','y5'].forEach(y => {
+        const tot = ['rev-b2c','rev-sub','rev-corp','rev-def'].reduce((s,p) => s + (+(document.querySelector(`[data-bind="${p}-${y}"]`)?.textContent||0)), 0);
+        const totEl=document.querySelector(`[data-bind="rev-tot-${y}"]`); if (totEl) totEl.textContent=tot;
+        const m={ y1:0.24, y2:0.39, y3:0.48, y4:0.49, y5:0.51 }[y];
+        const eb=document.querySelector(`[data-bind="ebitda-${y}"]`); if (eb) eb.textContent=Math.round(tot*m);
+    });
+
+    const e1=+(document.querySelector('[data-bind="ebitda-y1"]')?.textContent||100);
+    const e2=+(document.querySelector('[data-bind="ebitda-y2"]')?.textContent||285);
+    const e3=+(document.querySelector('[data-bind="ebitda-y3"]')?.textContent||570);
+    const r1=+(document.querySelector('[data-bind="rev-tot-y1"]')?.textContent||410);
+    const r2=+(document.querySelector('[data-bind="rev-tot-y2"]')?.textContent||735);
+    const r3=+(document.querySelector('[data-bind="rev-tot-y3"]')?.textContent||1180);
+    document.querySelectorAll('[data-bind="exec-rev-y1"]').forEach(el=>el.textContent=r1);
+    document.querySelectorAll('[data-bind="exec-rev-y2"]').forEach(el=>el.textContent=r2);
+    document.querySelectorAll('[data-bind="exec-rev-y3"]').forEach(el=>el.textContent=r3);
+    document.querySelectorAll('[data-bind="exec-ebitda-y1"]').forEach(el=>el.textContent=e1);
+    document.querySelectorAll('[data-bind="exec-ebitda-y2"]').forEach(el=>el.textContent=e2);
+    document.querySelectorAll('[data-bind="exec-ebitda-y3"]').forEach(el=>el.textContent=e3);
+    document.querySelectorAll('[data-bind="exec-net-y1"]').forEach(el=>el.textContent=Math.round(e1*0.6));
+    document.querySelectorAll('[data-bind="exec-net-y2"]').forEach(el=>el.textContent=Math.round(e2*0.67));
+    document.querySelectorAll('[data-bind="exec-net-y3"]').forEach(el=>el.textContent=Math.round(e3*0.71));
+    document.querySelectorAll('[data-bind="kpi-ebitda-y3"]').forEach(el=>el.textContent=e3+' k€');
+
+    if (simMap) renderSimMap();
+    if (c2Map) renderC2Map();
+    if (iomtMap) renderIomtMap();
+    renderTally(); renderC2Panel(); renderIomtPanel(); renderProgramsBigTable(); renderStatePreview();
+}
+
+function renderManual() {
+    const el=document.getElementById('manual-content'); if (!el) return; const s=CAMARWAR_STATE;
+    el.innerHTML = `
+        <h1 class="text-4xl font-black uppercase mb-2">Manual · CAMARWAR v${s.meta.version}</h1>
+        <p class="text-gray-400 mb-6">Doctrina conjunta PDC-01(A) · AJP-3.2 EDB · ATP-3.2.1 · OSINT mayo 2026</p>
+
+        <div class="flex gap-2 mb-8 border-b border-white/10 pb-2 sticky top-14 bg-[var(--c2-bg-main)] z-10 flex-wrap">
+            <button class="btn-ghost-sm" onclick="document.getElementById('m-op').scrollIntoView({behavior:'smooth'})">📖 Operación</button>
+            <button class="btn-ghost-sm" onclick="document.getElementById('m-spec').scrollIntoView({behavior:'smooth'})">⚙ Especificaciones</button>
+            <button class="btn-ghost-sm" onclick="document.getElementById('m-doc').scrollIntoView({behavior:'smooth'})">🪖 Doctrina</button>
+            <button class="btn-ghost-sm" onclick="document.getElementById('m-iomt').scrollIntoView({behavior:'smooth'})">🤖 IoMT</button>
+        </div>
+
+        <!-- =============== 1. MANUAL DE OPERACIÓN =============== -->
+        <section id="m-op">
+        <h2 class="text-3xl font-black uppercase mt-8 mb-4 text-cyan-300">1 · Manual de Operación · MiniCzolgi v1</h2>
+
+        <h3>1.1 · Pre-flight checklist (5 min antes de cada misión)</h3>
+        <ul>
+            <li>1. Inspección visual exterior: chasis, paneles laminado, jaula antivuelco · ausencia de fisuras o grietas.</li>
+            <li>2. Verificar nivel de combustible (gasolina · Vanguard 570cc) · mín. 50% para misión 60 min.</li>
+            <li>3. Verificar nivel de aceite hidráulico · presión transmisión.</li>
+            <li>4. Tensado y limpieza de orugas de goma · ausencia de piedras o residuos en rodillos.</li>
+            <li>5. Test ignición remota (~200m alcance) y kill switch de emergencia.</li>
+            <li>6. Verificar marcador airsoft/paintball acoplado al cañón · munición y aire.</li>
+            <li>7. Test torreta giratoria sobre rodamientos · giro 360º libre.</li>
+            <li>8. Calibración receptor GPS / link MQTT al servidor C2 (<code>STANAG 4586</code> inspirado).</li>
+        </ul>
+
+        <h3>1.2 · Embarque y operación inicial</h3>
+        <ul>
+            <li>Embarque: por la parte trasera/superior · cuidado con jaula antivuelco.</li>
+            <li>EPI obligatorio: casco DOT/ECE · máscara facial integral · guantes · ropa larga.</li>
+            <li>Cinturones de seguridad ajustados antes de arranque.</li>
+            <li>Posición de manos: 2 palancas manuales · NO mirar abajo durante movimiento.</li>
+            <li>Arranque: pulsador interior · espera 10s estabilización antes de mover palancas.</li>
+        </ul>
+
+        <h3>1.3 · Conducción · 2 palancas manuales</h3>
+        <ul>
+            <li><strong>Avance recto:</strong> ambas palancas hacia delante con presión equivalente.</li>
+            <li><strong>Retroceso:</strong> ambas palancas hacia atrás.</li>
+            <li><strong>Giro derecha:</strong> palanca izquierda hacia delante · derecha neutra (o atrás para giro sobre eje).</li>
+            <li><strong>Giro izquierda:</strong> palanca derecha hacia delante · izquierda neutra.</li>
+            <li><strong>Giro 360º sobre eje (pivot):</strong> palancas en sentido opuesto · velocidad reducida.</li>
+            <li>Velocidad limitada hidráulicamente a 7 km/h · no forzar.</li>
+        </ul>
+
+        <h3>1.4 · Operación de torreta y armamento</h3>
+        <ul>
+            <li>Torreta rotativa sobre rodamientos · giro 360º independiente del chasis.</li>
+            <li>Cañón con elevación manual (asc/desc) accionada por palanca lateral.</li>
+            <li>Marcador airsoft/paintball: gatillo en el panel frontal · munición desde alimentador.</li>
+            <li>Modo simulación de fuego: relámpago LED + buzzer al disparar · sensor láser opcional.</li>
+        </ul>
+
+        <h3>1.5 · Procedimientos de emergencia</h3>
+        <ul>
+            <li><strong>Avería motor:</strong> kill switch interior · activar baliza de socorro · esperar marshal.</li>
+            <li><strong>Vuelco:</strong> mantener cinturones · NO salir · esperar equipo de recuperación.</li>
+            <li><strong>Pérdida link C2:</strong> proceder a punto de control más cercano · señalización visual.</li>
+            <li><strong>Fuego/humo:</strong> kill switch · evacuación inmediata · extintor en estación de campo.</li>
+            <li><strong>Médica:</strong> baliza marshal · MEDEVAC desde estación de campo (<5 min).</li>
+        </ul>
+
+        <h3>1.6 · Post-mission · checklist apagado</h3>
+        <ul>
+            <li>1. Detener vehículo en zona de repostaje (FARP).</li>
+            <li>2. Apagado por encendido remoto · verificar que motor está parado.</li>
+            <li>3. Repostaje gasolina + aceite hidráulico si necesario.</li>
+            <li>4. Limpieza orugas de goma · retirar piedras/lodo.</li>
+            <li>5. Inspección post-misión · log incidencias en BMS-LINCE.</li>
+            <li>6. AAR (After Action Review) con marshals · 15 min.</li>
+        </ul>
+        </section>
+
+        <!-- =============== 2. ESPECIFICACIONES TÉCNICAS =============== -->
+        <section id="m-spec">
+        <h2 class="text-3xl font-black uppercase mt-12 mb-4 text-cyan-300">2 · Especificaciones Técnicas · Mantenimiento</h2>
+
+        <h3>2.1 · Datos de fabricante (ELGO-PLUS / MiniCzolgi PL · OSINT verificado)</h3>
+        <ul>
+            <li><strong>Motor:</strong> Briggs &amp; Stratton Vanguard 2-cilindros · 570 cm³ · 18 HP · gasolina</li>
+            <li><strong>Transmisión:</strong> hidráulica · controlada por 2 palancas manuales</li>
+            <li><strong>Dimensiones:</strong> 2,30 m (L) × 1,10 m (A) × 1,45–1,50 m (Alt)</li>
+            <li><strong>Masa operativa:</strong> 700 kg</li>
+            <li><strong>Velocidad máx.:</strong> ~7 km/h (limitada hidráulicamente por seguridad)</li>
+            <li><strong>Construcción:</strong> chasis acero pintura epoxi en polvo · paneles laminado reforzado</li>
+            <li><strong>Torreta:</strong> rotativa sobre rodamientos · giro 360º</li>
+            <li><strong>Cañón:</strong> elevación manual (asc/desc) · soporte marcador airsoft/paintball</li>
+            <li><strong>Sistemas seguridad:</strong> cinturón, jaula antivuelco, kill switch, encendido/apagado remoto (~200m)</li>
+        </ul>
+        <p class="text-xs text-gray-500 italic">Fuente: <a href="https://miniczolgi.pl/" target="_blank" class="program-link">miniczolgi.pl</a> · <a href="https://elgoplus.com/" target="_blank" class="program-link">elgoplus.com</a></p>
+
+        <h3>2.2 · Mantenimiento preventivo (1er escalón · tripulación)</h3>
+        <ul>
+            <li><strong>Diario / pre-misión:</strong> checklist 5 min, niveles aceite/combustible, presión orugas, kill switch.</li>
+            <li><strong>Cada 25 h operación:</strong> cambio aceite motor Vanguard (SAE 30 / 10W-30), filtro aire seco.</li>
+            <li><strong>Cada 50 h:</strong> bujías Vanguard (NGK BPR4ES o equivalente), inspección bobina.</li>
+            <li><strong>Cada 100 h:</strong> revisión hidráulica completa · presión bombas · cambio fluido si pérdida >5%.</li>
+            <li><strong>Cada 200 h:</strong> tensado profundo orugas · revisión rodillos · engrase rodamientos torreta.</li>
+        </ul>
+
+        <h3>2.3 · Stock de recambios crítico</h3>
+        <ul>
+            <li>Orugas de goma · 2 juegos completos por flota (4 carros × 2 = 8 orugas)</li>
+            <li>Filtros aire/aceite · pack 10 unidades</li>
+            <li>Bujías Vanguard · 8 unidades</li>
+            <li>Mangueras presión hidráulica · set repuesto rápido</li>
+            <li>Aceite hidráulico ISO VG 46 · 20L</li>
+            <li>Aceite motor SAE 30 · 10L</li>
+            <li>Gasolina sin plomo 95 · pre-cargado en FARP (≥100L)</li>
+            <li>Repuestos torreta: rodamientos cónicos, pasadores, sellos</li>
+            <li>BBs biodegradables 0,28-0,32g · 100.000 unidades</li>
+            <li>Baterías sello (encendido remoto) · pack 4u · LiFePO4</li>
+        </ul>
+
+        <h3>2.4 · Escalones de mantenimiento (doctrina ET adaptada)</h3>
+        <ul>
+            <li><strong>1er escalón (Tripulación):</strong> preventivo diario · limpieza · cambio filtros · niveles.</li>
+            <li><strong>2º escalón (Mecánico interno):</strong> reparaciones por sustitución (motor, bomba hidráulica) en &lt;2h en campo.</li>
+            <li><strong>3er escalón (Taller propio CAMARWAR):</strong> reparaciones mayores · soldaduras chasis · electrónica BMS.</li>
+            <li><strong>4º escalón (Industrial · ELGO-PLUS Polonia):</strong> overhaul completo · reconstrucción · garantía.</li>
+        </ul>
+
+        <h3>2.5 · MTBF / disponibilidad operacional objetivo</h3>
+        <ul>
+            <li>MTBF (Mean Time Between Failures): >500 h operación</li>
+            <li>Disponibilidad operativa: >85% (16 op + 4 reserva = redundancia 25%)</li>
+            <li>Tiempo medio reparación 2º escalón: &lt;2 h</li>
+            <li>Tiempo medio reparación 3er escalón: &lt;48 h</li>
+        </ul>
+        </section>
+
+        <!-- =============== 3. DOCTRINA =============== -->
+        <section id="m-doc">
+        <h2 class="text-3xl font-black uppercase mt-12 mb-4 text-cyan-300">3 · Doctrina · Empleo de Carros de Combate</h2>
+
+        <h3>3.1 · Los Tres Pilares del Carro de Combate</h3>
+        <ul>
+            <li><strong>Potencia de Fuego:</strong> capacidad de destruir objetivos a largas distancias con precisión, día/noche.</li>
+            <li><strong>Movilidad:</strong> velocidad punta + movilidad táctica (terrenos difíciles) + estratégica (transporte al teatro).</li>
+            <li><strong>Protección:</strong> blindaje pasivo + reactivo + sistemas de protección activa (APS) para que la tripulación sobreviva.</li>
+        </ul>
+
+        <h3>3.2 · Principios Operativos Fundamentales</h3>
+        <h4>A · Acción de Armas Combinadas (Combined Arms)</h4>
+        <ul>
+            <li><strong>Infantería mecanizada:</strong> limpia zonas donde el carro no ve · protege en ambientes urbanos/cerrados.</li>
+            <li><strong>Artillería:</strong> suprime defensas antes del asalto (Obuses 155mm M109).</li>
+            <li><strong>Apoyo aéreo / drones:</strong> reconocimiento y destrucción más allá del horizonte.</li>
+        </ul>
+        <h4>B · Masa y Concentración</h4>
+        <p>Los carros no se "gotean": se agrupan para lograr una <strong>ruptura en un punto decisivo</strong>. Concentración → choque + velocidad → sobrepasar defensas.</p>
+        <h4>C · Sorpresa y Rapidez · Ciclo OODA</h4>
+        <p><strong>Observar · Orientar · Decidir · Actuar.</strong> El carro busca golpear antes de que el enemigo reaccione, explotando la brecha para sembrar caos en la retaguardia (Blitzkrieg evolucionado).</p>
+
+        <h3>3.3 · Tipos de Operaciones</h3>
+        <h4>Ofensivas</h4>
+        <ul>
+            <li><strong>Movimiento para el contacto:</strong> localizar al enemigo manteniendo capacidad de despliegue.</li>
+            <li><strong>Ataque precipitado o deliberado:</strong> romper la línea defensiva.</li>
+            <li><strong>Explotación:</strong> los carros avanzan profundamente para destruir centros mando/logística.</li>
+            <li><strong>Persecución:</strong> no permitir reagrupación enemiga.</li>
+        </ul>
+        <h4>Defensivas</h4>
+        <ul>
+            <li><strong>Defensa Elástica:</strong> ceder terreno para desgastar al enemigo · contraataque con reserva móvil acorazada.</li>
+            <li><strong>Defensa en Posición:</strong> carros en posiciones desenfiladas (solo asoma cañón) → artillería de precisión corto alcance.</li>
+        </ul>
+
+        <h3>3.4 · El Pilar Español · Leopardo 2E</h3>
+        <p>La doctrina española gira en torno al <strong>Leopardo 2E</strong> (versión del Leopard 2A6 alemán, fabricado en España, ~60T, ~11M€/u). Es el activo principal para la <strong>acción de choque</strong>.</p>
+        <ul>
+            <li><strong>Función:</strong> capacidad de fuego resolutiva + maniobra ágil para romper líneas o frenar invasión vía contraataque.</li>
+            <li><strong>Unidades clave (BICC):</strong> integrados principalmente en <strong>BRIAC XII "Guadarrama"</strong>, BRIMZ I "Aragón", BRIMZ XI "Extremadura" y BRI X "Guzmán el Bueno".</li>
+        </ul>
+
+        <h3>3.5 · Organización · Grupos Tácticos (GT) y Subgrupos (SGT)</h3>
+        <h4>SGT · nivel compañía</h4>
+        <ul>
+            <li>1 compañía Leopardo 2E (13 carros) · NÚCLEO</li>
+            <li>1 sección de fusileros en VCI Pizarro · INFANTERÍA</li>
+            <li>Equipo de zapadores (brechas en campos minas/obstáculos) · INGENIEROS</li>
+            <li>Equipo observadores artillería (155mm) · ENLACE FUEGOS</li>
+        </ul>
+        <p class="text-xs text-gray-500 italic">Interoperabilidad: la infantería protege carros en zonas cerradas (bosques, pueblos); los carros abren paso en terreno abierto.</p>
+
+        <h3>3.6 · La Sección de Carros · 4 Leopardo 2E</h3>
+        <ul>
+            <li><strong>Mando de Sección:</strong> Carros 101 y 102 (1er binomio).</li>
+            <li><strong>Segundo Escalón:</strong> Carros 103 y 104 (2º binomio).</li>
+        </ul>
+
+        <h4>Formaciones tácticas (PD3-301 / ATP-3.2.1)</h4>
+        <table class="w-full text-sm mt-3 mb-4 border-collapse">
+            <thead class="text-xs uppercase text-gray-500 border-b border-white/10"><tr><th class="text-left p-2">Formación</th><th class="text-left p-2">Uso principal</th><th class="text-left p-2">Ventaja</th></tr></thead>
+            <tbody class="divide-y divide-white/5">
+                <tr><td class="p-2 font-bold">▮ Columna</td><td class="text-gray-400">Desplazamientos por carreteras</td><td>Máxima velocidad y control</td></tr>
+                <tr><td class="p-2 font-bold">━ Línea</td><td class="text-gray-400">Asalto final / cruce de crestas</td><td>Máxima potencia fuego frontal</td></tr>
+                <tr><td class="p-2 font-bold">▶ Cuña</td><td class="text-gray-400">Avance terreno abierto · amenaza frontal</td><td>Equilibrio fuego + flanqueo</td></tr>
+                <tr><td class="p-2 font-bold">⌐ Escalón</td><td class="text-gray-400">Protección flanco expuesto</td><td>Reacción rápida amenaza lateral</td></tr>
+            </tbody>
+        </table>
+
+        <h3>3.7 · Procedimientos · "Drill" español</h3>
+        <h4>A · Salto de Rana (Bounding Overwatch)</h4>
+        <p>Mientras una sección permanece estática en posición desenfilada (solo asoma torre) <strong>dando cobertura</strong>, la otra avanza a la siguiente posición cubierta. <strong>Nunca se mueve toda la unidad a la vez si hay amenaza.</strong></p>
+        <h4>B · Acción ante el contacto</h4>
+        <ul>
+            <li><strong>Fuego y movimiento:</strong> el carro recibido lanza botes fumígenos · maniobra evasiva · resto sección busca origen del fuego.</li>
+            <li><strong>Búsqueda del flanco:</strong> evitar choque frontal · fijar al enemigo por el frente · maniobrar elemento de ataque por flanco débil.</li>
+        </ul>
+        <h4>C · Tiro de Carro · prioridades</h4>
+        <ul>
+            <li><strong>Inmediatas:</strong> carros enemigos, equipos con misiles ATGM.</li>
+            <li><strong>Secundarias:</strong> vehículos transporte tropas.</li>
+            <li><strong>Infantería:</strong> con ametralladoras coaxiales (MG3 7,62mm).</li>
+        </ul>
+
+        <h3>3.8 · Munición · cañón 120mm L55</h3>
+        <ul>
+            <li><strong>APFSDS-T (Flecha · DM53/DM63):</strong> energía cinética · barra de tungsteno >1.700 m/s · contra carros · perfora por presión/calor.</li>
+            <li><strong>HE Programable (DM11):</strong> espoleta programable en 3 modos:
+                <ul>
+                    <li>Impacto · detona al tocar</li>
+                    <li>Retardo · perfora muro y detona dentro</li>
+                    <li>Airburst · explosión aérea sobre trinchera</li>
+                </ul>
+            </li>
+            <li><strong>Ametralladora MG3:</strong> 7,62mm · ~4.750 granallas por carro.</li>
+        </ul>
+        <h4>Estiba · seguridad tripulación</h4>
+        <ul>
+            <li><strong>Nicho de torre (15 proyectiles):</strong> con paneles de expulsión (blow-out) · explosión sale arriba.</li>
+            <li><strong>Depósito casco (27 proyectiles):</strong> izquierda del conductor · reserva principal.</li>
+        </ul>
+
+        <h3>3.9 · BMS-LINCE · Sistema de Gestión de Combate</h3>
+        <ul>
+            <li>Pantalla táctil para jefe de carro · mapa digital tiempo real.</li>
+            <li><strong>Blue Force Tracking (BFT):</strong> posición vehículos propios · evita fuego amigo.</li>
+            <li><strong>Marcado de objetivos:</strong> un carro detecta enemigo → aparece en pantalla de todos los carros de la unidad.</li>
+            <li><strong>Disparo a objetivos no vistos:</strong> si compañero localiza, tú puedes engranar fuego coordinado.</li>
+            <li><strong>Radio PR4G:</strong> salto de frecuencia · cifrado · voz + datos.</li>
+            <li><strong>Net-Fires:</strong> envío directo de coordenadas GPS a batería 155mm M109 sin radio voz.</li>
+        </ul>
+
+        <h3>3.10 · Logística · Trenes de Combate</h3>
+        <ul>
+            <li><strong>TC1 (Tren Combate Corto):</strong> detrás de los carros · munición + combustible 1 día + reparación ligera.</li>
+            <li><strong>TC2 (Tren Combate Largo):</strong> retaguardia brigada · ambulancias blindadas + suministros + repuestos pesados.</li>
+            <li><strong>FARP (Forward Arming &amp; Refueling Point):</strong> puntos repostaje en vanguardia · maniobra clave.</li>
+        </ul>
+        <p class="text-xs text-gray-500 italic">Nota crítica doctrinal: un carro sin combustible es un búnker de hierro inútil.</p>
+
+        <h3>3.11 · Mantenimiento de campaña · Vehículo "Búfalo"</h3>
+        <p>Bergepanzer 3 (Leopardo sin torre) · grúa 30T · cabrestante de gran potencia.</p>
+        <ul>
+            <li><strong>Extracción bajo fuego:</strong> remolca carro averiado fuera de zona muerte.</li>
+            <li><strong>Taller móvil en vanguardia:</strong> evita retroceso a retaguardia.</li>
+            <li><strong>Hito doctrinal:</strong> equipo 2º escalón español puede cambiar motor completo (EuroPowerPack) en &lt;35 min en campaña.</li>
+        </ul>
+
+        <h3>3.12 · Mando de Misión · Mission Command</h3>
+        <p>Tradición occidental aplicada en ET español:</p>
+        <ul>
+            <li>El mando superior da la <strong>finalidad</strong> ("qué" + "para qué").</li>
+            <li>El comandante de carro decide el <strong>"cómo"</strong> sobre el terreno.</li>
+            <li>Vital cuando los segundos cuentan y las comunicaciones pueden ser interferidas.</li>
+        </ul>
+
+        <h3>3.13 · Desafío Moderno (2026)</h3>
+        <ul>
+            <li><strong>Drones FPV y municiones merodeadoras:</strong> obligan a "jaulas" de protección + EW portátil en cada vehículo.</li>
+            <li><strong>Transparencia del campo de batalla:</strong> casi imposible ocultar agrupación de carros desde el aire → movimientos dispersos hasta el momento crítico.</li>
+            <li><strong>Lecciones Ucrania (2022-2026):</strong> EW para anular drones · redes camuflaje multiespectral para ocultar firma térmica del motor.</li>
+            <li><strong>Hito 13-04-2026:</strong> Ucrania capturó posición rusa solo con UGV+UAV (Ironclad de Roboneers + Shablya M2 · 5ª Bde Asalto).</li>
+        </ul>
+
+        <h3>3.14 · Fuerza 35 / BRIEX 2035</h3>
+        <ul>
+            <li><strong>Integración drones:</strong> Leopardos coordinados con drones reconocimiento para detectar amenazas anticarro fuera del radio.</li>
+            <li><strong>BMS-LINCE:</strong> cada carro ve aliados + enemigos detectados en pantalla tiempo real.</li>
+            <li><strong>BRIEX 2035 = BRILEG II "Rey Alfonso XIII"</strong> (Viator, Almería) · test bench de la Fuerza 35.</li>
+            <li><strong>Plataforma principal:</strong> VCR 8x8 Dragón (TESS Defence: Indra+EM&E+SAPA+GD-Santa Bárbara · 348 unidades programa · 40 entregadas 16-ene-2026).</li>
+        </ul>
+
+        <h3>3.15 · Cumplimiento doctrinal · referencias OSINT</h3>
+        <ul>
+            <li><a href="https://publicaciones.defensa.gob.es/media/downloadable/files/links/p/d/pdc-01_a_doctrina_para_el_empleo_de_las_fas.pdf" target="_blank">PDC-01(A) Doctrina FAS · ISBN 978-84-9091-318-5</a></li>
+            <li>PD1-001 Empleo Fuerzas Terrestres · PD2-001 Operaciones · PD2-002 Funciones de Combate</li>
+            <li><a href="https://assets.publishing.service.gov.uk/media/62b45b2de90e0765cdf62e03/20220207-AJP3-2_EDB_Land_Ops.pdf" target="_blank">AJP-3.2 EDB · Allied Joint Doctrine for Land Operations</a></li>
+            <li>ATP-3.2.1 Allied Land Tactics (STANAG 2605) · maneuverist core: Find · Fix · Strike · Exploit</li>
+            <li>ATP-3.2.2 C2 of Allied Land Forces · ATP-3.2.1.3 Conduct of Land Tactical Operations</li>
+            <li>STANAG 4586 · UCS · Unmanned Control System</li>
+            <li>APP-6(D) / MIL-STD-2525B · simbología militar</li>
+            <li><a href="https://ejercito.defensa.gob.es/unidades/Madrid/briacxii/" target="_blank">BRIAC XII "Guadarrama" · "Aprisa, Duro, Lejos"</a></li>
+            <li><a href="https://ejercito.defensa.gob.es/estructura/briex_2035/" target="_blank">BRIEX 2035</a></li>
+        </ul>
+        </section>
+
+        <!-- =============== 4. IoMT (movido desde la pestaña IoMT v009 §2) =============== -->
+        <section id="m-iomt">
+        <h2 class="text-3xl font-black uppercase mt-12 mb-4 text-purple-300">4 · IoMT · Internet of Military Things</h2>
+
+        <p class="text-gray-300">Sección capturada de la antigua pestaña IoMT (eliminada en v009 §3). Documenta el hito ucraniano del 13 abril 2026 y las capacidades nacionales españolas en sistemas no tripulados, alineadas con los programas CDTI CPP, COINCIDENTE/DGEI, NATO DIANA y EDF.</p>
+
+        <h3>4.1 · Hito histórico · 214º Batallón Independiente de Asalto (Ucrania OPFOR)</h3>
+        <p>El <strong>13 de abril de 2026</strong>, el presidente Volodymyr Zelenskyy anunció oficialmente que las Fuerzas Armadas de Ucrania habían capturado por primera vez una posición rusa empleando <strong>exclusivamente plataformas no tripuladas</strong> (UAV + UGV), sin participación de infantería en el asalto y sin bajas amigas. La operación marca la transición histórica de los ataques "asistidos por robots" hacia la <strong>Guerra de Saturación Autónoma</strong>.</p>
+
+        <h4>El batallón</h4>
+        <p>El <strong>214º Batallón Independiente de Asalto</strong> (OPFOR · OPposing FORce) es la única unidad militar de Ucrania especializada como <em>opposing force</em> de adiestramiento. Fue creado en <strong>2016</strong> a iniciativa de instructores militares de Estados Unidos. Desde el inicio de la invasión rusa a gran escala en 2022, opera tanto en su rol de adiestramiento como en misiones de combate para repeler la agresión armada y restablecer la integridad territorial de Ucrania.</p>
+
+        <h4>Plataformas robóticas operadas</h4>
+        <ul>
+            <li><strong>Rys Pro</strong> (Lince Pro): UGV con torreta de ametralladora controlada remotamente — plataforma estrella del batallón.</li>
+            <li><strong>Ratel</strong> (Tejón): UGV multipropósito · logística + asalto.</li>
+            <li><strong>Termit</strong> (Termita): UGV de carga.</li>
+            <li><strong>Ardal</strong>: UGV de reconocimiento.</li>
+            <li><strong>Snake (Zmiy)</strong>: UGV táctico.</li>
+            <li><strong>Protector</strong>: UGV armado.</li>
+            <li><strong>Volya</strong> (Voluntad): UGV ligero.</li>
+            <li><strong>Ironclad</strong> (Roboneers) + módulo <strong>Shablya M2</strong>: torreta automática para fuego remoto.</li>
+        </ul>
+
+        <h4>Escala de la doctrina robótica ucraniana 2026</h4>
+        <ul>
+            <li><strong>Marzo 2026:</strong> +9.000 misiones UGV ejecutadas por las FAU (incremento 50% sobre febrero).</li>
+            <li><strong>Q1 2026 acumulado:</strong> >24.500 misiones UGV.</li>
+            <li><strong>H1 2026 plan:</strong> contratación de 25.000 UGVs adicionales para el frente.</li>
+            <li><strong>Comandante en Jefe:</strong> Oleksandr Syrskyi (datos de incremento mensual).</li>
+            <li><strong>Significancia estratégica:</strong> validación operativa de que <em>"el riesgo del personal puede minimizarse mediante automatización"</em>.</li>
+        </ul>
+
+        <p class="source-cite">📎 Fuente verificada: <a href="https://united24media.com/latest-news/for-the-first-time-ukrainian-unmanned-systems-capture-russian-position-without-infantry-or-losses-17874" target="_blank">United24 Media · "For the First Time, Ukrainian Unmanned Systems Capture Russian Position Without Infantry or Losses"</a></p>
+
+        <h3>4.2 · Capacidades de España en IoMT (verificadas OSINT mayo 2026)</h3>
+        <p class="text-sm text-gray-400 mb-3">Plataformas, programas y sistemas nacionales españoles relevantes para IoMT (Internet of Military Things). Cada entrada incluye enlace oficial verificado.</p>
+
+        <h4>UAS (Unmanned Aerial Systems)</h4>
+        <ul>
+            <li><strong><a href="https://www.airbus.com/en/products-services/defence/uas/sirtap" target="_blank">SIRTAP</a></strong> — UAS Táctico High Endurance (Airbus DS) · 1er vuelo 2026 · CEUS Moguer · contrato 2023 €500M+ por 9 sistemas (27 drones + 9 GCS) · 2 payloads simultáneos (electro-óptico + radar multimisión) · 750 kg · 21.000 ft · +20 h endurance · +2.000 km. ET solicita variante armada.</li>
+            <li><strong><a href="https://www.indracompany.com/" target="_blank">Tarsis · Aertec/Indra</a></strong> — UAS Clase I/II (programa RAPAZ) · En servicio · 49 unidades adjudicadas a Indra (que absorbió Aertec DAS en 2025). Variante <strong>Tarsis-W</strong> armada con micromisiles 50mm guiados por láser hasta 4 km · NATO Class I.</li>
+            <li><strong><a href="https://www.inta.es/" target="_blank">Milano · INTA</a></strong> — UAS Clase I (programa RAPAZ) · desarrollo del Instituto Nacional de Técnica Aeroespacial.</li>
+            <li><strong>Programa <a href="https://www.tecnologiaeinnovacion.defensa.gob.es/" target="_blank">RAPAZ</a></strong> — Paraguas MOD para UAS &lt;150 kg · activo · agrupa Tarsis y Milano y derivados.</li>
+        </ul>
+
+        <h4>UGV (Unmanned Ground Systems)</h4>
+        <ul>
+            <li><strong>Taurus · <a href="https://www.miriadglobal.com/" target="_blank">Miriad Global</a></strong> — UGV terrestre con IA, desarrollo 100% nacional · demostrador alineado con CDTI CPP · estaciones de drones embarcados.</li>
+            <li><strong><a href="https://www.cdti.es/" target="_blank">CDTI CPP Robot Terrestre</a></strong> — UGV pesado multipropósito autónomo · licitación abierta · ejecución 30 meses · presupuesto €11,9M · cofinanciación FEDER + MOD. Aplicaciones duales: ISR, evacuación médica, transporte logístico, ingeniería.</li>
+            <li><strong><a href="https://milremrobotics.com/" target="_blank">THeMIS · Milrem</a></strong> — UGV ligero (vía Escribano) · evaluación ET · potencial >100 unidades · multifunción (ISR / logístico / armado) ya operativo en otros ejércitos OTAN.</li>
+        </ul>
+
+        <h4>Plataformas tripuladas con potencial UGV / teleoperación</h4>
+        <ul>
+            <li><strong><a href="https://ejercito.defensa.gob.es/unidades/Madrid/briacxii/" target="_blank">Leopard 2E</a></strong> — MBT 60 T · ~239 unidades · BRIAC XII Guadarrama (BIC León I/61, GCAC Villaviciosa II/61) · BRIMZ Aragón I, BRIMZ Extremadura XI · en servicio + modernización en curso.</li>
+            <li><strong><a href="https://defence.indragroup.com/es/blog/vcr-8x8-dragon-el-salto-al-futuro-del-ejercito-de-tierra" target="_blank">VCR 8x8 "Dragón"</a></strong> — Vehículo Combate de Ruedas · consorcio TESS Defence (Indra + Escribano EM&E + SAPA + GD-Santa Bárbara) · 348 unidades programa total · <strong>40 primeras entregadas el 16-ene-2026</strong> · base de la Brigada Experimental BRIEX 2035.</li>
+            <li><strong>VCI Pizarro · ASCOD</strong> — IFV Phase II (incluye recuperación Castor) · en servicio · base potencial para teleoperación en programas duales.</li>
+        </ul>
+
+        <h4>Programas marco · financiación pública</h4>
+        <ul>
+            <li><strong><a href="https://www.tecnologiaeinnovacion.defensa.gob.es/es-es/presentacion/imasd/paginas/coincidente.aspx" target="_blank">Programa COINCIDENTE</a></strong> — DGEI (ex-DGAM) · hasta €600.000 por proyecto · contacto coincidente@oc.mde.es · temas 2026: loitering munitions, navegación GNSS-denied.</li>
+            <li><strong><a href="https://www.diana.nato.int/" target="_blank">NATO DIANA Challenge 2026</a></strong> — Challenge "Autonomy & Unmanned Systems" (cha-26-09) · 150 firmas seleccionadas · €100.000 Phase I · 16 accelerator sites + 200 test centres en 32 naciones.</li>
+            <li><strong><a href="https://defence-industry-space.ec.europa.eu/eu-defence-industry/european-defence-fund-edf_en" target="_blank">European Defence Fund 2026</a></strong> — "Battle Tank of the Future" · cierre Sep 2026.</li>
+            <li><strong><a href="https://eda.europa.eu/" target="_blank">EDA Sentinel Strike Challenge</a></strong> — loitering munitions swarm · €2M.</li>
+            <li><strong><a href="https://www.nif.fund/" target="_blank">NATO Innovation Fund</a></strong> — fondo €1.000M · inversiones rolling.</li>
+        </ul>
+
+        <h4>Comando ciber/espacio nacional</h4>
+        <ul>
+            <li><strong>MCCE</strong> — Mando Conjunto del Ciberespacio (Madrid) · DCO/OCO · CERT-FAS · SOC defensivo.</li>
+            <li><strong>MCOE Espacio</strong> — Mando Conjunto del Espacio (Torrejón) · vigilancia espacial · SST · activado 2020 · cooperación CMOE OTAN.</li>
+        </ul>
+
+        <h3>4.3 · Arquitectura IoMT 3-capas (CAMARWAR)</h3>
+        <ul>
+            <li><strong>EDGE (Borde):</strong> sensores LiDAR + cámaras + telemetría en cada carro · Autonomía Delegada para maniobras evasivas locales.</li>
+            <li><strong>RED (Network):</strong> protocolo MQTT/DDS sobre malla RF · Common Operational Picture compartida (STANAG 4586).</li>
+            <li><strong>GOV (Gobernanza):</strong> IA Battle Management System · ROE precargadas · fusión de sensores · reasignación automática del líder si es destruido.</li>
+        </ul>
+
+        <h3>4.4 · Doctrina de Targeting aplicada</h3>
+        <ul>
+            <li>Saturación autónoma · enjambres coordinados UAV+UGV (referencia UA 13-04-2026).</li>
+            <li>Targeting conjunto sin asalto físico de infantería · supresión por fuego remoto.</li>
+            <li>Human-on-the-loop · IA gobierna ejecución, humano supervisa intención.</li>
+            <li>Find · Fix · Strike · Exploit (ATP-3.2.1) aplicado a swarm autónomo.</li>
+            <li>Niebla de Guerra Digital · solo enemigos detectados aparecen en COP.</li>
+            <li>ROE precargadas · zonas neutrales protegidas · LOAC compliance.</li>
+        </ul>
+        </section>
+
+        <p class="text-xs text-gray-500 mt-8 italic">Manual generado ${new Date().toLocaleString('es-ES')} · estado v${s.meta.version} · ${s.fleet.operational}+${s.fleet.spare} carros · doctrina OSINT verificada mayo 2026.</p>
+    `;
+}
+
+// =============================================================
+// Init
+// =============================================================
+window.addEventListener('DOMContentLoaded', () => {
+    loadStateFromStorage();
+    bindConfigInputs();
+    renderProgramsTable(); renderOrbatTable(); renderIomtTable(); renderCarrosTable();
+    renderPhaseLadder(); renderTally(); renderFilters(); renderCoaList();
+    initSimMap(); initC2Map(); initIomtMap();
+    recalcAll();
+    // DTG ZULU live updater
+    setInterval(() => { const el=document.getElementById('dtg-zulu'); if (el) el.textContent = fmtZulu(new Date()); }, 1000);
+    // Initial logs
+    pushLog('SYS', 'CAMARWAR v008 boot · DIANA workbench loaded', 'success');
+    pushLog('DOC', 'Doctrina OSINT verificada: PDC-01(A) · AJP-3.2 EDB · ATP-3.2.1', 'info');
+    pushLog('INTEL', 'OOB ET cargado: 2 divisiones · 21 unidades · 7 amenazas', 'info');
+    pushLog('AUTO', 'CmdLog stream activo · acepta NLP via "tally/phase/turn/doctrina/help"', 'info');
+});
+</script>
+</body>
+</html>

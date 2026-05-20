@@ -1,0 +1,25 @@
+1. Introducción a la IA y su Contexto Estratégico
+• Comprender la evolución histórica de la IA y su influencia en las fuerzas armadas.
+• Identificar los principales campos de aplicación militar (guerra de la información, logística, reconocimiento, etc.).
+• Reconocer la importancia de la ética, la responsabilidad y la gobernanza en los sistemas inteligentes.
+2. Visión General de los Sistemas Inteligentes
+• Describir los tipos de inteligencia artificial (IA débil vs. IA fuerte, IA especializada).
+• Explorar los componentes de un sistema inteligente (sensores, datos, algoritmos, actuadores).
+• Analizar casos de uso reales en la defensa (detección de amenazas, optimización de recursos, soporte a la toma de decisiones).
+3. Herramientas generativas de IA actuales.
+4. Ética, restricciones, plagio, límites de creatividad, regulación y futuro de las herramientas generativas de IA.
+5. Datos y su Valor Estratégico
+• Entender la naturaleza de los datos militares (sensores, redes, satélites).
+• Aprender a recopilar, limpiar y organizar datos de manera sencilla.
+• Discutir la importancia de la calidad y la seguridad de los datos en la IA.
+6. Uso de la IA en entornos aislados
+7. Protocolos de comunicación usados en aplicaciones de IA
+8. RAG (retrieval augmented generation)
+9. Toma de Decisiones Asistida por IA
+• Explorar cómo la IA puede apoyar la toma de decisiones tácticas y estratégicas.
+• Analizar ejemplos de sistemas de soporte a la decisión (simulaciones, análisis predictivo).
+• Evaluar los beneficios y riesgos de integrar IA en procesos operativos.
+10. Planificación y Gestión de Proyectos de IA
+• Identificar los pasos clave para diseñar e implementar un proyecto de IA en el entorno militar (definición de objetivos, recolección de datos, pruebas piloto, despliegue, mantenimiento).
+• Diseñar un esquema de proyecto sencillo en grupos, con enfoque en la aplicación práctica.
+• Reflejar sobre la cultura organizacional necesaria para el éxito de iniciativas de IA.
