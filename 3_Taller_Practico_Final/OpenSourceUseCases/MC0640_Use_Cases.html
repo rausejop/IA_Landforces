@@ -197,6 +197,24 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 .app15-grid .lbl{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-mute);background:rgba(255,255,255,0.015)}
 .app15-grid .val{color:var(--fg)}
 @media(max-width:880px){.app15-grid{grid-template-columns:140px 1fr}}
+
+/* Copy-to-Word button on each UC card */
+.copy-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-dim);background:var(--bg-3);border:1px solid var(--line-hot);padding:4px 10px;border-radius:6px;cursor:pointer;transition:all 0.15s}
+.copy-btn:hover{color:white;background:var(--accent-2);border-color:var(--accent)}
+.copy-btn.ok{color:#4ade80;border-color:#16a34a;background:rgba(34,197,94,0.12)}
+.copy-btn svg{width:12px;height:12px}
+
+#toast{position:fixed;bottom:80px;right:24px;background:var(--bg-3);color:var(--fg);border:1px solid var(--line-hot);padding:12px 16px;border-radius:8px;font-size:0.88rem;box-shadow:0 4px 14px rgba(0,0,0,0.4);opacity:0;transform:translateY(8px);transition:all 0.2s;z-index:70;pointer-events:none;max-width:320px}
+#toast.show{opacity:1;transform:translateY(0)}
+#toast.ok{border-color:#16a34a}
+#toast.err{border-color:#dc2626}
+
+/* Technical Report cover strip */
+.doc-control{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;padding:14px 18px;background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:8px;font-family:var(--font-mono);font-size:0.78rem}
+.doc-control .field{display:flex;flex-direction:column;gap:2px;min-width:120px}
+.doc-control .field .l{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--fg-mute)}
+.doc-control .field .v{color:var(--fg)}
+.doc-control .field.cls{justify-content:center}
 </style>
 </head>
 <body>
@@ -219,6 +237,8 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
     <symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
     <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
     <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
   </defs>
 </svg>
 
@@ -232,24 +252,28 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
       </span>
     </div>
     <nav class="topnav">
-      <a href="#about">About</a>
-      <a href="#constraints">Constraints</a>
-      <a href="#echelons">Echelons</a>
-      <a href="#use-cases">Use Cases</a>
-      <a href="#serials">Serials</a>
-      <a href="#references">References</a>
+      <a href="#exec">§1 Summary</a>
+      <a href="#acronyms">§2 Acronyms</a>
+      <a href="#about">§3 Intro</a>
+      <a href="#constraints">§4 Constraints</a>
+      <a href="#vendors">§5 Vendors</a>
+      <a href="#echelons">§6 Echelons</a>
+      <a href="#use-cases">§7 Use Cases</a>
+      <a href="#serials">§8 Serials</a>
+      <a href="#references">§9 References</a>
     </nav>
   </div>
 </header>
 
 <section class="hero">
   <div class="wrap">
-    <div class="eyebrow">ALLIED COMMAND OPERATIONS · NATO LAND FORCES</div>
-    <h1 class="h1">Information Exchange Use Cases for the Land Tactical C2 Profile</h1>
-    <p class="lede">Combinatorial visualisation of Use Cases (UC-NNN) against the Information Exchange Requirement (IER) tables in <strong>ANNEX C to Draft MC 0640</strong>, the document that supersedes STANAG 5048. <strong>Scope: Brigade and below</strong> — MC 0640 is the Land Tactical CIS directive; Division/Corps/LANDCOM appear only as upstream reach-back, not as UC subjects (that level belongs to MC 0593). The mission profile is <strong>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</strong>; technical realisation is constrained by lessons learned from the STEADFAST COBALT exercise series and by NISP Baseline 16.</p>
+    <div class="eyebrow">TECHNICAL REPORT · ALLIED COMMAND OPERATIONS · NATO LAND FORCES</div>
+    <h1 class="h1">Technical Report — CIS Communications Use Cases at Land Tactical Level</h1>
+    <p class="lede"><strong>Subject:</strong> Use Cases for the <em>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</em>, generated under <strong>NAF v4 + ADatP-47</strong> and applied to the Information Exchange Requirement tables of <strong>Annex C to Draft MC 0640</strong> (which supersedes STANAG 5048). <strong>Scope: Brigade and below.</strong> Division / Corps / LANDCOM appear only as upstream reach-back nodes — their primary UC content belongs to MC 0593. Technical realisation is constrained by the STEADFAST COBALT lessons learned and by NISP Baseline 16.</p>
     <div class="badge-row">
       <span class="badge">DRAFT MC 0640</span>
-      <span class="badge">AJP-6 Ed B v1</span>
+      <span class="badge">NAF v4 · ADatP-47</span>
+      <span class="badge">AJP-5 · AJP-6 Ed B v1</span>
       <span class="badge">AJP-3.2 Ed B</span>
       <span class="badge">NISP B16 · PFL-00403</span>
       <span class="badge">STANAG 4711 PCN</span>
@@ -258,13 +282,107 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
       <span class="badge">STANAG 4774 Labels</span>
       <span class="badge">STANAG 5527 NFFI</span>
     </div>
+    <div class="doc-control">
+      <div class="field"><span class="l">Document type</span><span class="v">Technical Report</span></div>
+      <div class="field"><span class="l">Issue</span><span class="v">v0.1 — DRAFT</span></div>
+      <div class="field"><span class="l">Issue date</span><span class="v">2026-05-20</span></div>
+      <div class="field"><span class="l">Authority</span><span class="v">LANDCOM CCIS Branch (proxy)</span></div>
+      <div class="field"><span class="l">UC method</span><span class="v">NAF v4 · ADatP-47</span></div>
+      <div class="field"><span class="l">Releasability</span><span class="v">NATO + Mission Partners</span></div>
+      <div class="field cls"><span class="l">Classification</span><span class="cls-tag cls-NU" style="margin-top:2px">NATO UNCLASSIFIED</span></div>
+    </div>
     <div class="stats-row" id="stats-row"><!-- populated by JS --></div>
+  </div>
+</section>
+
+<section class="section" id="exec">
+  <div class="wrap">
+    <div class="eyebrow">§ 1 · Executive Summary</div>
+    <h2 class="h2">What this report contains and how to read it</h2>
+    <p class="lede" style="margin-top:0;">This Technical Report presents 32 Use Cases for the Land Tactical CIS profile <strong>PFL-00403</strong>, drawn from the Information Exchange Requirement tables of <strong>Annex C to Draft MC 0640</strong>. Each UC is generated under the <strong>NAF v4 + ADatP-47</strong> methodology and grounded in <strong>AJP-5</strong> (Operational Planning) and <strong>AJP-6</strong> (CIS) doctrine.</p>
+    <p class="lede">Every UC card carries two parts: a <em>NAF v4 · ADatP-47 Specification Header</em> (formal IER ID, primary actor, goal, trigger, pre/postconditions, NAF view, FMN service, releasability, doctrinal basis) and a <em>14-row Operational Body</em> (the six IER dimensions plus equipment, time window, environment, zones, availability, classification, risk meter, and attack surface). The "Copy" button on each card emits a Word-ready HTML table — paste directly into a Word document.</p>
+    <div class="grid grid-3" style="margin-top:18px;gap:14px;">
+      <div class="card"><h3 class="h3" style="color:var(--accent);margin-bottom:6px;">Scope</h3><p style="color:var(--fg-dim);font-size:0.92rem;">Brigade · Battle Group · Company. MC 0640 covers LANDCOM downward; this report focuses on Bde-and-below. Upper echelons (Division, Corps, LANDCOM) appear only as upstream reach-back context.</p></div>
+      <div class="card"><h3 class="h3" style="color:var(--accent);margin-bottom:6px;">Method</h3><p style="color:var(--fg-dim);font-size:0.92rem;">NAF v4 NOV/NSOV views + ADatP-47 SysML-style UC packages. AJP-5 supplies commander's intent; AJP-6 mandates the service-oriented stance. STEADFAST COBALT supplies the technical constraints.</p></div>
+      <div class="card"><h3 class="h3" style="color:var(--accent);margin-bottom:6px;">Realisation</h3><p style="color:var(--fg-dim);font-size:0.92rem;">FMN Spiral 5 / NISP Baseline 16 services on a typical NATO stack: <strong>Systematic SitaWare</strong> on <strong>Klas Voyager</strong>, routed by <strong>Cisco ESR6300</strong>, into <strong>Thales Synaps</strong> / <strong>L3Harris AN/PRC-163</strong> SDRs, with <strong>Advenica / Fox-IT</strong> CDS at every NNI.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="acronyms">
+  <div class="wrap">
+    <div class="eyebrow">§ 2 · Acronyms &amp; Abbreviations</div>
+    <h2 class="h2">Terminology used in this report</h2>
+    <p class="lede" style="margin-top:0;margin-bottom:14px;">Per AP-06 (NATO Glossary of Terms) and AP-15 (Glossary of Allied Joint Publications). When in doubt, the AP-06/AP-15 definition prevails.</p>
+    <div class="grid grid-2" style="gap:10px;">
+      <div class="card" style="padding:14px 18px;">
+        <h3 class="h3" style="color:var(--accent);margin-bottom:8px;font-size:0.9rem;">Operational &amp; doctrine</h3>
+        <ul style="list-style:none;padding:0;font-size:0.86rem;line-height:1.7;color:var(--fg-dim);">
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ACO</strong> — Allied Command Operations</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">AJP</strong> — Allied Joint Publication</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">AOR</strong> — Area of Responsibility</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BFT</strong> — Blue Force Tracking</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BG</strong> — Battle Group</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BJFC / BGIFC / BFDC</strong> — Brigade / Battlegroup Joint Fires Cell / Brigade Fire Direction Centre</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CCIR</strong> — Commander's Critical Information Requirements</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CFST</strong> — Company-Level Fire Support Team</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CIFC / LIFC</strong> — Combined / Land Intelligence Fusion Cell</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">COIST</strong> — Company Intelligence Support Team</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CoI</strong> — Community of Interest</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">COP</strong> — Common Operational Picture</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">EW / EWCC</strong> — Electronic Warfare / EW Coordination Cell</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">HUMINT</strong> — Human Intelligence</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">IER</strong> — Information Exchange Requirement</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ISTAR</strong> — Intelligence, Surveillance, Target Acquisition, Reconnaissance</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">LANDCOM</strong> — Allied Land Command</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MTF</strong> — Message Text Format (APP-11)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">QRF</strong> — Quick Reaction Force</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">RFI</strong> — Request For Information</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SITREP / LOGSITREP</strong> — Situation Report / Logistics Situation Report</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">TET</strong> — Target Engagement Team</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">VJTF(L)</strong> — Very High Readiness Joint Task Force (Land)</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:14px 18px;">
+        <h3 class="h3" style="color:var(--accent);margin-bottom:8px;font-size:0.9rem;">CIS / networking / waveforms</h3>
+        <ul style="list-style:none;padding:0;font-size:0.86rem;line-height:1.7;color:var(--fg-dim);">
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">BGP-4</strong> — Border Gateway Protocol v4</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">C3</strong> — Consultation, Command &amp; Control</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">CDS</strong> — Cross-Domain Solution</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">DCIS</strong> — Deployable CIS</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">DSCP</strong> — Differentiated Services Code Point</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">ESSOR HDR</strong> — European Secure Software-defined Radio High Data Rate Waveform (STANAG 5651)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">FFH / EPM</strong> — Fast Frequency Hopping / Electronic Protection Measures</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">FMN</strong> — Federated Mission Networking</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">IGMPv3</strong> — Internet Group Management Protocol v3</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">LPI / LPD</strong> — Low Probability of Intercept / Detection</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MarLOS</strong> — Multi-channel Ad-hoc Relay LOS (STANAG 4691)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MELPe</strong> — Mixed Excitation Linear Prediction enhanced (STANAG 5634)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MIP4</strong> — Multilateral Interoperability Programme baseline 4</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">MNE</strong> — Mission Network Element</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NAF</strong> — NATO Architecture Framework</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NBWF</strong> — NATO Narrowband Waveform (STANAG 5630)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NFFI</strong> — NATO Friendly Force Information (STANAG 5527)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NFV</strong> — Network Functions Virtualization</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NISP</strong> — NATO Interoperability Standards and Profiles</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">NNI</strong> — Network-to-Network Interface</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PCN / PCR</strong> — Protected Core Networking / Protected Core Router (STANAG 4711)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PFL</strong> — Profile (NISP Baseline)</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">PTT</strong> — Push-To-Talk</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">RTP / UDP</strong> — Real-time Transport Protocol / User Datagram Protocol</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SATURN</strong> — Second-generation Anti-jam Tactical UHF Radio for NATO</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SDR</strong> — Software Defined Radio</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">SFF / SWaP-C</strong> — Small Form Factor / Size, Weight, Power, Cost</li>
+          <li><strong style="color:var(--fg);font-family:var(--font-mono);">XMPP</strong> — Extensible Messaging and Presence Protocol (RFC 6120/6121)</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="section" id="about">
   <div class="wrap">
-    <div class="eyebrow">§ 01 · About</div>
+    <div class="eyebrow">§ 3 · Introduction &amp; Doctrinal Basis</div>
     <h2 class="h2">What an IER is, and why every Use Case picks one</h2>
     <div class="grid grid-2">
       <div class="card">
@@ -326,7 +444,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="constraints">
   <div class="wrap">
-    <div class="eyebrow">§ 02 · STEADFAST COBALT lessons learned</div>
+    <div class="eyebrow">§ 4 · Technical Constraints — STEADFAST COBALT lessons learned</div>
     <h2 class="h2">Four constraint blocks that shape every Use Case</h2>
     <div class="grid grid-2">
       <div class="pillar">
@@ -355,7 +473,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="vendors">
   <div class="wrap">
-    <div class="eyebrow">§ 03 · Vendor ecosystem</div>
+    <div class="eyebrow">§ 5 · Vendor Ecosystem</div>
     <h2 class="h2">Who actually builds the boxes — four blocks of NATO suppliers</h2>
     <p class="lede" style="margin-bottom:20px;">No single vendor covers the full MC 0640 + FMN Spiral 5 + legacy/SDR matrix. The 32 allied nations procure across four blocks, with interoperability proven annually at <strong>CWIX</strong> and <strong>STEADFAST COBALT</strong>. UC cards below name representative products in the <em>Frequencies / Equipment</em> row.</p>
     <div class="grid grid-2">
@@ -402,7 +520,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="echelons">
   <div class="wrap">
-    <div class="eyebrow">§ 04 · Echelon ladder</div>
+    <div class="eyebrow">§ 6 · Echelon Profile</div>
     <h2 class="h2">MC 0640 scope — Brigade and below (LANDCOM/Corps shown as upstream context only)</h2>
     <div class="ladder" id="ladder"></div>
     <p class="lede" style="font-size:0.88rem;margin-top:14px;"><em>Note:</em> Platoon is intentionally not covered by MC 0640. LANDCOM/Corps/Division rungs are shown for context (reach-back targets) but their primary UC content belongs to MC 0593, not this deliverable.</p>
@@ -411,7 +529,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="use-cases">
   <div class="wrap">
-    <div class="eyebrow">§ 05 · Use Cases</div>
+    <div class="eyebrow">§ 7 · Use Cases</div>
     <h2 class="h2">32 representative Use Cases — Brigade, Battle Group, Company</h2>
     <p class="lede" style="margin-bottom:22px;">First-cut presentation. All 32 UCs sit within the MC 0640 scope (Brigade and below). They are fused with STEADFAST COBALT constraints, PFL-00403 technology choices, and real vendor products (Thales, L3Harris, Klas, Cisco, Systematic, Advenica). The full Annex C inventory (~700–800 Serials) lives in <code style="font-family:var(--font-mono);background:var(--bg-3);padding:1px 6px;border-radius:4px;border:1px solid var(--line);">serials/annexC_extracted.json</code>.</p>
 
@@ -438,7 +556,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="serials">
   <div class="wrap">
-    <div class="eyebrow">§ 06 · Serial inventory</div>
+    <div class="eyebrow">§ 8 · Serial Inventory</div>
     <h2 class="h2">Annex C Serials (sample) — 1:1 with Use Cases</h2>
     <p class="lede" style="margin-bottom:18px;">MC 0640 (Land) does not publish formal Serial identifiers the way MC 0195 (Maritime) does. We therefore treat each row of Annex C as one Serial S-NNN paired 1:1 with one Use Case UC-NNN. The full live mapping lives in <code>serials/annexC_extracted.json</code>.</p>
     <table class="uc-index">
@@ -450,7 +568,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 
 <section class="section" id="references">
   <div class="wrap">
-    <div class="eyebrow">§ 07 · References</div>
+    <div class="eyebrow">§ 9 · References</div>
     <h2 class="h2">Doctrine, profiles, and STANAGs cited</h2>
     <ul class="refs">
       <li><strong>Reference A —</strong> <a href="https://www.mindev.gov.gr/wp-content/uploads/2023/04/08-NCIA-ACQ-2023-06756.pdf" target="_blank" rel="noopener"><code>Draft MC 0640</code></a> — Minimum Level of CIS Capabilities at Land Tactical Level (replaces former STANAG 5048). Annex C carries the IER Specifications used here.</li>
@@ -483,6 +601,7 @@ footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
   </div>
 </footer>
 
+<div id="toast" role="status" aria-live="polite"></div>
 <button id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top">↑</button>
 
 <script>
@@ -1488,6 +1607,7 @@ function renderUcCards(list) {
           <span class="uc-serial">↔ ${uc.serial}</span>
           <span class="uc-echelon">${uc.band}</span>
           <span class="cls-tag cls-${uc.cls}" style="margin-left:auto;">${clsName(uc.cls)}</span>
+          <button class="copy-btn" onclick="copyUc('${uc.id}', this)" title="Copy this UC as a Word-ready table"><svg><use href="#i-copy"/></svg>Copy</button>
         </div>
         <div class="uc-title">${uc.title}</div>
         <div class="uc-sub">${linkifyVendors(uc.sub)}</div>
@@ -1576,6 +1696,163 @@ function renderQuickJump() {
   document.getElementById("uc-quickjump").innerHTML = USE_CASES.map(u =>
     `<a href="#${u.id}" class="band-${bandClass(u.band)}" title="${u.title.replace(/"/g,'&quot;')}">${u.id}</a>`
   ).join("");
+}
+
+/* ===========================================================
+   Copy UC table to clipboard (HTML + plain-text) for Word paste
+   =========================================================== */
+
+function stripHtml(s) {
+  if (s == null) return "";
+  return String(s).replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"');
+}
+
+function ucToHtmlTable(uc) {
+  const n = naf(uc);
+  const env = envLabel(uc.env);
+  const eq = uc.equipment.map(l => stripHtml(l)).join("<br/>");
+  const rows = [
+    ["UC ID",              uc.id],
+    ["Serial",             uc.serial],
+    ["Title",              uc.title],
+    ["Echelon",            uc.band],
+    ["Summary",            stripHtml(uc.sub)],
+    ["IER ID (NAF/ADatP-47)", n.ierId],
+    ["Version",            n.version],
+    ["Status",             n.status],
+    ["Issue date",         n.issueDate],
+    ["Originating authority", n.authority],
+    ["Primary actor",      stripHtml(n.primary)],
+    ["Secondary actors",   stripHtml(n.secondary)],
+    ["Goal (AJP-5)",       stripHtml(n.goal)],
+    ["Trigger event",      stripHtml(n.trigger)],
+    ["Preconditions",      stripHtml(n.preconditions)],
+    ["Postconditions",     stripHtml(n.postconditions)],
+    ["NAF view",           n.nafView],
+    ["ADatP-47 artifact",  n.adatp47],
+    ["FMN service",        n.fmnService],
+    ["Releasability",      n.releasability],
+    ["Doctrinal basis",    n.doctrinalBasis],
+    ["IER · Who",          stripHtml(uc.ier.who)],
+    ["IER · What",         stripHtml(uc.ier.what)],
+    ["IER · When",         stripHtml(uc.ier.when)],
+    ["IER · Protection",   stripHtml(uc.ier.protection)],
+    ["IER · Precedence",   uc.prec],
+    ["IER · Volume",       stripHtml(uc.ier.volume)],
+    ["Frequencies / Equipment", eq],
+    ["Time Window",        uc.timeWindow],
+    ["Environment",        env],
+    ["Zones, CoI",         uc.zones],
+    ["Availability",       uc.avail],
+    ["Classification",     `${uc.cls} — ${clsName(uc.cls)}`],
+    ["Risk (LPI/LPD)",     `${uc.lpi}/5 — ${RISK_LABEL[uc.lpi]} — ${RISK_NARR[uc.lpi]}`],
+    ["Attack Surface",     stripHtml(uc.attackSurface)]
+  ];
+  const tr = rows.map(([k,v]) =>
+    `<tr><td style="background:#f3f4f6;font-weight:bold;width:30%;padding:6px 8px;border:1px solid #999;vertical-align:top">${k}</td><td style="padding:6px 8px;border:1px solid #999;vertical-align:top">${String(v).replace(/\n/g,'<br/>')}</td></tr>`
+  ).join("");
+  return `<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-family:Calibri,Arial,sans-serif;font-size:11pt;width:100%;border:1px solid #555">
+<tr><td colspan="2" style="background:#1a2230;color:white;font-weight:bold;font-size:13pt;padding:8px;border:1px solid #555">${uc.id} — ${uc.title}</td></tr>
+${tr}
+</table>`;
+}
+
+function ucToPlainText(uc) {
+  const n = naf(uc);
+  const env = envLabel(uc.env);
+  const eq = uc.equipment.map(l => "  " + stripHtml(l)).join("\n");
+  const lines = [
+    `${uc.id} — ${uc.title}`,
+    `Serial: ${uc.serial}    Echelon: ${uc.band}`,
+    `Summary: ${stripHtml(uc.sub)}`,
+    "",
+    "--- NAF v4 / ADatP-47 Specification Header ---",
+    `IER ID:            ${n.ierId}`,
+    `Version:           ${n.version}   Status: ${n.status}   Issued: ${n.issueDate}`,
+    `Authority:         ${n.authority}`,
+    `Primary actor:     ${stripHtml(n.primary)}`,
+    `Secondary actors:  ${stripHtml(n.secondary)}`,
+    `Goal (AJP-5):      ${stripHtml(n.goal)}`,
+    `Trigger:           ${stripHtml(n.trigger)}`,
+    `Preconditions:     ${stripHtml(n.preconditions)}`,
+    `Postconditions:    ${stripHtml(n.postconditions)}`,
+    `NAF view:          ${n.nafView}`,
+    `ADatP-47 artifact: ${n.adatp47}`,
+    `FMN service:       ${n.fmnService}`,
+    `Releasability:     ${n.releasability}`,
+    `Doctrinal basis:   ${n.doctrinalBasis}`,
+    "",
+    "--- 14-row Operational Body ---",
+    ` 1. IER · Who:        ${stripHtml(uc.ier.who)}`,
+    ` 2. IER · What:       ${stripHtml(uc.ier.what)}`,
+    ` 3. IER · When:       ${stripHtml(uc.ier.when)}`,
+    ` 4. IER · Protection: ${stripHtml(uc.ier.protection)}`,
+    ` 5. IER · Precedence: ${uc.prec}`,
+    ` 6. IER · Volume:     ${stripHtml(uc.ier.volume)}`,
+    ` 7. Equipment:`,
+    eq,
+    ` 8. Time Window:      ${uc.timeWindow}`,
+    ` 9. Environment:      ${env}`,
+    `10. Zones, CoI:       ${uc.zones}`,
+    `11. Availability:     ${uc.avail}`,
+    `12. Classification:   ${uc.cls} — ${clsName(uc.cls)}`,
+    `13. Risk (LPI/LPD):   ${uc.lpi}/5 — ${RISK_LABEL[uc.lpi]} — ${RISK_NARR[uc.lpi]}`,
+    `14. Attack Surface:   ${stripHtml(uc.attackSurface)}`
+  ];
+  return lines.join("\n");
+}
+
+function showToast(msg, kind) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "show " + (kind || "ok");
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(() => { t.className = ""; }, 2500);
+}
+
+function copyUc(ucId, btn) {
+  const uc = USE_CASES.find(u => u.id === ucId);
+  if (!uc) return;
+  const html = ucToHtmlTable(uc);
+  const text = ucToPlainText(uc);
+
+  function ok() {
+    if (btn) {
+      btn.classList.add("ok");
+      btn.innerHTML = '<svg><use href="#i-check"/></svg>Copied';
+      setTimeout(() => {
+        btn.classList.remove("ok");
+        btn.innerHTML = '<svg><use href="#i-copy"/></svg>Copy';
+      }, 1800);
+    }
+    showToast(`${ucId} copied — paste into Word as a table.`, "ok");
+  }
+  function fail(err) {
+    showToast("Copy failed: " + (err && err.message ? err.message : "browser blocked"), "err");
+  }
+
+  if (navigator.clipboard && window.ClipboardItem) {
+    try {
+      const item = new ClipboardItem({
+        "text/html":  new Blob([html], { type: "text/html"  }),
+        "text/plain": new Blob([text], { type: "text/plain" })
+      });
+      navigator.clipboard.write([item]).then(ok).catch(fail);
+      return;
+    } catch (e) { /* fall through */ }
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(ok).catch(fail);
+    return;
+  }
+  // Last-resort fallback for very old browsers / file:// quirks
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand("copy"); ok(); } catch (e) { fail(e); }
+  document.body.removeChild(ta);
 }
 
 function setupTopButton() {
