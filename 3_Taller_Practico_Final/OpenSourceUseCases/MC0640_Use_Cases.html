@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MC0640 Use Cases — NATO Land Forces / PFL-00403</title>
+
+<!--
+  MC0640_Use_Cases.html — first-cut draft
+  PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"
+  Self-contained: hand-rolled CSS, inline SVG sprite, system fonts.
+  Production version will inline Tailwind 3.4.16, Lucide UMD, and base64
+  Outfit + JetBrains Mono fonts (see specs/specs.txt).
+-->
+
+<style>
+:root {
+  --bg:#0a0e14; --bg-2:#11161e; --bg-3:#1a2230; --bg-4:#232c3d;
+  --fg:#e6edf3; --fg-dim:#8b96a8; --fg-mute:#5a6678;
+  --line:#283142; --line-hot:#3a4658;
+  --accent:#4a9eff; --accent-2:#2d6cc0;
+  --gold:#d4a017; --gold-soft:rgba(212,160,23,0.18);
+
+  /* Classification palette — AstroUXDS/Pantone Standard-Form (NU/NR/NS).
+     MS has no canonical NATO colour; magenta is the FMN/AMN convention. */
+  --cls-NU-text:#22c55e; --cls-NU-border:#16a34a;
+  --cls-NR-text:#3b82f6; --cls-NR-border:#2563eb;
+  --cls-NS-text:#ef4444; --cls-NS-border:#dc2626;
+  --cls-MS-text:#d946ef; --cls-MS-border:#c026d3;
+
+  --env-Friend:#22c55e; --env-NotFriend:#ef4444; --env-Mixed:#d4a017;
+
+  --font-sans:'Outfit',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-mono:'JetBrains Mono','Cascadia Mono','SF Mono',Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--font-sans); font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  background-image:
+    radial-gradient(800px 400px at 80% -10%,rgba(74,158,255,0.06),transparent 60%),
+    radial-gradient(600px 300px at 5% 5%,rgba(212,160,23,0.04),transparent 60%);
+}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+.section{padding:56px 0 24px}
+.section + .section{border-top:1px dashed var(--line)}
+.eyebrow{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-mute);margin-bottom:10px}
+.h1{font-size:2.4rem;font-weight:700;line-height:1.1;letter-spacing:-0.01em}
+.h2{font-size:1.5rem;font-weight:700;line-height:1.2;margin-bottom:18px}
+.h3{font-size:1.05rem;font-weight:600;letter-spacing:0.01em}
+.lede{color:var(--fg-dim);font-size:1.02rem;max-width:880px;margin-top:14px}
+.grid{display:grid;gap:18px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:980px){.grid-3,.grid-4{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+
+.topbar{position:sticky;top:0;z-index:50;background:rgba(10,14,20,0.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{display:flex;align-items:center;gap:18px;padding:14px 28px;max-width:1280px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700}
+.brand .star{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#1a2230,#0a0e14);border:1px solid var(--line-hot);border-radius:8px;color:var(--accent)}
+.brand .titleblock{display:flex;flex-direction:column;line-height:1.1}
+.brand .titleblock .t1{font-size:0.95rem}
+.brand .titleblock .t2{font-size:0.68rem;letter-spacing:0.12em;color:var(--fg-mute);text-transform:uppercase}
+.topnav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.topnav a{color:var(--fg-dim);text-decoration:none;font-size:0.85rem;padding:8px 10px;border-radius:6px}
+.topnav a:hover{background:var(--bg-3);color:var(--fg)}
+
+.hero{padding:56px 0 36px}
+.hero .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.badge{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.08em;padding:4px 9px;border-radius:5px;border:1px solid var(--line-hot);color:var(--fg-dim);background:var(--bg-2)}
+
+/* Classification tag — mandatory styling per spec */
+.cls-tag{display:inline-block;font-family:var(--font-mono);font-weight:700;font-size:0.62rem;letter-spacing:0.06em;padding:1px 7px;border-radius:5px;border-width:1px;border-style:solid;text-transform:uppercase}
+.cls-NU{color:var(--cls-NU-text);border-color:var(--cls-NU-border);background:rgba(34,197,94,0.12)}
+.cls-NR{color:var(--cls-NR-text);border-color:var(--cls-NR-border);background:rgba(59,130,246,0.12)}
+.cls-NS{color:var(--cls-NS-text);border-color:var(--cls-NS-border);background:rgba(239,68,68,0.12)}
+.cls-MS{color:var(--cls-MS-text);border-color:var(--cls-MS-border);background:rgba(217,70,239,0.12)}
+
+.prec-tag{display:inline-block;font-family:var(--font-mono);font-weight:700;font-size:0.65rem;letter-spacing:0.08em;color:var(--gold);border:1px solid var(--gold);background:var(--gold-soft);padding:2px 8px;border-radius:5px;text-transform:uppercase}
+
+.card{background:linear-gradient(180deg,var(--bg-2),var(--bg-3));border:1px solid var(--line);border-radius:12px;padding:20px;position:relative}
+
+.pillar{background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:18px}
+.pillar h3{color:var(--fg);margin-bottom:8px}
+.pillar .kbd-list{font-family:var(--font-mono);font-size:0.78rem;color:var(--fg-dim)}
+.pillar .kbd-list span{display:inline-block;background:var(--bg-4);border:1px solid var(--line-hot);padding:1px 6px;border-radius:4px;margin:2px 4px 2px 0}
+
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:grid;grid-template-columns:180px 1fr auto;gap:14px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:var(--bg-2)}
+.rung .lbl{font-family:var(--font-mono);font-size:0.78rem;color:var(--fg-dim);letter-spacing:0.04em}
+.rung .desc{font-size:0.88rem;color:var(--fg)}
+.rung .tier{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.1em;padding:3px 8px;border-radius:4px}
+.tier-H{color:#4ade80;background:rgba(34,197,94,0.1);border:1px solid #16a34a}
+.tier-M{color:#facc15;background:rgba(212,160,23,0.12);border:1px solid #a16207}
+.tier-L{color:#fb923c;background:rgba(249,115,22,0.12);border:1px solid #c2410c}
+.rung.upstream{opacity:0.45;border-style:dashed}
+.rung.upstream .lbl::after{content:" · upstream";color:var(--fg-mute);font-size:0.7rem}
+
+.uc-card{background:linear-gradient(180deg,var(--bg-2) 0%,#131a25 100%);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden}
+.uc-head{display:flex;flex-direction:column;gap:8px;padding:20px 22px 14px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(74,158,255,0.06),transparent)}
+.uc-head-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.uc-id{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.1em;color:var(--accent)}
+.uc-serial{font-family:var(--font-mono);font-size:0.72rem;color:var(--fg-mute)}
+.uc-echelon{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;color:var(--fg-dim);border:1px solid var(--line-hot);padding:2px 8px;border-radius:5px}
+.uc-title{font-size:1.15rem;font-weight:700;color:var(--fg)}
+.uc-sub{font-size:0.88rem;color:var(--fg-dim)}
+
+.uc-rows{display:grid;grid-template-columns:200px 1fr;gap:0}
+.uc-rows .k,.uc-rows .v{padding:11px 18px;border-top:1px solid var(--line);font-size:0.9rem}
+.uc-rows .k{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-mute);background:rgba(255,255,255,0.015);align-self:stretch}
+.uc-rows .v{color:var(--fg)}
+.uc-rows .v .mono-sub{display:block;font-family:var(--font-mono);font-size:0.78rem;color:var(--fg-dim);margin-top:2px}
+.uc-rows .v .mono-sub.first{font-family:var(--font-sans);font-size:0.9rem;color:var(--fg);margin-top:0}
+
+.env-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.env-Friend{background:var(--env-Friend);box-shadow:0 0 8px var(--env-Friend)}
+.env-NotFriend{background:var(--env-NotFriend);box-shadow:0 0 8px var(--env-NotFriend)}
+.env-Mixed{background:var(--env-Mixed);box-shadow:0 0 8px var(--env-Mixed)}
+
+.risk{display:flex;flex-direction:column;gap:6px}
+.risk-meter{display:flex;gap:4px;align-items:center}
+.risk-meter .dot{width:12px;height:12px;border-radius:50%;background:var(--bg-4);border:1px solid var(--line-hot)}
+.risk-meter .dot.on{background:var(--gold);border-color:var(--gold);box-shadow:0 0 6px rgba(212,160,23,0.5)}
+.risk-meter .score{font-family:var(--font-mono);font-size:0.78rem;color:var(--fg-dim);margin-left:8px}
+.risk-label{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold);margin-left:10px}
+.risk-narr{font-size:0.85rem;color:var(--fg-dim);font-style:italic}
+
+.uc-index{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg-2)}
+.uc-index th,.uc-index td{text-align:left;padding:11px 14px;font-size:0.88rem;border-bottom:1px solid var(--line)}
+.uc-index th{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg-mute);background:var(--bg-3)}
+.uc-index tbody tr:last-child td{border-bottom:0}
+.uc-index tbody tr:hover{background:var(--bg-3)}
+.uc-index .mono{font-family:var(--font-mono);font-size:0.82rem;color:var(--fg-dim)}
+.uc-index a{color:var(--accent);text-decoration:none}
+.uc-index a:hover{text-decoration:underline}
+
+.refs{color:var(--fg-dim);font-size:0.88rem}
+.refs li{margin-bottom:6px}
+.refs code{font-family:var(--font-mono);font-size:0.82rem;background:var(--bg-3);padding:1px 6px;border-radius:4px;border:1px solid var(--line)}
+
+footer{margin-top:40px;padding:30px 0 50px;border-top:1px solid var(--line);color:var(--fg-mute);font-size:0.78rem}
+footer .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+
+.echelon-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.echelon-filter button{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;background:var(--bg-2);color:var(--fg-dim);border:1px solid var(--line-hot);padding:6px 12px;border-radius:6px;cursor:pointer}
+.echelon-filter button.active{background:var(--accent-2);color:white;border-color:var(--accent)}
+.echelon-filter button:hover{color:var(--fg)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="i-radio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"/></symbol>
+    <symbol id="i-network" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="star"><svg width="22" height="22"><use href="#i-star"/></svg></span>
+      <span class="titleblock">
+        <span class="t1">MC&nbsp;0640 Use Cases</span>
+        <span class="t2">PFL-00403 · FMN Spiral 5 · DRAFT</span>
+      </span>
+    </div>
+    <nav class="topnav">
+      <a href="#about">About</a>
+      <a href="#constraints">Constraints</a>
+      <a href="#echelons">Echelons</a>
+      <a href="#use-cases">Use Cases</a>
+      <a href="#serials">Serials</a>
+      <a href="#references">References</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">ALLIED COMMAND OPERATIONS · NATO LAND FORCES</div>
+    <h1 class="h1">Information Exchange Use Cases for the Land Tactical C2 Profile</h1>
+    <p class="lede">Combinatorial visualisation of Use Cases (UC-NNN) against the Information Exchange Requirement (IER) tables in <strong>ANNEX C to Draft MC 0640</strong>, the document that supersedes STANAG 5048. <strong>Scope: Brigade and below</strong> — MC 0640 is the Land Tactical CIS directive; Division/Corps/LANDCOM appear only as upstream reach-back, not as UC subjects (that level belongs to MC 0593). The mission profile is <strong>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</strong>; technical realisation is constrained by lessons learned from the STEADFAST COBALT exercise series and by NISP Baseline 16.</p>
+    <div class="badge-row">
+      <span class="badge">DRAFT MC 0640</span>
+      <span class="badge">AJP-6 Ed B v1</span>
+      <span class="badge">AJP-3.2 Ed B</span>
+      <span class="badge">NISP B16 · PFL-00403</span>
+      <span class="badge">STANAG 4711 PCN</span>
+      <span class="badge">STANAG 5651 ESSOR</span>
+      <span class="badge">STANAG 5630/5634 NBWF</span>
+      <span class="badge">STANAG 4774 Labels</span>
+      <span class="badge">STANAG 5527 NFFI</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="eyebrow">§ 01 · About</div>
+    <h2 class="h2">What an IER is, and why every Use Case picks one</h2>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:10px;">IER — Information Exchange Requirement</h3>
+        <p class="lede" style="margin-top:0;">Per AJP-6, an IER is a category of information that must be exchanged between operational facilities so commanders can decide. MC 0640 makes each IER answer six dimensions: <em>Who, What, When, Protection, Precedence, Volume</em>. In this project we treat each row of Annex C as one Serial (S-NNN) paired 1:1 with one Use Case (UC-NNN).</p>
+      </div>
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:10px;">14-row Use Case card</h3>
+        <p class="lede" style="margin-top:0;">Each UC card renders <strong>14 fields</strong> in fixed order — six IER dimensions, then equipment, time window, environment, zones/CoI, availability, classification, an LPI/LPD risk meter with a one-sentence narrative, and an attack-surface note. Mission classification overrides the IER's notional default.</p>
+      </div>
+    </div>
+
+    <h2 class="h2" style="margin-top:34px;">MC 0593 vs MC 0640 — why this site only shows the green band</h2>
+    <p class="lede" style="margin-top:0;">Both are NATO Military Committee directives, but the scopes do not overlap. This deliverable visualises <strong>only MC 0640</strong> (Brigade and below). LANDCOM, Corps and Division are shown only as upstream reach-back nodes — their primary UC content belongs to MC 0593.</p>
+    <table class="uc-index" style="margin-top:14px;">
+      <thead><tr><th></th><th>MC 0593</th><th>MC 0640 (this site)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Level</strong></td><td>Strategic + Operational (Joint HQ)</td><td>Tactical Land — LANDCOM↓, focus <strong>Bde and below</strong></td></tr>
+        <tr><td><strong>Domain</strong></td><td>Joint (all components)</td><td>Land only</td></tr>
+        <tr><td><strong>Aim</strong></td><td>Minimum C2 services + mission data structure</td><td>Minimum field connectivity + radios + tactical IP/network interop</td></tr>
+        <tr><td><strong>FMN role</strong></td><td>COI &amp; security-domain policy</td><td>How edge routers + waveforms inject IP into FMN</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="h2" style="margin-top:34px;">Classification palette (mandatory)</h2>
+    <div class="grid grid-4">
+      <div class="card" style="display:flex;align-items:center;gap:14px;">
+        <span class="cls-tag cls-NU">NU</span>
+        <div><strong>NATO Unclassified</strong><div style="color:var(--fg-dim);font-size:0.82rem;">#22c55e / #16a34a</div></div>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:14px;">
+        <span class="cls-tag cls-NR">NR</span>
+        <div><strong>NATO Restricted</strong><div style="color:var(--fg-dim);font-size:0.82rem;">#3b82f6 / #2563eb</div></div>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:14px;">
+        <span class="cls-tag cls-NS">NS</span>
+        <div><strong>NATO Secret</strong><div style="color:var(--fg-dim);font-size:0.82rem;">#ef4444 / #dc2626</div></div>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:14px;">
+        <span class="cls-tag cls-MS">MS</span>
+        <div><strong>Mission Secret</strong><div style="color:var(--fg-dim);font-size:0.82rem;">#d946ef / #c026d3 · FMN/AMN</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="constraints">
+  <div class="wrap">
+    <div class="eyebrow">§ 02 · STEADFAST COBALT lessons learned</div>
+    <h2 class="h2">Four constraint blocks that shape every Use Case</h2>
+    <div class="grid grid-2">
+      <div class="pillar">
+        <h3 class="h3"><svg width="14" height="14" style="vertical-align:-2px;margin-right:6px;"><use href="#i-network"/></svg>1. Day-Zero Protected Core Networking</h3>
+        <p style="color:var(--fg-dim);font-size:0.92rem;margin:8px 0 10px;">National units down to Brigade level must not route raw IP across boundaries. All cross-NNI data rides STANAG 4711 IPsec PCN tunnels over an agnostic black transport backbone. Every Brigade spins up a PCR mapped into the FMN Mission Network Element; NNI dynamic routing uses BGP-4.</p>
+        <div class="kbd-list"><span>STANAG 4711</span><span>PCR</span><span>BGP-4</span><span>NNI</span><span>Black transport</span></div>
+      </div>
+      <div class="pillar">
+        <h3 class="h3"><svg width="14" height="14" style="vertical-align:-2px;margin-right:6px;"><use href="#i-radio"/></svg>2. Echelon-tiered bandwidth &amp; protocol</h3>
+        <p style="color:var(--fg-dim);font-size:0.92rem;margin:8px 0 10px;">Corps/Div HQ: SATCOM + fibre, IPv4/IPv6 dual-stack, MIP4 baseline, full HD video. Bde/Bn: MarLOS STANAG 4691 + SATURN Ed.4 PRF-151 FFH for air-ground. Coy/Plt: XMPP for chat, AComP-5634 MELPe 2.4 kbps VARC half-duplex PTT. Standard VoIP is blocked at the edge.</p>
+        <div class="kbd-list"><span>STANAG 4691 MarLOS</span><span>SATURN Ed.4</span><span>STANAG 5651 ESSOR</span><span>STANAG 5634 NBWF</span><span>AComP-5634 MELPe</span><span>XMPP RFC 6120</span></div>
+      </div>
+      <div class="pillar">
+        <h3 class="h3"><svg width="14" height="14" style="vertical-align:-2px;margin-right:6px;"><use href="#i-lock"/></svg>3. NNI data integrity — STANAG 4774 labels + CDS</h3>
+        <p style="color:var(--fg-dim);font-size:0.92rem;margin:8px 0 10px;">"Weakest link" doctrine: a single tactical-CP compromise at a small nation can traverse the federated core. Inter-nation boundaries enforce Cross-Domain Solutions with STANAG 4774 confidentiality metadata labels. NFFI (STANAG 5527) BFT updates from lower-classification networks must pass label validation before ingress to NATO Secret COPs.</p>
+        <div class="kbd-list"><span>STANAG 4774</span><span>STANAG 5527 NFFI</span><span>CDS</span><span>XML metadata label</span></div>
+      </div>
+      <div class="pillar">
+        <h3 class="h3"><svg width="14" height="14" style="vertical-align:-2px;margin-right:6px;"><use href="#i-cpu"/></svg>4. SWaP-C — NFV / DCIS at the edge</h3>
+        <p style="color:var(--fg-dim);font-size:0.92rem;margin:8px 0 10px;">Migration off heavy single-purpose racks to Network Functions Virtualization on Deployable CIS nodes. Coy-to-Bn Command Posts run on a single COTS ruggedized SFF blade hosting routing engine, XMPP server, local C2 registry, and security gateway. Stand-up target: under 30 minutes.</p>
+        <div class="kbd-list"><span>NFV</span><span>DCIS</span><span>COTS SFF</span><span>Hypervisor</span><span>&lt; 30 min</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="vendors">
+  <div class="wrap">
+    <div class="eyebrow">§ 03 · Vendor ecosystem</div>
+    <h2 class="h2">Who actually builds the boxes — four blocks of NATO suppliers</h2>
+    <p class="lede" style="margin-bottom:20px;">No single vendor covers the full MC 0640 + FMN Spiral 5 + legacy/SDR matrix. The 32 allied nations procure across four blocks, with interoperability proven annually at <strong>CWIX</strong> and <strong>STEADFAST COBALT</strong>. UC cards below name representative products in the <em>Frequencies / Equipment</em> row.</p>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">1. SDR + NATO waveforms (tactical radio)</h3>
+        <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
+          <li><strong style="color:var(--fg);">Thales</strong> (FR/EU) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">Synaps · SquadNet · PR4G</span>. ESSOR consortium founding member.</li>
+          <li><strong style="color:var(--fg);">L3Harris</strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">Falcon III / IV · AN/PRC-158 · AN/PRC-163</span>. CNR-IP, SATURN, PFL-00446 IP injection.</li>
+          <li><strong style="color:var(--fg);">Leonardo</strong> (IT) — vehicular tactical SDR; ESSOR + militarised IP routing.</li>
+          <li><strong style="color:var(--fg);">Rohde &amp; Schwarz</strong> (DE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">SOVERON</span>. Sovereignty focus; NBWF resilience under EW.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">2. NFV / SWaP-C / DCIS hardware</h3>
+        <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
+          <li><strong style="color:var(--fg);">Klas Telecom</strong> (IE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">KlasTRX · Voyager</span>. SFF backpack modules; de-facto NATO deployable HQ standard.</li>
+          <li><strong style="color:var(--fg);">Cisco Defense</strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">ESR6300</span>. Runs BGP-4 + IPsec STANAG 4711 PCN tunnels for ~90% of NATO PCN nets.</li>
+          <li><strong style="color:var(--fg);">PacStar / Curtiss-Wright</strong> (US) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">PacStar 400-Series</span>. BG/Bde CP rapid deployment.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">3. C2 software (mission data)</h3>
+        <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
+          <li><strong style="color:var(--fg);">Systematic</strong> (DK) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">SitaWare Headquarters · Frontline · Edge</span>. De-facto NATO land C2 standard. XMPP tactical chat, NFFI mapping, FMN-native.</li>
+          <li><strong style="color:var(--fg);">Saab</strong> (SE) — <span style="font-family:var(--font-mono);color:var(--fg-dim);">9LAND C2</span>. Land + fires interop, NISP B16 profile compliance.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="h3" style="margin-bottom:8px;color:var(--accent);">4. Cross-Domain Solutions (NNI / classification boundary)</h3>
+        <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:0.92rem;line-height:1.7;">
+          <li><strong style="color:var(--fg);">Advenica</strong> (SE) — hardware/software CDS gateways; STANAG 4774 label validation at NNI.</li>
+          <li><strong style="color:var(--fg);">Fox-IT</strong> (NL) — high-grade CDS appliances; classification boundary enforcement.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px;border-left:3px solid var(--gold);background:linear-gradient(180deg,rgba(212,160,23,0.06),var(--bg-2));">
+      <h3 class="h3" style="color:var(--gold);margin-bottom:6px;">Reference integration pattern</h3>
+      <p style="color:var(--fg);font-size:0.95rem;line-height:1.7;">
+        <strong>Systematic SitaWare</strong> (C2 software) → on <strong>Klas Voyager</strong> hardware (virtualised NFV) → routed by <strong>Cisco ESR6300</strong> (encrypted IPsec / BGP-4) → injected into <strong>Thales Synaps</strong> or <strong>L3Harris AN/PRC-163</strong> SDR → over a common NATO waveform (ESSOR HDR or NBWF) → label-validated through <strong>Advenica / Fox-IT CDS</strong> at every NNI.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="echelons">
+  <div class="wrap">
+    <div class="eyebrow">§ 04 · Echelon ladder</div>
+    <h2 class="h2">MC 0640 scope — Brigade and below (LANDCOM/Corps shown as upstream context only)</h2>
+    <div class="ladder" id="ladder"></div>
+    <p class="lede" style="font-size:0.88rem;margin-top:14px;"><em>Note:</em> Platoon is intentionally not covered by MC 0640. LANDCOM/Corps/Division rungs are shown for context (reach-back targets) but their primary UC content belongs to MC 0593, not this deliverable.</p>
+  </div>
+</section>
+
+<section class="section" id="use-cases">
+  <div class="wrap">
+    <div class="eyebrow">§ 05 · Use Cases</div>
+    <h2 class="h2">32 representative Use Cases — Brigade, Battle Group, Company</h2>
+    <p class="lede" style="margin-bottom:22px;">First-cut presentation. All 32 UCs sit within the MC 0640 scope (Brigade and below). They are fused with STEADFAST COBALT constraints, PFL-00403 technology choices, and real vendor products (Thales, L3Harris, Klas, Cisco, Systematic, Advenica). The full Annex C inventory (~700–800 Serials) lives in <code style="font-family:var(--font-mono);background:var(--bg-3);padding:1px 6px;border-radius:4px;border:1px solid var(--line);">serials/annexC_extracted.json</code>.</p>
+
+    <div class="echelon-filter" id="echelon-filter"></div>
+
+    <table class="uc-index" style="margin-bottom:32px;">
+      <thead>
+        <tr><th>UC</th><th>Echelon</th><th>Title</th><th>Cls</th><th>Precedence</th><th>Risk</th></tr>
+      </thead>
+      <tbody id="uc-index-body"></tbody>
+    </table>
+
+    <div id="uc-cards" class="grid" style="grid-template-columns:1fr;gap:24px;"></div>
+  </div>
+</section>
+
+<section class="section" id="serials">
+  <div class="wrap">
+    <div class="eyebrow">§ 06 · Serial inventory</div>
+    <h2 class="h2">Annex C Serials (sample) — 1:1 with Use Cases</h2>
+    <p class="lede" style="margin-bottom:18px;">MC 0640 (Land) does not publish formal Serial identifiers the way MC 0195 (Maritime) does. We therefore treat each row of Annex C as one Serial S-NNN paired 1:1 with one Use Case UC-NNN. The full live mapping lives in <code>serials/annexC_extracted.json</code>.</p>
+    <table class="uc-index">
+      <thead><tr><th>S-ID</th><th>IER From</th><th>IER To</th><th>IE Product</th><th>Operational capability</th><th>Tech Svc L2</th><th>L1</th></tr></thead>
+      <tbody id="serial-rows"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="references">
+  <div class="wrap">
+    <div class="eyebrow">§ 07 · References</div>
+    <h2 class="h2">Doctrine, profiles, and STANAGs cited</h2>
+    <ul class="refs">
+      <li><code>Draft MC 0640</code> — Minimum Level of CIS Capabilities at Land Tactical Level (replaces former STANAG 5048). Annex C carries the IER Specifications used here.</li>
+      <li><code>AJP-6 Ed B v1 (Apr 2024)</code> — Allied Joint Doctrine for CIS; defines the IER framework, resilience, interoperability, availability requirements.</li>
+      <li><code>AJP-3.2 Ed B</code> — Allied Joint Doctrine for Land Operations.</li>
+      <li><code>NISP Baseline 16 / AC/322-D(2024)0053</code> — establishes <strong>PFL-00403 "Land Tactical C2 Information Exchange Profile (FMN Spiral 5)"</strong>.</li>
+      <li><code>AP-06 / AP-15</code> — NATO Glossaries.</li>
+      <li><code>APP-7(D)</code> Joint Brevity Words; <code>APP-11</code> NATO Message Text Formats.</li>
+      <li><code>STANAG 4711</code> — Protected Core Networking (PCN).</li>
+      <li><code>STANAG 4774</code> — Confidentiality Metadata Label Syntax.</li>
+      <li><code>STANAG 4691</code> — Multi-channel ad-hoc relay (MarLOS).</li>
+      <li><code>STANAG 5527 / NFFI</code> — NATO Friendly Force Information.</li>
+      <li><code>STANAG 5630</code> — NATO Narrowband Waveform (NBWF) physical layer.</li>
+      <li><code>STANAG 5634 / AComP-5634</code> — NBWF Profile B / MELPe 2.4 kbps over RTP/UDP.</li>
+      <li><code>STANAG 5651</code> — ESSOR High Data Rate Waveform.</li>
+      <li><code>SATURN Ed.4 / PRF-151</code> — Anti-jam Tactical UHF Radio for NATO.</li>
+      <li><code>RFC 6120 / 6121</code> — Extensible Messaging and Presence Protocol (XMPP).</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <div>Draft visualisation of MC 0640 Annex C / PFL-00403 — Allied Command Operations.</div>
+    <div><span class="cls-tag cls-NU">NATO UNCLASSIFIED</span><span style="margin-left:8px;">Build: first-cut · self-contained · no network</span></div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+const ROW_LABELS = {
+  who:"IER · Who", what:"IER · What", when:"IER · When",
+  protection:"IER · Protection", precedence:"IER · Precedence", volume:"IER · Volume",
+  equipment:"Frequencies / Equipment", timeWindow:"Time Window", environment:"Environment",
+  zones:"Zones, CoI", availability:"Availability", classification:"Classification",
+  risk:"Risk (LPI/LPD)", attackSurface:"Attack Surface"
+};
+const RISK_LABEL = ["None","None","LPI","LPI","LPI+LPD","LPI+LPD"];
+const RISK_NARR = [
+  "No tactical concealment required; routine garrison-style RF posture.",
+  "Light EW posture; periodic frequency hopping suffices.",
+  "Moderate LPI required; spread-spectrum and DSCP shaping recommended.",
+  "Strong LPI required; FFH-EPM, low-duty-cycle bursts, directional antennas.",
+  "LPI+LPD mission-critical; ESSOR HDR FFH, minimal emission profile, brevity-only voice.",
+  "Adversary EW dominant; assume detection; rely on encryption-in-depth and scheduled brevity bursts."
+];
+
+const ECHELONS = [
+  { lbl:"Company",      tier:"L", desc:"1.5 × 1.5 km AOR · NBWF + legacy VHF + XMPP — MC 0640 lowest in scope" },
+  { lbl:"Battle Group", tier:"M", desc:"4 × 5 km AOR · ESSOR HDR + NBWF, PCR stand-up via SATCOM" },
+  { lbl:"Brigade",      tier:"M", desc:"15 × 25 km AOR · MarLOS STANAG 4691 + SATURN Ed.4 + PCN tunnels — top of MC 0640 focus" },
+  { lbl:"Division",     tier:"H", desc:"30 × 60 km AOR · reach-back target for Bde · MC 0593 territory", upstream:true },
+  { lbl:"Corps",        tier:"H", desc:"Multi-division strategic backbone · MC 0593 territory", upstream:true },
+  { lbl:"LANDCOM",      tier:"H", desc:"Land Component Command — theatre-level C2 hub · MC 0593 territory", upstream:true }
+];
+const TIER_LABEL = { H:"HIGH · FULL IP", M:"MED · TAC IP", L:"LOW · EDGE" };
+
+/* ------------------------------------------------------------
+   32 Use Cases — sampled across echelons.
+   First 3 = canonical (Coy / BG / Div) — fully populated.
+   UC-004..UC-032 = compact form sourced from Annex C inventory.
+   ------------------------------------------------------------ */
+const USE_CASES = [
+  // ---- 1) Company canonical ----------------------------------
+  { id:"UC-001", serial:"S-COY-CFF-01", band:"Company",
+    title:"Dismounted Call For Fire under EW jamming",
+    sub:"Nation A light infantry company coordinates immediate fires with a Nation B mortar section 4 km away through a contested forest mesh.",
+    cls:"MS", prec:"Flash", env:"NotFriend", lpi:4,
+    avail:"Mission (best-effort recovery under jamming)",
+    timeWindow:"Mission window 4–6 h", zones:"AOR 1.5 × 1.5 km · Coalition CoI",
+    ier:{
+      who:"Coy Forward Observer (Nation A) ➜ Mortar Section (Nation B)",
+      what:"Voice (Secure) Call For Fire · XMPP plain-text target coordinates",
+      when:"≤ 150 ms voice path end-to-end · chat ≤ 2 s · burst on PTT",
+      protection:"Mission Secret · STANAG 4774 labels at CNR-IP gateway · per-link MELPe key",
+      volume:"Ultra-low · 2.4 kbps voice + bytes-per-burst XMPP"
+    },
+    equipment:[
+      "L3Harris AN/PRC-163 tri-band SDR (Coy HQ) + Thales PR4G legacy VHF (dismounted)",
+      "NATO NBWF Profile A — AComP-5630 Annex G — 25 kHz channels",
+      "AComP-5634 / STANAG 5634 — MELPe 2.4 kbps RTP/UDP — VARC half-duplex PTT",
+      "Klas Voyager backpack edge router · PFL-00446 (DSCP / IGMPv3 / UDP)"
+    ],
+    attackSurface:"Legacy VHF mesh has no native auth; CNR-IP gateway is the single label-enforcement point. Mitigation: per-link key + DSCP starvation guard + scheduled brevity bursts under EW."
+  },
+  // ---- 2) Battle Group canonical -----------------------------
+  { id:"UC-002", serial:"S-BG-CP-STANDUP", band:"Battle Group",
+    title:"Mobile CP stand-up · NFV PCR + BGP-4 + NFFI BFT",
+    sub:"Multinational mechanised BG (Nations C + D armoured vehicles) deploys a mobile Command Post in under 20 minutes after a retrograde manoeuvre and federates into the FMN core.",
+    cls:"NS", prec:"Immediate", env:"Mixed", lpi:3,
+    avail:"High (24/7) once federated",
+    timeWindow:"Continuous operations, 72-hour planning cycle",
+    zones:"AOR 4 × 5 km · Bn Task Force CoI + Bde reach-back",
+    ier:{
+      who:"BG TOC (Nation C/D combined) ➜ Bde TOC ➜ subordinate Coy CPs",
+      what:"NFFI (STANAG 5527) BFT position stream · Formal Message · Battlefield Control Measures",
+      when:"BFT update ≤ 5 s · Formal Message ≤ 60 s · CP stand-up ≤ 20 min, PCR up ≤ 7 min",
+      protection:"NATO Secret · IPsec PCN (STANAG 4711) · per-MNE crypto suite · BGP-4 with TCP-AO",
+      volume:"Medium · constant BFT trickle + bursty formal traffic + opportunistic chat"
+    },
+    equipment:[
+      "Thales Synaps vehicular tri-band SDR with ESSOR HDR Waveform (STANAG 5651)",
+      "Light SATCOM terminal · MIL-Ka or X-band, theatre-dependent",
+      "Klas Voyager SFF blade · hypervisor hosts the PCR + Systematic SitaWare HQ + XMPP + security gateway",
+      "Cisco ESR6300 runs BGP-4 NNI announce into FMN MNE · STANAG 4691 MarLOS to peer BGs"
+    ],
+    attackSurface:"PCR is single point of trust for the MNE; loss exposes every subnet. BGP-4 hijack risk mitigated by TCP-AO and RPKI-style origin validation. Hypervisor escape would cross every virtualised function — patch cadence and signed-VNF policy are mandatory."
+  },
+  // ---- 3) Brigade canonical (CDS-degraded intel reception) ----
+  { id:"UC-003", serial:"S-BDE-CDS-INGRESS", band:"Brigade",
+    title:"Bde ASAC receives CDS-degraded intel package from Division reach-back",
+    sub:"Brigade All-Source Analysis Cell ingests a Division-pushed intel package (imagery + MIP4 target data). The Bde-side CDS gateway validates STANAG 4774 labels and auto-degrades content (image resolution, sensitive fields) to match the Bde network's classification before re-distribution to BGs.",
+    cls:"NS", prec:"Priority", env:"Friend", lpi:2,
+    avail:"High (24/7) once federated",
+    timeWindow:"Continuous; ingress triggered by Div collection events",
+    zones:"Bde AOR · BG-filtered downstream",
+    ier:{
+      who:"Div HQ (reach-back, upstream) ➜ Bde ASAC ➜ subordinate BG/Coy systems",
+      what:"MIP4 land data model package · Target Folder (TST) · imagery · Document Collaboration & Storage",
+      when:"Routine 6-hourly intel cycle · ad-hoc Priority push on TST event",
+      protection:"NS at ingress · STANAG 4774 labels validated · auto-degrade to NR/NU on outbound NNI",
+      volume:"High · MB to GB per package · multicast inside Bde enclave (IGMPv3)"
+    },
+    equipment:[
+      "Advenica / Fox-IT CDS gateway at the Div↔Bde NNI",
+      "Systematic SitaWare Headquarters (Bde ASAC console) with MIP4 ingest",
+      "Klas Voyager NFV blade hosting the CDS-translated multicast distributor",
+      "Cisco ESR6300 PCN gateway · STANAG 4711 IPsec tunnel to Div upstream"
+    ],
+    attackSurface:"CDS gateway is the trust crown — a misconfigured label policy can over-release NS content. Mitigation: dual-control policy review, golden-image CDS replay testing, and per-flow STANAG 4774 origin validation at every NNI hop."
+  },
+
+  // ---- 4–10) Company-level UCs -------------------------------
+  { id:"UC-004", serial:"S-112", band:"Company",
+    title:"BG → Coy Voice (Secure) tactical net",
+    sub:"Continuous voice net carrying SITREPs and contact reports between the BG TOC and a forward rifle company in dense vegetation.",
+    cls:"NS", prec:"Immediate", env:"NotFriend", lpi:4,
+    avail:"High during mission", timeWindow:"H-hour to mission end",
+    zones:"BG AOR · Coy nested CoI",
+    ier:{
+      who:"BG TOC ➜ Coy HQ",
+      what:"Voice (Secure) — Audio-Based Communication Services / Core Services",
+      when:"PTT-triggered · ≤ 200 ms one-way",
+      protection:"NS · per-link MELPe key · STANAG 4774 labels on supplementary chat",
+      volume:"2.4 kbps streaming under PTT · idle silent"
+    },
+    equipment:[
+      "Thales Synaps vehicular SDR (BG side) + L3Harris AN/PRC-163 handheld + Thales PR4G legacy VHF (Coy)",
+      "NATO NBWF Profile A — STANAG 5630 / AComP-5634",
+      "MELPe 2.4 kbps RTP/UDP/IPv4",
+      "PFL-00446 DSCP — Flash marking on PTT-active flow · Klas Voyager edge router enforces"
+    ],
+    attackSurface:"Direction-finding risk on long-duration PTT. Counter: brevity, scheduled keying windows, antenna pattern management."
+  },
+  { id:"UC-005", serial:"S-114", band:"Company",
+    title:"BG → Coy Instant Message (XMPP tactical chat)",
+    sub:"Text-only orders, queries, and acknowledgements on a saturated mesh — XMPP is the survival fallback when voice is jammed.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:3,
+    avail:"High (graceful under jamming)", timeWindow:"Continuous",
+    zones:"BG AOR · Coy CoI",
+    ier:{
+      who:"BG HQ ➜ Coy HQ (bidirectional)",
+      what:"Instant Message — Text-Based Collaboration Services / Core Services",
+      when:"Burst ≤ 2 s · idle keep-alive 30 s",
+      protection:"NS · TLS over MELPe tunnel · STANAG 4774 label per message",
+      volume:"A few bytes per message · cumulative kbps even at high tempo"
+    },
+    equipment:[
+      "L3Harris AN/PRC-163 handheld SDR running NBWF (Coy) · Thales Synaps vehicular (BG)",
+      "Systematic SitaWare Edge XMPP client (RFC 6120/6121) on the C2 handheld",
+      "Klas Voyager NFV blade on BG TOC hosting the XMPP server",
+      "DSCP shaping enforced by Cisco ESR6300 ensures XMPP priority above bulk traffic"
+    ],
+    attackSurface:"XMPP roster leaks can map the unit hierarchy. Counter: rosters per-mission, no presence broadcast, JIDs scoped to short-lived mission identifiers."
+  },
+  { id:"UC-006", serial:"S-COY-BFT", band:"Company",
+    title:"Dismounted BFT position trickle (NFFI over NBWF)",
+    sub:"Squad-level position updates from every soldier handheld back to the company COP, surviving the narrowband channel.",
+    cls:"NR", prec:"Routine", env:"NotFriend", lpi:3,
+    avail:"Best-effort", timeWindow:"H-hour to mission end",
+    zones:"Coy AOR · Coalition CoI",
+    ier:{
+      who:"Soldier handheld ➜ Coy COP",
+      what:"NFFI (STANAG 5527) compact BFT — Situational Awareness Services / Joint Services",
+      when:"Position update every 15–30 s",
+      protection:"NR · STANAG 4774 label on stream · NBWF link crypto",
+      volume:"Ultra-low · bit-budget tight · compressed coordinate format"
+    },
+    equipment:[
+      "Rohde & Schwarz SOVERON / L3Harris AN/PRC-163 soldier handheld SDR (NBWF Profile A)",
+      "Klas Voyager NFV blade on Coy CP aggregates NFFI feed",
+      "PFL-00446 DSCP — Routine marking but never starved (Cisco ESR6300 policy)",
+      "Upstream relay via Thales Synaps vehicular ESSOR HDR to BG"
+    ],
+    attackSurface:"BFT stream reveals troop concentration to RF interceptors. Mitigation: jittered update intervals, position obfuscation on suspected EW dominance."
+  },
+  { id:"UC-007", serial:"S-CFST-CFF", band:"Company",
+    title:"Company Fire Support Team Call For Fire to BGJFC",
+    sub:"CFST observer requests indirect fires through the Battlegroup Joint Fires Cell with target grid + adjustment.",
+    cls:"NS", prec:"Flash", env:"NotFriend", lpi:4,
+    avail:"Mission", timeWindow:"H-hour to mission end",
+    zones:"Coy AOR · BG fires CoI",
+    ier:{
+      who:"CFST observer ➜ BGJFC",
+      what:"Call For Fire (Targeting Services / Operations Planning Services / COI Services)",
+      when:"Voice ≤ 150 ms · digital CFF ≤ 5 s",
+      protection:"NS · STANAG 4774 labels · digital CFF signed at origin",
+      volume:"Low · voice burst + small digital payload"
+    },
+    equipment:[
+      "L3Harris AN/PRC-163 tri-band SDR with NBWF to BG, Thales Synaps ESSOR HDR back-haul",
+      "Systematic SitaWare Edge / Saab 9LAND C2 fires registry on Klas Voyager NFV blade",
+      "MELPe 2.4 kbps voice channel reserved for fires",
+      "DSCP EF marking guaranteed across the BG enclave (Cisco ESR6300)"
+    ],
+    attackSurface:"Fires net is the highest-value EW target; loss = mission abort. Defence-in-depth: dual bearer (voice + digital), pre-planned silence procedures."
+  },
+  { id:"UC-008", serial:"S-COY-METEOC", band:"Company",
+    title:"Company METEOC info request to BFDC",
+    sub:"Local met data (wind, ballistic temperature) pulled from the Brigade Fire Direction Centre by the Coy CFST before a fire mission.",
+    cls:"NR", prec:"Routine", env:"Friend", lpi:1,
+    avail:"High", timeWindow:"Pre-mission and on demand",
+    zones:"Coy AOR · BG/Bde shared environmental CoI",
+    ier:{
+      who:"Coy CFST ➜ BFDC",
+      what:"METEOC Info (Meteorology Services / Environmental Services / COI Services)",
+      when:"Pull on demand · update ≤ 60 s",
+      protection:"NR · STANAG 4774 routine label",
+      volume:"Low · structured METEOC packet a few hundred bytes"
+    },
+    equipment:[
+      "Systematic SitaWare HQ pub/sub topic on Bde DCIS",
+      "Tactical IP transport via Thales Synaps ESSOR HDR",
+      "Klas Voyager NFV blade caches METEOC for offline ballistic calc",
+      "PFL-00446 DSCP CS2 (Cisco ESR6300 policy)"
+    ],
+    attackSurface:"Met data poisoning is low-risk but possible; counter with signed packets and consistency checks against neighbouring Coys."
+  },
+  { id:"UC-009", serial:"S-COY-RECCE", band:"Company",
+    title:"Coy Recce Patrols → COIST sensor report",
+    sub:"Dismounted recce patrol pushes ground-truth observations (vehicle counts, ID, posture) up to the Company Intelligence Support Team.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:4,
+    avail:"Mission", timeWindow:"Patrol window",
+    zones:"Coy recce zone · COI restricted to BG ISR cell",
+    ier:{
+      who:"Coy Recce Patrol ➜ COIST",
+      what:"Informal Message + sensor product attachment (Informal Messaging Services / Core Services)",
+      when:"As-observed; ideally ≤ 5 min of sighting",
+      protection:"NS · STANAG 4774 labels per report",
+      volume:"Low · text + small JPEG attachments"
+    },
+    equipment:[
+      "L3Harris AN/PRC-163 handheld with NBWF · short-burst tactical messenger",
+      "XMPP attachment relay (Systematic SitaWare Edge) via Klas Voyager NFV blade",
+      "Multicast aggregation to COIST via IGMPv3 (Cisco ESR6300)",
+      "Brevity-only voice on Rohde & Schwarz SOVERON fallback if data path saturated"
+    ],
+    attackSurface:"Patrol radio signature is the highest LPI/LPD challenge on the battlefield. Counter: cold transmit, ESSOR FFH on the back-haul leg, no idle keep-alives."
+  },
+  { id:"UC-010", serial:"S-COY-CASEVAC", band:"Company",
+    title:"Coy CASEVAC 9-Liner to BG aid station",
+    sub:"Time-critical casualty evacuation request formatted per APP-11 NATO MTF, dispatched over secure voice and digital chat in parallel.",
+    cls:"NR", prec:"Flash", env:"NotFriend", lpi:3,
+    avail:"Mission", timeWindow:"On casualty event",
+    zones:"Coy AOR · BG medical CoI",
+    ier:{
+      who:"Coy aid post ➜ BG aid station",
+      what:"Formal Message — 9-Liner APP-11 MTF (Military Messaging Service / Core Services)",
+      when:"≤ 2 min from casualty event",
+      protection:"NR · STANAG 4774 NR label · integrity-signed MTF",
+      volume:"Low · structured short-form text"
+    },
+    equipment:[
+      "L3Harris AN/PRC-163 voice over NBWF + digital MTF via Systematic SitaWare XMPP",
+      "MTF templating on Klas Voyager NFV blade (Coy CP)",
+      "Dual-bearer redundancy (voice on Rohde & Schwarz SOVERON + chat in parallel)",
+      "DSCP EF reserved for medical traffic (Cisco ESR6300 policy)"
+    ],
+    attackSurface:"Aid station radio nets are RoE-protected but still EW-vulnerable. Mitigation: pre-coordinated frequencies, alternate met / aid station rendezvous."
+  },
+
+  // ---- 11–18) Battle Group / Battalion UCs --------------------
+  { id:"UC-011", serial:"S-088", band:"Battle Group",
+    title:"VJTF(L) → BG Battlefield Control Measures push",
+    sub:"Brigade-formulated control measures (boundaries, FSCMs, ACMs) pushed to the BG for unit-level acknowledgement.",
+    cls:"NS", prec:"Immediate", env:"Mixed", lpi:2,
+    avail:"High", timeWindow:"On plan change",
+    zones:"Bde AOR · BG nested CoI",
+    ier:{
+      who:"VJTF(L) HQ ➜ BG HQ",
+      what:"Battlefield Control Measures — Maneuver Planning / LAND Services / COI Services",
+      when:"On change · ack ≤ 2 min",
+      protection:"NS · STANAG 4774 label · signed by Bde planner",
+      volume:"Medium · structured XML payload"
+    },
+    equipment:[
+      "Thales Synaps ESSOR HDR backbone Bde-to-BG",
+      "Systematic SitaWare HQ MIP4 message bus replicates control measures",
+      "Klas Voyager DCIS gateway translates to BG-native C2 (e.g. Saab 9LAND)",
+      "Multicast distribution within BG enclave (Cisco ESR6300, IGMPv3)"
+    ],
+    attackSurface:"Tampering with FSCMs can cause fratricide. Mitigation: digital signature verification at every consumer, dual-acknowledge before fires are deconflicted."
+  },
+  { id:"UC-012", serial:"S-BG-FORMAL", band:"Battle Group",
+    title:"BG ↔ Bde Formal Messaging (APP-11 MTF)",
+    sub:"Operations Orders, Fragmentary Orders, and structured reports exchanged over the Military Messaging Service.",
+    cls:"NS", prec:"Priority", env:"Friend", lpi:1,
+    avail:"High", timeWindow:"Per planning cycle",
+    zones:"Bde AOR",
+    ier:{
+      who:"BG TOC ↔ Bde TOC",
+      what:"Formal Message — APP-11 MTF (Military Messaging Service / Core Enterprise Services)",
+      when:"As scheduled by battle rhythm",
+      protection:"NS · STANAG 4774 labels · signed and archived",
+      volume:"Medium · 10s of KB per OPORD"
+    },
+    equipment:[
+      "Systematic SitaWare HQ formal messaging server on Bde DCIS (Klas Voyager)",
+      "Thales Synaps ESSOR HDR backbone for vehicle-borne BG",
+      "Cisco ESR6300 establishes STANAG 4711 PCN tunnel across NNI to higher",
+      "MIP4 attachment encoding (SitaWare native)"
+    ],
+    attackSurface:"Replay or delayed-delivery attacks on OPORDs can disrupt phase changes. Mitigation: timestamps + sequence numbers signed end-to-end."
+  },
+  { id:"UC-013", serial:"S-BG-OFFICE-COLLAB", band:"Battle Group",
+    title:"BG planning Office Collaboration (Chat + AV)",
+    sub:"Real-time planning between BG and Bde staffs — text chat, audio bridge, and shared whiteboard during the MDMP.",
+    cls:"NS", prec:"Routine", env:"Friend", lpi:1,
+    avail:"High", timeWindow:"Planning blocks (2–6 h)",
+    zones:"Bde AOR · planning CoI",
+    ier:{
+      who:"BG planning cell ↔ Bde planning cell",
+      what:"Office Collaboration (Audio/AV/Chat) — Video-Based / Audio-Based / Text-Based Collaboration / Core Services",
+      when:"Planning sessions on demand",
+      protection:"NS · TLS over PCN · STANAG 4774 labels on shared docs",
+      volume:"Medium · AV stream ~512 kbps · chat negligible"
+    },
+    equipment:[
+      "Systematic SitaWare HQ collaboration suite on Klas Voyager NFV stack (Bde)",
+      "Multicast video distribution via IGMPv3 (Cisco ESR6300)",
+      "Thales Synaps ESSOR HDR backbone for the BG end",
+      "STANAG 4711 PCN tunnel through black core (Cisco ESR6300)"
+    ],
+    attackSurface:"Shared whiteboards can leak plan-in-progress. Mitigation: ephemeral session keys, no recording at the BG end, label-on-export."
+  },
+  { id:"UC-014", serial:"S-BG-VTC", band:"Battle Group",
+    title:"BG VTC bridge into Bde commander's update brief",
+    sub:"Video teleconference with the BG commander joining the Bde daily commander's update from a static vehicle terminal.",
+    cls:"NS", prec:"Routine", env:"Friend", lpi:1,
+    avail:"High", timeWindow:"Daily 30-min brief",
+    zones:"Bde AOR",
+    ier:{
+      who:"BG commander ↔ Bde commander + staff",
+      what:"VTC — Video Based Collaboration Services / Core Services",
+      when:"Scheduled daily 0800Z",
+      protection:"NS · STANAG 4774 label on session metadata",
+      volume:"High · ~1.5 Mbps video + 64 kbps audio"
+    },
+    equipment:[
+      "PacStar 400-Series vehicle VTC endpoint with hardware codec",
+      "Thales Synaps ESSOR HDR + light SATCOM hybrid back-haul",
+      "MCU on Klas Voyager NFV blade (Bde DCIS)",
+      "DSCP AF41 / EF reserved for the session (Cisco ESR6300)"
+    ],
+    attackSurface:"VTC streams reveal terminal location via traffic patterns. Mitigation: cover traffic, alternate-route load balancing."
+  },
+  { id:"UC-015", serial:"S-BG-LOGSITREP", band:"Battle Group",
+    title:"BG LOGSITREP up to Bde G4",
+    sub:"Daily logistics situation report (POL, ammo, maintenance, casualties) submitted on the formal channel.",
+    cls:"NR", prec:"Routine", env:"Friend", lpi:1,
+    avail:"High", timeWindow:"Daily 1800Z",
+    zones:"Bde AOR · sustainment CoI",
+    ier:{
+      who:"BG S4 ➜ Bde G4",
+      what:"LOGSITREP (Reports / Logistics Services / COI Services)",
+      when:"Daily and on event",
+      protection:"NR · STANAG 4774 label · audit-archived",
+      volume:"Low · structured short-form"
+    },
+    equipment:[
+      "Systematic SitaWare LOG schema · MIP4-formatted packet",
+      "Military messaging service relay on Klas Voyager NFV blade",
+      "Thales Synaps ESSOR HDR + Cisco ESR6300 PCN tunnel to Bde G4",
+      "Archival store on Bde DCIS (signed audit log)"
+    ],
+    attackSurface:"Logistics data exposes operational tempo. Mitigation: NR-level confinement, no MS or above commingling without label upgrade."
+  },
+  { id:"UC-016", serial:"S-BG-NFFI", band:"Battle Group",
+    title:"Inter-national BFT exchange (Nation C ⇄ Nation D)",
+    sub:"NFFI position streams from a Nation C armoured platoon visible on Nation D vehicle displays inside the same BG.",
+    cls:"NS", prec:"Routine", env:"Mixed", lpi:2,
+    avail:"High", timeWindow:"Continuous",
+    zones:"BG AOR · multinational CoI",
+    ier:{
+      who:"Nation C armoured BFT ↔ Nation D armoured BFT",
+      what:"NFFI (STANAG 5527) BFT — Situational Awareness Services / Joint Services / COI Services",
+      when:"Position update every 10 s",
+      protection:"NS · STANAG 4774 NS label · CDS validation at the inter-national NNI",
+      volume:"Medium · steady multicast stream"
+    },
+    equipment:[
+      "Vehicle BFT terminals on both nations",
+      "PCR translates national subnets via BGP-4 NNI",
+      "ESSOR HDR backbone, multicast across NNI",
+      "STANAG 4774 label validated on every multicast packet"
+    ],
+    attackSurface:"Inter-national multicast is the textbook target for stream injection. Mitigation: per-packet origin auth, CDS replay on every NNI."
+  },
+  { id:"UC-017", serial:"S-BFT-DEGRADE", band:"Battle Group",
+    title:"BFT graceful degradation on ESSOR backbone loss",
+    sub:"When ESSOR HDR is jammed, NFFI BFT falls back from steady multicast to compressed periodic bursts over NBWF.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:5,
+    avail:"Best-effort", timeWindow:"On EW event",
+    zones:"BG AOR",
+    ier:{
+      who:"Vehicle BFT ➜ BG COP",
+      what:"NFFI (STANAG 5527) compressed BFT over NBWF — Situational Awareness Services",
+      when:"Burst every 60 s instead of every 10 s",
+      protection:"NS · STANAG 4774 label · link-layer crypto on NBWF",
+      volume:"Ultra-low under degradation"
+    },
+    equipment:[
+      "Adaptive bearer policy on vehicle SDR",
+      "NBWF Profile A fallback path",
+      "Coalition COP aggregator interpolates between bursts",
+      "DSCP CS3 reserved for degraded BFT"
+    ],
+    attackSurface:"Adversary detects degradation and pushes harder. Mitigation: pre-planned scheduled bursts, antenna nulling, opportunistic frequency change."
+  },
+  { id:"UC-018", serial:"S-BG-OBSERVATION", band:"Battle Group",
+    title:"BG HQ ↔ Close Observation Platoon recon feed",
+    sub:"Reports and imagery from a Close Observation Platoon pushed back to BG HQ; CoP requests confirmation tasking.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:4,
+    avail:"Mission", timeWindow:"Insertion to extract",
+    zones:"BG named area of interest",
+    ier:{
+      who:"BG HQ ↔ Close Observation Platoon",
+      what:"Informal Message + Reports (Informal Messaging Services / Joint Services)",
+      when:"As observed",
+      protection:"NS · STANAG 4774 labels · attachment integrity",
+      volume:"Low to medium · text + occasional imagery"
+    },
+    equipment:[
+      "Long-range handheld SDR with directional antenna",
+      "NBWF on the recon leg, ESSOR on the BG leg",
+      "Local image compressor on Coy NFV blade",
+      "DSCP CS3"
+    ],
+    attackSurface:"Recon team RF emissions are the highest-value EW target. Counter: scheduled brief contacts, antenna directionality, full radio silence between contacts."
+  },
+
+  // ---- 19–24) Brigade UCs -------------------------------------
+  { id:"UC-019", serial:"S-BJFC-DBAWS", band:"Brigade",
+    title:"BJFC → DBAWS deep fires tasking",
+    sub:"Brigade Joint Fires Cell tasks the Deep Battle Artillery Weapon Systems with target packages and deployment commands.",
+    cls:"NS", prec:"Immediate", env:"Mixed", lpi:3,
+    avail:"High", timeWindow:"Fires cycle",
+    zones:"Bde AOR · deep battle area",
+    ier:{
+      who:"BJFC ➜ DBAWS",
+      what:"Fire Missions + Deployment Commands + Target Management — Targeting Services / Operations Planning / COI",
+      when:"Mission-driven · ≤ 3 min order-to-tube",
+      protection:"NS · STANAG 4774 NS labels · signed CFF/Fire Mission",
+      volume:"Medium · structured target packets"
+    },
+    equipment:[
+      "MIP4 fires data model on Bde DCIS",
+      "ESSOR HDR backbone Bde-to-firing unit",
+      "Digital fire control via tasking service",
+      "DSCP EF reserved for fires"
+    ],
+    attackSurface:"Fires net is the prime EW + cyber target. Counter: dual signed path (voice brevity + digital), pre-coordinated brevity codes."
+  },
+  { id:"UC-020", serial:"S-BJFC-CBAG", band:"Brigade",
+    title:"BJFC ↔ CBAG close fires coordination",
+    sub:"Voice (Secure), Informal Message, and Instant Message between BJFC and Close Battery Artillery Guns.",
+    cls:"NS", prec:"Immediate", env:"Mixed", lpi:3,
+    avail:"High", timeWindow:"Continuous during fires",
+    zones:"Bde AOR · close battle area",
+    ier:{
+      who:"BJFC ↔ CBAG",
+      what:"Voice (Secure) / Informal Message / Instant Message — Core Services",
+      when:"PTT and burst chat",
+      protection:"NS · per-link key · STANAG 4774 labels on digital flows",
+      volume:"Low to medium"
+    },
+    equipment:[
+      "Vehicular SDR with ESSOR HDR + NBWF",
+      "XMPP on Bde DCIS for chat",
+      "MELPe voice on the fires net",
+      "PFL-00446 DSCP shaping"
+    ],
+    attackSurface:"Same as UC-019 fires net considerations; CBAG positions are also vulnerable to BFT-derived counter-battery."
+  },
+  { id:"UC-021", serial:"S-BJFC-BASO", band:"Brigade",
+    title:"BJFC ↔ BASO airspace coordination",
+    sub:"Brigade Air Support Officer pushes Airspace Control Measures and consumes ASSESSREPs from the BJFC.",
+    cls:"NS", prec:"Priority", env:"Mixed", lpi:2,
+    avail:"High", timeWindow:"Airspace plan cycle",
+    zones:"Bde AOR overlapping joint airspace",
+    ier:{
+      who:"BJFC ↔ BASO",
+      what:"Airspace Control Measures + ASSESSREP + Voice + Informal Message — Air Services / Joint Services / Core",
+      when:"On plan change and continuous deconfliction",
+      protection:"NS · STANAG 4774 labels on ACMs",
+      volume:"Medium"
+    },
+    equipment:[
+      "BASO terminal on Bde DCIS",
+      "MIP4 airspace deconfliction service",
+      "AOCC(L) reach-back via PCN tunnel",
+      "DSCP AF31 for ACMs, AF41 for fires voice"
+    ],
+    attackSurface:"ACM tampering can clear airspace for adversary or block friendly fires. Mitigation: signed ACMs, BASO/BJFC dual ack."
+  },
+  { id:"UC-022", serial:"S-BJFC-BGIFC", band:"Brigade",
+    title:"BJFC ↔ BGIFC fires handover at BG boundary",
+    sub:"Coordinated handover of in-progress fire missions between Bde Joint Fires Cell and Battlegroup Joint Fires Cell.",
+    cls:"NS", prec:"Immediate", env:"Mixed", lpi:3,
+    avail:"High", timeWindow:"On boundary cross",
+    zones:"BG/Bde boundary CoI",
+    ier:{
+      who:"BJFC ↔ BGIFC",
+      what:"ASSESSREP + Call For Fire + METEOC + Target Folder — Targeting Services / COI",
+      when:"On handover trigger",
+      protection:"NS · STANAG 4774 labels · signed by both fires cells",
+      volume:"Medium"
+    },
+    equipment:[
+      "MIP4 target folder replication",
+      "ESSOR HDR backbone",
+      "XMPP coordination chat",
+      "Dual-control sign-off"
+    ],
+    attackSurface:"Handover misalignment can cause fires gap or duplicate. Mitigation: explicit dual-ack handover, fires-active flag in MIP4."
+  },
+  { id:"UC-023", serial:"S-244", band:"Brigade",
+    title:"EWCC → EW Assets tasking order",
+    sub:"Electronic Warfare Coordination Cell tasks EW assets (jammers, ESM) for the next mission cycle.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:5,
+    avail:"Mission", timeWindow:"Per EW battle rhythm",
+    zones:"Bde EW area of influence",
+    ier:{
+      who:"EWCC ➜ EW Assets",
+      what:"Tasking Order — Tasking & Order Services / EW Services / COI",
+      when:"Per cycle and on demand",
+      protection:"NS · STANAG 4774 labels · signed tasking",
+      volume:"Low · structured short-form"
+    },
+    equipment:[
+      "EWCC tasking service on Bde DCIS",
+      "ESSOR HDR + dedicated EW back-haul",
+      "Encrypted multicast to EW asset cluster",
+      "DSCP CS4 reserved for EW tasking"
+    ],
+    attackSurface:"EW tasking compromise reveals friendly EW intent. Mitigation: short-validity tasking tokens, asset-side replay protection."
+  },
+  { id:"UC-024", serial:"S-201", band:"Brigade",
+    title:"CIFC → Bde ASAC INTREP downflow",
+    sub:"Combined Intelligence Fusion Cell pushes INTREPs to the Brigade All-Source Analysis Cell.",
+    cls:"NS", prec:"Priority", env:"Friend", lpi:2,
+    avail:"High", timeWindow:"Intel cycle and event-driven",
+    zones:"Theatre intel CoI",
+    ier:{
+      who:"CIFC ➜ Bde ASAC",
+      what:"INTREP (Reports / Joint Services / COI)",
+      when:"6-hourly + event-driven",
+      protection:"NS · STANAG 4774 labels · CDS to lower if Bde net so demands",
+      volume:"Medium · text + sometimes imagery"
+    },
+    equipment:[
+      "MIP4 intel data model",
+      "PCN tunnel from theatre intel core to Bde",
+      "CDS gateway for any cross-classification recipients",
+      "DSCP CS3"
+    ],
+    attackSurface:"Intel leak risk is structural. Mitigation: minimum-necessary disclosure, per-report label review."
+  },
+
+  // ---- 25–28) Brigade sustainment / engineer / intel / ISTAR -----
+  { id:"UC-025", serial:"S-BG-LOGREP", band:"Brigade",
+    title:"Bde G4 LOGREP cycle from BG S4",
+    sub:"Daily structured logistics situation report (POL, Class V ammo, maintenance, casualties) submitted by Battlegroup S4 to Brigade G4 over the formal channel.",
+    cls:"NR", prec:"Routine", env:"Friend", lpi:1,
+    avail:"High", timeWindow:"Daily 1800Z + on event",
+    zones:"Bde AOR · sustainment CoI",
+    ier:{
+      who:"BG S4 ➜ Bde G4",
+      what:"LOGSITREP — Reports / Logistics Services / COI Services · MIP4 LOG schema",
+      when:"Daily 1800Z + on event-driven slip",
+      protection:"NR · STANAG 4774 NR label · audit-archived for J4 staff",
+      volume:"Low · structured short-form a few KB"
+    },
+    equipment:[
+      "Systematic SitaWare Headquarters (Bde G4 console)",
+      "Systematic SitaWare Frontline (BG S4 vehicle)",
+      "Klas Voyager NFV blade on the BG TOC · Cisco ESR6300 PCN gateway",
+      "Formal Messaging Service over STANAG 4711 PCN tunnel"
+    ],
+    attackSurface:"Logistics traffic discloses operational tempo. Mitigation: NR confinement, no MS commingling without label upgrade, signed audit trail on Bde G4 side."
+  },
+  { id:"UC-026", serial:"S-BDE-ENGR", band:"Brigade",
+    title:"Bde ENGR GP obstacle/route plan distribution to BGs",
+    sub:"Brigade Engineer Group publishes obstacle plans, mobility routes, and route-clearance status to all subordinate Battle Groups.",
+    cls:"NS", prec:"Priority", env:"Mixed", lpi:2,
+    avail:"High", timeWindow:"On plan change · daily refresh",
+    zones:"Bde AOR · all BGs · engineer CoI",
+    ier:{
+      who:"VJTF(L) Bde ➜ ENGR GP ➜ all BGs",
+      what:"Battlefield Control Measures (obstacles, routes) + METEOC — LAND Services / Environmental Services / COI",
+      when:"On change · daily 0600Z refresh",
+      protection:"NS · STANAG 4774 labels · signed by Bde engineer planner",
+      volume:"Medium · MIP4 BCM packet with attachments"
+    },
+    equipment:[
+      "Systematic SitaWare Edge with engineer overlay plug-in",
+      "MIP4 BCM bus on Bde DCIS (Klas Voyager)",
+      "Thales Synaps vehicular SDR · ESSOR HDR backbone to BGs",
+      "Multicast distribution inside Bde enclave (IGMPv3)"
+    ],
+    attackSurface:"Tampered route status can cause mobility-kill on a friendly column. Mitigation: signed per-segment status, dual-source verification (engineer + UAS imagery)."
+  },
+  { id:"UC-027", serial:"S-302", band:"Brigade",
+    title:"HUMINT report cycle — HUMINT ➜ BGISS ➜ COIST",
+    sub:"Human intelligence reporting chain from a field HUMINT team into Battlegroup Intelligence Section Staff and onward to Company Intelligence Support Teams.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:4,
+    avail:"Mission", timeWindow:"As-collected",
+    zones:"Bde AOR · BG/Coy intel CoI",
+    ier:{
+      who:"HUMINT team ➜ BGISS ➜ COIST",
+      what:"HUMINT Report — Reports / Joint Services / COI · structured text + occasional imagery",
+      when:"As-collected · ideally ≤ 30 min from contact",
+      protection:"NS · STANAG 4774 labels · source-name compartmented",
+      volume:"Low · text-dominant"
+    },
+    equipment:[
+      "L3Harris AN/PRC-163 handheld (HUMINT field team)",
+      "NBWF Profile A · short-burst tactical messenger",
+      "Systematic SitaWare Frontline on BGISS terminal",
+      "XMPP attachment relay via Klas Voyager NFV blade"
+    ],
+    attackSurface:"Source-name compromise can lead to source loss. Mitigation: per-source compartmented labels, end-to-end signed attachment, no presence broadcast on the HUMINT XMPP roster."
+  },
+  { id:"UC-028", serial:"S-BDE-UAS-FEED", band:"Brigade",
+    title:"UAS Ground Control Station ISR feed to Bde ASAC",
+    sub:"Tactical UAS imagery and full-motion video streamed from a brigade-organic UAS Ground Control Station into the Brigade All-Source Analysis Cell for live exploitation.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:3,
+    avail:"Mission", timeWindow:"UAS sortie duration",
+    zones:"Bde named area of interest · ISR CoI",
+    ier:{
+      who:"UAS Gnd Control Stn ➜ Bde ASAC",
+      what:"Target Info Reports + Imagery + Status Reports — Targeting Services / Operations Planning / COI",
+      when:"Streaming live (FMV) · still imagery on demand",
+      protection:"NS · STANAG 4774 labels · per-platform crypto",
+      volume:"High · FMV ~2 Mbps · still imagery bursts"
+    },
+    equipment:[
+      "Dedicated tactical data link from GCS to Bde DCIS",
+      "Systematic SitaWare Edge with ISR overlay (Bde ASAC)",
+      "Klas Voyager NFV blade hosting the GCS uplink VNF",
+      "Multicast FMV distribution inside Bde enclave (IGMPv3 · DSCP AF41)"
+    ],
+    attackSurface:"UAS data link is jammable and spoofable. Mitigation: link-layer FFH, signed platform metadata, fallback to recorded burst transmit on jamming detection."
+  },
+
+  // ---- 29–32) Bde aviation / fires team / Coy edge UCs -----------
+  { id:"UC-029", serial:"S-038", band:"Brigade",
+    title:"Bde ➜ AVN GP rotary lift tasking order",
+    sub:"Brigade tasks an Aviation Group element (rotary lift) for casualty extraction and re-supply support inside the Bde AOR.",
+    cls:"NS", prec:"Immediate", env:"Mixed", lpi:2,
+    avail:"High", timeWindow:"Per sortie",
+    zones:"Bde AOR overlapping AVN GP operating area",
+    ier:{
+      who:"VJTF(L) Bde HQ ➜ AVN GP",
+      what:"Tasking Order — Tasking & Order Services / COI · MIP4 ATO-extract structure",
+      when:"On mission trigger · ack ≤ 2 min",
+      protection:"NS · STANAG 4774 labels · signed by Bde air liaison",
+      volume:"Low · structured short-form"
+    },
+    equipment:[
+      "Systematic SitaWare Headquarters (Bde TOC)",
+      "Tasking & Order Services VNF on Klas Voyager",
+      "Cisco ESR6300 PCN gateway to AVN GP",
+      "Thales Synaps + SATURN Ed.4 PRF-151 for air-ground voice fallback"
+    ],
+    attackSurface:"Tasking compromise leaks rotary timing and landing point coordinates. Mitigation: short-validity tasking tokens, last-mile coords delivered via separate brevity channel."
+  },
+  { id:"UC-030", serial:"S-BDE-TET", band:"Brigade",
+    title:"Bde ASAC ➜ TET dynamic targeting cue",
+    sub:"Brigade All-Source Analysis Cell pushes a dynamic target cue (location + windows + ID) to the Target Engagement Team for sensor-to-shooter conversion.",
+    cls:"NS", prec:"Flash", env:"NotFriend", lpi:4,
+    avail:"Mission", timeWindow:"Target window (often minutes)",
+    zones:"Bde named area of interest · TET CoI",
+    ier:{
+      who:"Bde ASAC ➜ TET",
+      what:"Target Folder (TST) + Call For Fire prep — Targeting Services / Operations Planning / COI",
+      when:"On target detection · cue ≤ 60 s of identification",
+      protection:"NS · STANAG 4774 labels · signed by Bde targeting officer",
+      volume:"Low · MIP4 target packet"
+    },
+    equipment:[
+      "Saab 9LAND C2 dynamic targeting bus (or Systematic SitaWare)",
+      "Klas Voyager NFV blade · TST replication service",
+      "Thales Synaps vehicular SDR with ESSOR HDR · brevity voice fallback",
+      "DSCP EF reserved for the targeting cue flow"
+    ],
+    attackSurface:"Dynamic targeting is the most time-critical and EW-exposed flow on the Bde net. Mitigation: dual sensor confirmation, dual-bearer redundancy (digital + voice brevity), signed TST packet."
+  },
+  { id:"UC-031", serial:"S-COY-CCIR", band:"Company",
+    title:"Coy CCIR Manager ➜ Th ISR Res collection request",
+    sub:"Company-level Commander's Critical Information Requirements manager pushes a collection request up the chain to the brigade-controlled ISR resource pool.",
+    cls:"NS", prec:"Priority", env:"NotFriend", lpi:3,
+    avail:"Mission", timeWindow:"Within commander's decision window",
+    zones:"Coy AOR · Bde ISR CoI",
+    ier:{
+      who:"Coy CCIR Manager ➜ Th ISR Res (via BG ISR coordinator)",
+      what:"RFI + Target Info Request — Requests & Responses / LAND Services / COI",
+      when:"On commander's decision trigger · response ≤ 60 min",
+      protection:"NS · STANAG 4774 labels · BG-level audit",
+      volume:"Low · text + small attachments"
+    },
+    equipment:[
+      "Systematic SitaWare Edge (Coy CCIR Manager handheld)",
+      "L3Harris AN/PRC-163 dismounted SDR with NBWF",
+      "Klas Voyager NFV blade hosting the RFI service",
+      "Cisco ESR6300 PCN gateway from BG up to Bde"
+    ],
+    attackSurface:"RFI content discloses Coy's planning priorities. Mitigation: minimum-necessary phrasing, per-request label review, no presence broadcast on the RFI bus."
+  },
+  { id:"UC-032", serial:"S-COY-NFV-RESTORE", band:"Company",
+    title:"Coy NFV blade hot-restore after physical loss",
+    sub:"After the Company Command Post NFV blade is lost (kinetic or capture), a spare COTS SFF blade is brought up from the BG reserve with a signed golden image; full C2 service is restored in under 30 minutes per STEADFAST COBALT target.",
+    cls:"MS", prec:"Immediate", env:"NotFriend", lpi:3,
+    avail:"Best-effort during restore · High once restored",
+    timeWindow:"Restore window ≤ 30 min", zones:"Coy AOR",
+    ier:{
+      who:"BG SIG ➜ Coy CP (NFV control-plane)",
+      what:"VNF redeploy + key material re-issue + XMPP/SitaWare reseed — Core Enterprise Services / COI",
+      when:"On loss event · target stand-up ≤ 30 min",
+      protection:"MS · signed golden image · STANAG 4774 label policy reseeded · BG-issued per-blade key",
+      volume:"Low control-plane · medium for image transfer"
+    },
+    equipment:[
+      "Klas Voyager spare SFF blade (Coy reserve)",
+      "Cisco ESR6300 ruggedised router (PCN tunnel re-up)",
+      "Systematic SitaWare Edge restored from golden image",
+      "PacStar 400-Series field power kit · ESSOR HDR back-haul to BG"
+    ],
+    attackSurface:"Spare blade key material could be captured along with the original. Mitigation: per-event key rotation, BG-side authoritative golden-image store, signed-VNF policy enforced at boot."
+  }
+];
+
+const SERIAL_SAMPLE = [
+  ["S-001","LCC","VJTF(L)","Voice (Secure)","Voice","Audio-Based Communication Services","Core Services"],
+  ["S-002","LCC","VJTF(L)","Formal Message","Formal Messaging","Military Messaging Service","Core Services"],
+  ["S-003","LCC","VJTF(L)","Informal Message","Informal Messaging","Informal Messaging Services","Core Services"],
+  ["S-004","LCC","VJTF(L)","Instant Message","Instant Messaging","Text-Based Collaboration Services","Core Services"],
+  ["S-014","VJTF(L)","CAOC","ASSESSREP","Intent & Guidance","Joint Services","COI Services"],
+  ["S-015","VJTF(L)","CAOC","SITREP","Reports","Joint Services","COI Services"],
+  ["S-026","VJTF(L)","ISTAR","Target Folder (TST)","Targeting Services","Operations Planning Services","COI Services"],
+  ["S-038","VJTF(L)","AVN GP","Tasking Order","Tasking & Orders","Tasking & Order Services","COI Services"],
+  ["S-052","VJTF(L)","FS GP","Call For Fire","Targeting Services","Operations Planning Services","COI Services"],
+  ["S-061","VJTF(L)","ENGR GP","METEOC Info","Meteorology Services","Environmental Services","COI Services"],
+  ["S-088","VJTF(L)","BG","Battlefield Ctrl Meas","Maneuver Planning","LAND Services","COI Services"],
+  ["S-112","BG","COY","Voice (Secure)","Voice","Audio-Based Communication Services","Core Services"],
+  ["S-114","BG","COY","Instant Message","Instant Messaging","Text-Based Collaboration Services","Core Services"],
+  ["S-146","JTF HQ","CIFC","RFI","Requests & Responses","LAND Services","COI Services"],
+  ["S-201","CIFC","Bde ASAC","INTREP","Reports","Joint Services","COI Services"],
+  ["S-244","EWCC","EW Assets","Tasking Order","Tasking & Orders","EW Services","COI Services"],
+  ["S-277","BGISS","COIST","Informal Message","Informal Messaging","Informal Messaging Services","Core Services"],
+  ["S-302","HUMINT","BGISS","HUMINT Report","Reports","Joint Services","COI Services"],
+  ["S-341","JTF HQ","LIFC","Target Folder","Targeting Services","Operations Planning Services","COI Services"],
+  ["S-380","LIFC","CIFC","RFI","Requests & Responses","LAND Services","COI Services"],
+  ["S-411","CIFC","Div ASAC","Voice (Secure)","Voice","Audio-Based Communication Services","Core Services"],
+  ["S-450","Div ASAC","Bde ASAC","Instant Message","Instant Messaging","Text-Based Collaboration Services","Core Services"],
+  ["S-493","EWCC","EW Assets","Informal Message","Informal Messaging","Informal Messaging Services","Core Services"]
+];
+
+/* ------------------------------------------------------------ */
+function renderLadder() {
+  document.getElementById("ladder").innerHTML = ECHELONS.map(e => `
+    <div class="rung${e.upstream ? ' upstream' : ''}">
+      <div class="lbl">${e.lbl}</div>
+      <div class="desc">${e.desc}</div>
+      <div class="tier tier-${e.tier}">${TIER_LABEL[e.tier]}</div>
+    </div>`).join("");
+}
+
+function riskMini(n) {
+  let out = '<span style="display:inline-flex;gap:3px;align-items:center;">';
+  for (let i = 0; i < 5; i++) {
+    out += `<span style="width:8px;height:8px;border-radius:50%;background:${i < n ? 'var(--gold)' : 'var(--bg-4)'};border:1px solid ${i < n ? 'var(--gold)' : 'var(--line-hot)'};"></span>`;
+  }
+  out += `<span class="mono" style="margin-left:6px;">${n}/5</span></span>`;
+  return out;
+}
+function riskDots(n) {
+  let out = "";
+  for (let i = 0; i < 5; i++) out += `<span class="dot${i < n ? ' on' : ''}"></span>`;
+  return out;
+}
+function envLabel(c) {
+  if (c === 'Friend') return 'Friendly';
+  if (c === 'NotFriend') return 'Hostile / contested';
+  return 'Mixed';
+}
+function clsName(c) {
+  return { NU:'NATO Unclassified', NR:'NATO Restricted', NS:'NATO Secret', MS:'Mission Secret' }[c] || c;
+}
+
+let activeBand = "All";
+
+function renderUcIndex(list) {
+  document.getElementById("uc-index-body").innerHTML = list.map(uc => `
+    <tr>
+      <td><a href="#${uc.id}" class="mono">${uc.id}</a></td>
+      <td>${uc.band}</td>
+      <td>${uc.title}</td>
+      <td><span class="cls-tag cls-${uc.cls}">${uc.cls}</span></td>
+      <td><span class="prec-tag">${uc.prec}</span></td>
+      <td>${riskMini(uc.lpi)}</td>
+    </tr>`).join("");
+}
+
+function renderUcCards(list) {
+  document.getElementById("uc-cards").innerHTML = list.map(uc => {
+    const eq = uc.equipment.map((l,i) => `<span class="mono-sub${i===0?' first':''}">${l}</span>`).join("");
+    return `
+    <article class="uc-card" id="${uc.id}">
+      <header class="uc-head">
+        <div class="uc-head-row1">
+          <span class="uc-id">${uc.id}</span>
+          <span class="uc-serial">↔ ${uc.serial}</span>
+          <span class="uc-echelon">${uc.band}</span>
+          <span class="cls-tag cls-${uc.cls}" style="margin-left:auto;">${clsName(uc.cls)}</span>
+        </div>
+        <div class="uc-title">${uc.title}</div>
+        <div class="uc-sub">${uc.sub}</div>
+      </header>
+      <div class="uc-rows">
+        <div class="k">${ROW_LABELS.who}</div>          <div class="v">${uc.ier.who}</div>
+        <div class="k">${ROW_LABELS.what}</div>         <div class="v">${uc.ier.what}</div>
+        <div class="k">${ROW_LABELS.when}</div>         <div class="v">${uc.ier.when}</div>
+        <div class="k">${ROW_LABELS.protection}</div>   <div class="v">${uc.ier.protection}</div>
+        <div class="k">${ROW_LABELS.precedence}</div>   <div class="v"><span class="prec-tag">${uc.prec}</span></div>
+        <div class="k">${ROW_LABELS.volume}</div>       <div class="v">${uc.ier.volume}</div>
+        <div class="k">${ROW_LABELS.equipment}</div>    <div class="v">${eq}</div>
+        <div class="k">${ROW_LABELS.timeWindow}</div>   <div class="v">${uc.timeWindow}</div>
+        <div class="k">${ROW_LABELS.environment}</div>  <div class="v"><span class="env-dot env-${uc.env}"></span>${envLabel(uc.env)}</div>
+        <div class="k">${ROW_LABELS.zones}</div>        <div class="v">${uc.zones}</div>
+        <div class="k">${ROW_LABELS.availability}</div> <div class="v">${uc.avail}</div>
+        <div class="k">${ROW_LABELS.classification}</div><div class="v"><span class="cls-tag cls-${uc.cls}">${uc.cls} — ${clsName(uc.cls)}</span></div>
+        <div class="k">${ROW_LABELS.risk}</div>
+        <div class="v">
+          <div class="risk">
+            <div class="risk-meter">
+              ${riskDots(uc.lpi)}
+              <span class="score">${uc.lpi}/5</span>
+              <span class="risk-label">${RISK_LABEL[uc.lpi]}</span>
+            </div>
+            <div class="risk-narr">${RISK_NARR[uc.lpi]}</div>
+          </div>
+        </div>
+        <div class="k">${ROW_LABELS.attackSurface}</div><div class="v">${uc.attackSurface}</div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+function renderFilter() {
+  const bands = ["All", ...new Set(USE_CASES.map(u => u.band))];
+  document.getElementById("echelon-filter").innerHTML = bands.map(b =>
+    `<button class="${b === activeBand ? 'active' : ''}" onclick="setBand('${b}')">${b}</button>`
+  ).join("");
+}
+function setBand(b) {
+  activeBand = b;
+  applyFilter();
+}
+function applyFilter() {
+  const list = (activeBand === "All") ? USE_CASES : USE_CASES.filter(u => u.band === activeBand);
+  renderFilter();
+  renderUcIndex(list);
+  renderUcCards(list);
+}
+
+function renderSerials() {
+  document.getElementById("serial-rows").innerHTML = SERIAL_SAMPLE.map(r =>
+    `<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${r[6]}</td></tr>`
+  ).join("");
+}
+
+renderLadder();
+applyFilter();
+renderSerials();
+</script>
+
+</body>
+</html>
