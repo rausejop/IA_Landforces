@@ -1,0 +1,12 @@
+Beneficiary
+Rafael  Ausejo Prieto
+Bank Name
+Banco Santander One Empresas 
+Bank Country
+SPAIN
+Account n°
+ES46 0049 2232 2029 1410 9186
+IBAN
+ES46
+BIC
+BSCHESMMXXX
